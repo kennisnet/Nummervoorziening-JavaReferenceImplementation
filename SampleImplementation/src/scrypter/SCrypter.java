@@ -27,7 +27,7 @@ public class SCrypter {
         String salt = "rktYml0MIp9TC9u6Ny6uqw==";
         
         if (args.length == 0) {    
-            System.err.println("SCrypter v0.3-20160302 (T.Beekman@Kennisnet.nl)\n");
+            System.err.println("SCrypter v0.31-20160302 (T.Beekman@Kennisnet.nl)\n");
             System.err.println("Usage: java -jar SCrypter.jar N:[N] r:[r] p:[p] passwd:[passwd] salt:[salt]");
             System.err.println("N:\tGeneral work factor, iteration count (default: 16384)");
             System.err.println("r:\tBlocksize in use for underlying hash; fine-tunes the relative memory-cost (default: 8)");
@@ -70,12 +70,18 @@ public class SCrypter {
         long endTime = System.currentTimeMillis();        
         String[] parts = hashed.split("\\$");
         
+        String generatedHash = parts[4];
+        char[] hashedChar = generatedHash.toCharArray();
+        byte[] hashedBin = decode(hashedChar);
+        String hashedBinString = new String(hashedBin);
+        
         String hashedHex = javax.xml.bind.DatatypeConverter.printHexBinary(
-                decode(hashed.toCharArray())).toLowerCase();
+                hashedBin).toLowerCase();
         
         // Print the results
+        System.err.println("Generated hash (bin):\t\t" + hashedBinString);
         System.err.println("Generated hash (base16):\t" + hashedHex);
-        System.err.println("Generated hash (base64):\t" + parts[4]);
+        System.err.println("Generated hash (base64):\t" + generatedHash);
         System.err.println("Generated hash String:\t\t" + hashed);
         System.err.println("Total runtime:\t\t\t" + (endTime - startTime) + "ms.");        
         
