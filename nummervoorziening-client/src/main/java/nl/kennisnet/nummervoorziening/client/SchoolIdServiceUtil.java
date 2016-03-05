@@ -1,9 +1,6 @@
 package nl.kennisnet.nummervoorziening.client;
 
-import school.id.eck.schemas.v1_0.PingRequest;
-import school.id.eck.schemas.v1_0.PingResponse;
-import school.id.eck.schemas.v1_0.SchoolID;
-import school.id.eck.schemas.v1_0.SchoolIDService;
+import school.id.eck.schemas.v1_0.*;
 
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
@@ -34,6 +31,15 @@ public class SchoolIdServiceUtil {
      */
     public PingResponse ping() {
         return schoolID.ping(new PingRequest());
+    }
+
+    /**
+     * Executes request to Web Service and returns response containing all active chains.
+     *
+     * @return RetrieveChainsResponse instance with list of active chains.
+     */
+    public RetrieveChainsResponse retrieveChains() {
+        return schoolID.retrieveChains(new RetrieveChainsRequest());
     }
 
     /**
