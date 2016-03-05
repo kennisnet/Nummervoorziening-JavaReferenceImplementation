@@ -2,6 +2,7 @@ package nl.kennisnet.nummervoorziening.client;
 
 import school.id.eck.schemas.v1_0.PingResponse;
 import school.id.eck.schemas.v1_0.RetrieveChainsResponse;
+import school.id.eck.schemas.v1_0.RetrieveSectorsResponse;
 
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
@@ -37,5 +38,7 @@ public class Main {
         }
         RetrieveChainsResponse retrieveChainsResponse = schoolIdServiceUtil.retrieveChains();
         System.out.println("Count of active chains:    " + retrieveChainsResponse.getChain().size());
+        RetrieveSectorsResponse retrieveSectorsResponse = schoolIdServiceUtil.retrieveSectors();
+        System.out.println("Count of active sectors:   " + retrieveSectorsResponse.getSector().size());
     }
 }
