@@ -1,0 +1,409 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<wsdl:definitions name="SchoolID"
+                  targetNamespace="http://id.school/eck/schemas/v1_0"
+                  xmlns:sid="http://id.school/eck/schemas/v1_0"
+                  xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+                  xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl"
+                  xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+                  xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+
+    <wsdl:documentation>
+        Service: SchoolID (Nummervoorziening)
+        Version: 0.2-20160303
+        Author: Thomas Beekman (T.Beekman@Kennisnet.nl)
+
+        Uses WS:Addressing
+    </wsdl:documentation>
+
+    <wsdl:types>
+        <xsd:schema targetNamespace="http://id.school/eck/schemas/v1_0"
+                    elementFormDefault="qualified">
+            <xsd:element name="pingRequest" type="sid:PingRequest"></xsd:element>
+            <xsd:element name="pingResponse" type="sid:PingResponse"></xsd:element>
+            <xsd:element name="retrieveEckIdRequest" type="sid:RetrieveEckIdRequest"></xsd:element>
+            <xsd:element name="retrieveEckIdResponse" type="sid:RetrieveEckIdResponse"></xsd:element>
+            <xsd:element name="submitEckIdBatchRequest" type="sid:SubmitEckIdBatchRequest"></xsd:element>
+            <xsd:element name="submitEckIdBatchResponse" type="sid:SubmitEckIdBatchResponse"></xsd:element>
+            <xsd:element name="retrieveEckIdBatchRequest" type="sid:RetrieveEckIdBatchRequest"></xsd:element>
+            <xsd:element name="retrieveEckIdBatchResponse" type="sid:RetrieveEckIdBatchResponse"></xsd:element>
+            <xsd:element name="replaceEckIdRequest" type="sid:ReplaceEckIdRequest"></xsd:element>
+            <xsd:element name="replaceEckIdResponse" type="sid:ReplaceEckIdResponse"></xsd:element>
+            <xsd:element name="retrieveChainsRequest" type="sid:RetrieveChainsRequest"></xsd:element>
+            <xsd:element name="retrieveChainsResponse" type="sid:RetrieveChainsResponse"></xsd:element>
+            <xsd:element name="retrieveSectorsRequest" type="sid:RetrieveSectorsRequest"></xsd:element>
+            <xsd:element name="retrieveSectorsResponse" type="sid:RetrieveSectorsResponse"></xsd:element>
+
+            <xsd:complexType name="PingRequest">
+                <xsd:annotation>
+                    <xsd:documentation>Request om te testen of de Nummervoorziening goed functioneert. Ook is in het antwoord het huidige versienummer van de Nummervoorziening applicatie te vinden.</xsd:documentation>
+                </xsd:annotation>
+                <xsd:sequence>
+                </xsd:sequence>
+            </xsd:complexType>
+
+            <xsd:complexType name="PingResponse">
+                <xsd:annotation>
+                    <xsd:documentation>Antwoord op een PingRequest</xsd:documentation>
+                </xsd:annotation>
+                <xsd:sequence>
+                    <xsd:element name="available" type="xsd:boolean"
+                                 minOccurs="1" maxOccurs="1">
+                        <xsd:annotation>
+                            <xsd:documentation>Geeft True terug als de Nummervoorziening correct werkt.</xsd:documentation>
+                        </xsd:annotation>
+                    </xsd:element>
+                    <xsd:element name="applicationVersion" type="xsd:string"
+                                 minOccurs="1" maxOccurs="1">
+                        <xsd:annotation>
+                            <xsd:documentation>Het versienummer van de Nummervoorziening.</xsd:documentation>
+                        </xsd:annotation>
+                    </xsd:element>
+                    <xsd:element name="systemTime" type="xsd:dateTime"
+                                 minOccurs="1" maxOccurs="1">
+                        <xsd:annotation>
+                            <xsd:documentation>De systeemtijd op de Nummervoorziening server.</xsd:documentation>
+                        </xsd:annotation>
+                    </xsd:element>
+                </xsd:sequence>
+            </xsd:complexType>
+
+            <xsd:complexType name="RetrieveEckIdRequest">
+                <xsd:annotation>
+                    <xsd:documentation>Request parameters (1e niveau hash van het PGN, keten ID en sector ID) voor het genereren van een ECK-ID.</xsd:documentation>
+                </xsd:annotation>
+                <xsd:sequence>
+                    <xsd:element name="hpgn" type="sid:HPgn" minOccurs="1" maxOccurs="1"></xsd:element>
+                    <xsd:element name="chainId" type="xsd:string" minOccurs="1" maxOccurs="1"></xsd:element>
+                    <xsd:element name="sectorId" type="xsd:string" minOccurs="1" maxOccurs="1"></xsd:element>
+                </xsd:sequence>
+            </xsd:complexType>
+
+            <xsd:complexType name="RetrieveEckIdResponse">
+                <xsd:annotation>
+                    <xsd:documentation>Response parameters ontvangen na het genereren van een ECK-ID. Wanneer de parameters voldoen aan de validaties en de verwerking goed is verlopen bevat de response het gegenereerde ECK-ID, anders wordt een Soap:fault teruggeven.</xsd:documentation>
+                </xsd:annotation>
+                <xsd:sequence>
+                    <xsd:element name="eckId" type="sid:EckId" minOccurs="1" maxOccurs="1"></xsd:element>
+                </xsd:sequence>
+            </xsd:complexType>
+
+            <xsd:complexType name="SubmitEckIdBatchRequest">
+                <xsd:annotation>
+                    <xsd:documentation>Request parameters (index, 1e niveau hash van het PGN, keten ID en sector ID) voor het genereren van meerdere ECK-IDs in een enkele aanroep. </xsd:documentation>
+                </xsd:annotation>
+                <xsd:sequence>
+                    <xsd:element name="hpgnList" type="sid:ListedHpgn" minOccurs="1" maxOccurs="unbounded"></xsd:element>
+                    <xsd:element name="chainId" type="xsd:string" minOccurs="1" maxOccurs="1"></xsd:element>
+                    <xsd:element name="sectorId" type="xsd:string" minOccurs="1" maxOccurs="1"></xsd:element>
+                </xsd:sequence>
+            </xsd:complexType>
+
+            <xsd:complexType name="SubmitEckIdBatchResponse">
+                <xsd:annotation>
+                    <xsd:documentation>Response parameters ontvangen na het ontvangen van de batch. Wanneer de parameters voldoen aan de validaties bevat de response de batch identifier, anders wordt een Soap:fault teruggeven.</xsd:documentation>
+                </xsd:annotation>
+                <xsd:sequence>
+                    <xsd:element name="batchIdentifier" type="sid:BatchIdentifier" minOccurs="1" maxOccurs="1"></xsd:element>
+                </xsd:sequence>
+            </xsd:complexType>
+
+            <xsd:complexType name="RetrieveEckIdBatchRequest">
+                <xsd:annotation>
+                    <xsd:documentation>Request parameters (batch identifier) voor het opvragen van het resultaat van een batchverwerking.</xsd:documentation>
+                </xsd:annotation>
+                <xsd:sequence>
+                    <xsd:element name="batchIdentifier" type="sid:BatchIdentifier" minOccurs="1" maxOccurs="1"></xsd:element>
+                </xsd:sequence>
+            </xsd:complexType>
+
+            <xsd:complexType name="RetrieveEckIdBatchResponse">
+                <xsd:annotation>
+                    <xsd:documentation>Response parameters ontvangen na het ontvangen van de batch. Wanneer de batch identifier correct is en de batchverwerking is voltooid bevat de response de batch met per element dezelfde index als gebruikt in de aanroe, anders wordt een Soap:fault teruggeven.</xsd:documentation>
+                </xsd:annotation>
+                <xsd:sequence>
+                    <xsd:element name="success" type="sid:ListedEckIdSuccess" minOccurs="0" maxOccurs="unbounded"></xsd:element>
+                    <xsd:element name="failed" type="sid:ListedEckIdFailure" minOccurs="0" maxOccurs="unbounded"></xsd:element>
+                </xsd:sequence>
+            </xsd:complexType>
+
+            <xsd:complexType name="ReplaceEckIdRequest">
+                <xsd:annotation>
+                    <xsd:documentation>Request parameters (1e niveau hash van het oude PGN, 1e niveau hash van het nieuwe PGN, keten ID en sector ID) voor het vervangen van een nieuwe PGN door de oude PGN. Indien geen effectiveDate is opgegeven zal de wijziging direct ingaan.</xsd:documentation>
+                </xsd:annotation>
+                <xsd:sequence>
+                    <xsd:element name="hpgnOld" type="sid:HPgn" minOccurs="1" maxOccurs="1"></xsd:element>
+                    <xsd:element name="hpgnNew" type="sid:HPgn" minOccurs="1" maxOccurs="1"></xsd:element>
+                    <xsd:element name="chainId" type="xsd:string" minOccurs="1" maxOccurs="1"></xsd:element>
+                    <xsd:element name="sectorId" type="xsd:string" minOccurs="1" maxOccurs="1"></xsd:element>
+                    <xsd:element name="effectiveDate" type="xsd:dateTime" minOccurs="0" maxOccurs="1"></xsd:element>
+                </xsd:sequence>
+            </xsd:complexType>
+
+            <xsd:complexType name="ReplaceEckIdResponse">
+                <xsd:annotation>
+                    <xsd:documentation>Response parameters ontvangen na het vervangen van een ECK-ID. Wanneer de parameters voldoen aan de validaties en de verwerking goed is verlopen bevat de response het gegenereerde ECK-ID, anders wordt een Soap:fault teruggegeven.</xsd:documentation>
+                </xsd:annotation>
+                <xsd:sequence>
+                    <xsd:element name="eckId" type="sid:EckId" minOccurs="1" maxOccurs="1"></xsd:element>
+                </xsd:sequence>
+            </xsd:complexType>
+
+            <xsd:complexType name="RetrieveChainsRequest">
+                <xsd:annotation>
+                    <xsd:documentation>Request parameters voor het opvragen van ondersteunde ketens.</xsd:documentation>
+                </xsd:annotation>
+                <xsd:sequence>
+                </xsd:sequence>
+            </xsd:complexType>
+
+            <xsd:complexType name="RetrieveChainsResponse">
+                <xsd:annotation>
+                    <xsd:documentation>Response ontvangen na het opvragen van ketens. Per keten wordt weergegeven of deze valide is. Bij fouten in de verwerking wordt een Fault teruggeven.</xsd:documentation>
+                </xsd:annotation>
+                <xsd:sequence>
+                    <xsd:element name="chain" type="sid:Chain" minOccurs="1" maxOccurs="unbounded"></xsd:element>
+                </xsd:sequence>
+            </xsd:complexType>
+
+            <xsd:complexType name="RetrieveSectorsRequest">
+                <xsd:annotation>
+                    <xsd:documentation>Request parameters voor het opvragen van ondersteunde sectors.</xsd:documentation>
+                </xsd:annotation>
+                <xsd:sequence>
+                </xsd:sequence>
+            </xsd:complexType>
+
+            <xsd:complexType name="RetrieveSectorsResponse">
+                <xsd:annotation>
+                    <xsd:documentation>Response ontvangen na het opvragen van sectors. Per sector wordt weergegeven of deze valide is. Bij fouten in de verwerking wordt een Fault teruggeven.</xsd:documentation>
+                </xsd:annotation>
+                <xsd:sequence>
+                    <xsd:element name="sector" type="sid:Sector" minOccurs="1" maxOccurs="unbounded"></xsd:element>
+                </xsd:sequence>
+            </xsd:complexType>
+
+            <xsd:complexType name="HPgn">
+                <xsd:annotation>
+                    <xsd:documentation>1e niveau hash van het PGN.</xsd:documentation>
+                </xsd:annotation>
+                <xsd:simpleContent>
+                    <xsd:extension base="xsd:string"></xsd:extension>
+                </xsd:simpleContent>
+            </xsd:complexType>
+
+            <xsd:complexType name="ListedHpgn">
+                <xsd:annotation>
+                    <xsd:documentation>1e niveau hash van het PGN, keten ID, sector ID met volgnummer.</xsd:documentation>
+                </xsd:annotation>
+                <xsd:sequence>
+                    <xsd:element name="index" type="xsd:int"></xsd:element>
+                    <xsd:element name="hPgn" type="sid:HPgn"></xsd:element>
+                </xsd:sequence>
+            </xsd:complexType>
+
+            <xsd:complexType name="BatchIdentifier">
+                <xsd:annotation>
+                    <xsd:documentation>Kenmerk om het resultaat van de operatie op te halen.</xsd:documentation>
+                </xsd:annotation>
+                <xsd:simpleContent>
+                    <xsd:extension base="xsd:string"></xsd:extension>
+                </xsd:simpleContent>
+            </xsd:complexType>
+
+            <xsd:complexType name="ListedEckIdSuccess">
+                <xsd:annotation>
+                    <xsd:documentation>Succesvolle poging tot gegenereren van een ECK-ID met volgnummer.</xsd:documentation>
+                </xsd:annotation>
+                <xsd:sequence>
+                    <xsd:element name="index" type="xsd:int" minOccurs="1" maxOccurs="1"></xsd:element>
+                    <xsd:element name="eckId" type="sid:EckId" minOccurs="1" maxOccurs="1"></xsd:element>
+                </xsd:sequence>
+            </xsd:complexType>
+
+            <xsd:complexType name="ListedEckIdFailure">
+                <xsd:annotation>
+                    <xsd:documentation>Gefaalde poging tot genereren van een ECK-ID met volgnummer.</xsd:documentation>
+                </xsd:annotation>
+                <xsd:sequence>
+                    <xsd:element name="index" type="xsd:int" minOccurs="1" maxOccurs="1"></xsd:element>
+                    <xsd:element name="errorMessage" type="xsd:string" minOccurs="1" maxOccurs="1"></xsd:element>
+                </xsd:sequence>
+            </xsd:complexType>
+
+            <xsd:complexType name="EckId">
+                <xsd:annotation>
+                    <xsd:documentation>Gegenereerde ECK-ID.</xsd:documentation>
+                </xsd:annotation>
+                <xsd:simpleContent>
+                    <xsd:extension base="xsd:string"></xsd:extension>
+                </xsd:simpleContent>
+            </xsd:complexType>
+
+            <xsd:complexType name="Sector">
+                <xsd:annotation>
+                    <xsd:documentation>Omschrijving van een sector.</xsd:documentation>
+                </xsd:annotation>
+                <xsd:sequence>
+                    <xsd:element name="id" type="xsd:string" minOccurs="1" maxOccurs="1"></xsd:element>
+                    <xsd:element name="name" type="xsd:string" minOccurs="1" maxOccurs="1"></xsd:element>
+                    <xsd:element name="description" type="xsd:string" minOccurs="1" maxOccurs="1"></xsd:element>
+                    <xsd:element name="lastEdited" type="xsd:dateTime" minOccurs="1" maxOccurs="1"></xsd:element>
+                </xsd:sequence>
+            </xsd:complexType>
+
+            <xsd:complexType name="Chain">
+                <xsd:annotation>
+                    <xsd:documentation>Omschrijving van een keten.</xsd:documentation>
+                </xsd:annotation>
+                <xsd:sequence>
+                    <xsd:element name="id" type="xsd:string" minOccurs="1" maxOccurs="1"></xsd:element>
+                    <xsd:element name="name" type="xsd:string" minOccurs="1" maxOccurs="1"></xsd:element>
+                    <xsd:element name="description" type="xsd:string" minOccurs="1" maxOccurs="1"></xsd:element>
+                    <xsd:element name="lastEdited" type="xsd:dateTime" minOccurs="1" maxOccurs="1"></xsd:element>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:schema>
+    </wsdl:types>
+
+    <wsdl:message name="pingRequest">
+        <wsdl:part name="pingRequest" element="sid:pingRequest"></wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="pingResponse">
+        <wsdl:part name="pingResponse" element="sid:pingResponse"></wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="retrieveEckIdRequest">
+        <wsdl:part name="retrieveEckIdRequest" element="sid:retrieveEckIdRequest"></wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="retrieveEckIdResponse">
+        <wsdl:part name="retrieveEckIdResponse" element="sid:retrieveEckIdResponse"></wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="submitEckIdBatchRequest">
+        <wsdl:part name="submitEckIdBatchRequest" element="sid:submitEckIdBatchRequest"></wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="submitEckIdBatchResponse">
+        <wsdl:part name="submitEckIdBatchResponse" element="sid:submitEckIdBatchResponse"></wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="retrieveEckIdBatchRequest">
+        <wsdl:part name="retrieveEckIdBatchRequest" element="sid:retrieveEckIdBatchRequest"></wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="retrieveEckIdBatchResponse">
+        <wsdl:part name="retrieveEckIdBatchResponse" element="sid:retrieveEckIdBatchResponse"></wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="replaceEckIdRequest">
+        <wsdl:part name="replaceEckIdRequest" element="sid:replaceEckIdRequest"></wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="replaceEckIdResponse">
+        <wsdl:part name="replaceEckIdResponse" element="sid:replaceEckIdResponse"></wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="retrieveChainsRequest">
+        <wsdl:part name="retrieveChainsRequest" element="sid:retrieveChainsRequest"></wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="retrieveChainsResponse">
+        <wsdl:part name="retrieveChainsResponse" element="sid:retrieveChainsResponse"></wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="retrieveSectorsRequest">
+        <wsdl:part name="retrieveSectorsRequest" element="sid:retrieveSectorsRequest"></wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="retrieveSectorsResponse">
+        <wsdl:part name="retrieveSectorsResponse" element="sid:retrieveSectorsResponse"></wsdl:part>
+    </wsdl:message>
+
+    <wsdl:portType name="SchoolID">
+        <wsdl:documentation>Omschrijving van de Nummervoorziening interface.</wsdl:documentation>
+
+        <wsdl:operation name="ping">
+            <wsdl:documentation>Service om te testen of de Nummervoorziening goed functioneert. Ook is in het antwoord het huidige versienummer van de Nummervoorziening service te vinden.</wsdl:documentation>
+            <wsdl:input message="sid:pingRequest"></wsdl:input>
+            <wsdl:output message="sid:pingResponse"></wsdl:output>
+        </wsdl:operation>
+
+        <wsdl:operation name="retrieveEckId">
+            <wsdl:documentation>Service om op basis van de gegeven input een enkel ECK-ID te genereren.</wsdl:documentation>
+            <wsdl:input message="sid:retrieveEckIdRequest"/>
+            <wsdl:output message="sid:retrieveEckIdResponse"/>
+        </wsdl:operation>
+
+        <wsdl:operation name="submitEckIdBatch">
+            <wsdl:documentation>Service om meerdere ECK-IDs te genereren op basis van een geindexeerde lijst. Als response wordt een batch identifier teruggegeven die kan worden gebruikt bij het aanroepen van de service retrieveEckIdBatch. De oorspronkelijke indices gebruik als input van de submitEckIdBatch service worden hergebruikt voor het resultaat van de retrieveEckIdBatch service.</wsdl:documentation>
+            <wsdl:input message="sid:submitEckIdBatchRequest"></wsdl:input>
+            <wsdl:output message="sid:submitEckIdBatchResponse"></wsdl:output>
+        </wsdl:operation>
+
+        <wsdl:operation name="retrieveEckIdBatch">
+            <wsdl:documentation>Service om op basis van een batch identifier de status van een batchverwerking op te vragen danwel het resultaat van de batchverwerking op te halen.</wsdl:documentation>
+            <wsdl:input message="sid:retrieveEckIdBatchRequest"></wsdl:input>
+            <wsdl:output message="sid:retrieveEckIdBatchResponse"></wsdl:output>
+        </wsdl:operation>
+
+        <wsdl:operation name="replaceEckId">
+            <wsdl:documentation>Service om bij een gewijzigde PGN het oude ECK-ID te kunnen handhaven.</wsdl:documentation>
+            <wsdl:input message="sid:replaceEckIdRequest"></wsdl:input>
+            <wsdl:output message="sid:replaceEckIdResponse"></wsdl:output>
+        </wsdl:operation>
+
+        <wsdl:operation name="retrieveChains">
+            <wsdl:documentation>Service om de ondersteunde ketens binnen Nummervoorziening op te kunnen vragen.</wsdl:documentation>
+            <wsdl:input message="sid:retrieveChainsRequest"></wsdl:input>
+            <wsdl:output message="sid:retrieveChainsResponse"></wsdl:output>
+        </wsdl:operation>
+
+        <wsdl:operation name="retrieveSectors">
+            <wsdl:documentation>Service om de ondersteunde sectoren binnen Nummervoorziening op te kunnen vragen.</wsdl:documentation>
+            <wsdl:input message="sid:retrieveSectorsRequest"></wsdl:input>
+            <wsdl:output message="sid:retrieveSectorsResponse"></wsdl:output>
+        </wsdl:operation>
+    </wsdl:portType>
+
+    <wsdl:binding name="SchoolIDSoapBinding" type="sid:SchoolID">
+        <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http" />
+        <wsaw:UsingAddressing wsdl:required="true" />
+
+        <wsdl:operation name="ping">
+            <soap:operation soapAction="http://id.school/eck/schemas/v1_0/ping" />
+            <wsdl:input><soap:body use="literal" /></wsdl:input>
+            <wsdl:output><soap:body use="literal" /></wsdl:output>
+        </wsdl:operation>
+
+        <wsdl:operation name="retrieveEckId">
+            <soap:operation soapAction="http://id.school/eck/schemas/v1_0/retrieveEckId" />
+            <wsdl:input><soap:body use="literal" /></wsdl:input>
+            <wsdl:output><soap:body use="literal" /></wsdl:output>
+        </wsdl:operation>
+
+        <wsdl:operation name="submitEckIdBatch">
+            <soap:operation soapAction="http://id.school/eck/schemas/v1_0/submitEckIdBatch" />
+            <wsdl:input><soap:body use="literal" /></wsdl:input>
+            <wsdl:output><soap:body use="literal" /></wsdl:output>
+        </wsdl:operation>
+
+        <wsdl:operation name="retrieveEckIdBatch">
+            <soap:operation soapAction="http://id.school/eck/schemas/v1_0/retrieveEckIdBatch" />
+            <wsdl:input><soap:body use="literal" /></wsdl:input>
+            <wsdl:output><soap:body use="literal" /></wsdl:output>
+        </wsdl:operation>
+
+        <wsdl:operation name="replaceEckId">
+            <soap:operation soapAction="http://id.school/eck/schemas/v1_0/replaceEckId" />
+            <wsdl:input><soap:body use="literal" /></wsdl:input>
+            <wsdl:output><soap:body use="literal" /></wsdl:output>
+        </wsdl:operation>
+
+        <wsdl:operation name="retrieveChains">
+            <soap:operation soapAction="http://id.school/eck/schemas/v1_0/retrieveChains" />
+            <wsdl:input><soap:body use="literal" /></wsdl:input>
+            <wsdl:output><soap:body use="literal" /></wsdl:output>
+        </wsdl:operation>
+
+        <wsdl:operation name="retrieveSectors">
+            <soap:operation soapAction="http://id.school/eck/schemas/v1_0/retrieveSectors" />
+            <wsdl:input><soap:body use="literal" /></wsdl:input>
+            <wsdl:output><soap:body use="literal" /></wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+
+    <wsdl:service name="SchoolIDService">
+        <wsdl:port binding="sid:SchoolIDSoapBinding" name="SchoolIDSoap10">
+            <soap:address location="https://id.school/eck/" />
+        </wsdl:port>
+    </wsdl:service>
+</wsdl:definitions>
