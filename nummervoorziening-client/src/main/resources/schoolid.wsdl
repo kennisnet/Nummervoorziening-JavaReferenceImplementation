@@ -403,7 +403,9 @@
 
     <wsdl:service name="SchoolIDService">
         <wsdl:port binding="sid:SchoolIDSoapBinding" name="SchoolIDSoap10">
-            <soap:address location="https://id.school/eck/" />
+            <!-- Change server address until we will have available sandbox environment. -->
+            <!-- <soap:address location="https://id.school/eck/" /> -->
+            <soap:address location="https://nummervoorziening.192.168.38.10.xip.io/nva/201509" />
         </wsdl:port>
     </wsdl:service>
 </wsdl:definitions>
