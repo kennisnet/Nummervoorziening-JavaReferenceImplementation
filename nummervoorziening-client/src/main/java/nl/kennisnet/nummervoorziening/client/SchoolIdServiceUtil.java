@@ -36,10 +36,19 @@ public class SchoolIdServiceUtil {
     /**
      * Executes request to Web Service and returns response containing all active chains.
      *
-     * @return RetrieveChainsResponse instance with list of active chains.
+     * @return RetrieveChainsResponse instance with list of all active chains.
      */
     public RetrieveChainsResponse retrieveChains() {
         return schoolID.retrieveChains(new RetrieveChainsRequest());
+    }
+
+    /**
+     * Executes request to Web Service and returns response containing all active sectors.
+     *
+     * @return RetrieveSectorsResponse instance with list of all active sectors.
+     */
+    public RetrieveSectorsResponse retrieveSectors() {
+        return schoolID.retrieveSectors(new RetrieveSectorsRequest());
     }
 
     /**
