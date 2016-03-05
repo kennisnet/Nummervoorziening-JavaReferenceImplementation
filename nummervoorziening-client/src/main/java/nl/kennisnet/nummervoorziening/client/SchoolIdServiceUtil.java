@@ -52,6 +52,21 @@ public class SchoolIdServiceUtil {
     }
 
     /**
+     * Executes request to Web Service and returns response containing generated EckId.
+     *
+     * @return RetrieveEckIdResponse instance with generated EckId.
+     */
+    public RetrieveEckIdResponse retrieveEckId(String chainId, String sectorId, String hPgnValue) {
+        RetrieveEckIdRequest retrieveEckIdRequest = new RetrieveEckIdRequest();
+        retrieveEckIdRequest.setChainId(chainId);
+        retrieveEckIdRequest.setSectorId(sectorId);
+        HPgn hPgn = new HPgn();
+        hPgn.setValue(hPgnValue);
+        retrieveEckIdRequest.setHpgn(hPgn);
+        return schoolID.retrieveEckId(retrieveEckIdRequest);
+    }
+
+    /**
      * Disables ssl verifications. It is needed in development if you are using
      * self signed certificate, this method should not be used in production.
      */
