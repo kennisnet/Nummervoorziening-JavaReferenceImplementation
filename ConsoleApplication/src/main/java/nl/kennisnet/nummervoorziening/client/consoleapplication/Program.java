@@ -1,7 +1,9 @@
 package nl.kennisnet.nummervoorziening.client.consoleapplication;
 
 import nl.kennisnet.nummervoorziening.client.schoolid.SchoolIDServiceUtil;
-import school.id.eck.schemas.v1_0.*;
+import school.id.eck.schemas.v1_0.Chain;
+import school.id.eck.schemas.v1_0.PingResponse;
+import school.id.eck.schemas.v1_0.Sector;
 
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
@@ -37,11 +39,9 @@ public class Program {
             System.out.println("Web Service is not available, finishing.");
             return;
         }
-        RetrieveChainsResponse retrieveChainsResponse = schoolIdServiceUtil.retrieveChains();
-        List<Chain> activeChains = retrieveChainsResponse.getChain();
+        List<Chain> activeChains = schoolIdServiceUtil.getChains();
         System.out.println("Count of active chains:    " + activeChains.size());
-        RetrieveSectorsResponse retrieveSectorsResponse = schoolIdServiceUtil.retrieveSectors();
-        List<Sector> activeSectors = retrieveSectorsResponse.getSector();
+        List<Sector> activeSectors = schoolIdServiceUtil.getSectors();
         System.out.println("Count of active sectors:   " + activeSectors.size());
         System.out.println("Retrieving EckId for first active sector and first active chain:");
         String chainId = activeChains.get(0).getId();
@@ -50,7 +50,7 @@ public class Program {
         System.out.println("SectorId:   " + sectorId);
         String hPgn = "hpgn";
         System.out.println("HPgn:       " + hPgn);
-        RetrieveEckIdResponse retrieveEckIdResponse = schoolIdServiceUtil.retrieveEckId(chainId, sectorId, hPgn);
-        System.out.println("Retrieved EckID: " + retrieveEckIdResponse.getEckId().getValue());
+        String eckId = schoolIdServiceUtil.generateSchoolID(chainId, sectorId, hPgn);
+        System.out.println("Retrieved EckID: " + eckId);
     }
 }

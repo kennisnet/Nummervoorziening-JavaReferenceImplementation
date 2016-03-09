@@ -13,6 +13,14 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
+    <dependencies>
+        <dependency>
+            <groupId>com.lambdaworks</groupId>
+            <artifactId>scrypt</artifactId>
+            <version>1.4.0</version>
+        </dependency>
+    </dependencies>
+
     <build>
         <plugins>
             <plugin>

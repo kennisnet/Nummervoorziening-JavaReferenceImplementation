@@ -40,7 +40,6 @@
 
     <modules>
         <module>ConsoleApplication</module>
-        <module>CryptJava</module>
         <module>SchoolID</module>
         <module>UnitTestProject</module>
     </modules>
