@@ -5,6 +5,7 @@ import school.id.eck.schemas.v1_0.*;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
+import javax.xml.datatype.XMLGregorianCalendar;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
@@ -26,12 +27,30 @@ public class SchoolIDServiceUtil {
     }
 
     /**
-     * Executes request to Web Service for getting information about its availability/configuration.
+     * Executes request to Web Service for getting information about its availability.
      *
-     * @return PingResponse instance with information about Web Service.
+     * @return true if service available, false - otherwise.
      */
-    public PingResponse ping() {
-        return schoolID.ping(new PingRequest());
+    public boolean isWebServiceAvailable() {
+        return schoolID.ping(new PingRequest()).isAvailable();
+    }
+
+    /**
+     * Executes request to Web Service and returns current application version.
+     *
+     * @return current web service application version.
+     */
+    public String getApplicationVersion() {
+        return schoolID.ping(new PingRequest()).getApplicationVersion();
+    }
+
+    /**
+     * Executes request to Web Service and returns server's system time.
+     *
+     * @return server's system time.
+     */
+    public XMLGregorianCalendar getSystemTime() {
+        return schoolID.ping(new PingRequest()).getSystemTime();
     }
 
     /**
