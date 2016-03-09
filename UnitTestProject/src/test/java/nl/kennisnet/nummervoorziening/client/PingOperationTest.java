@@ -1,7 +1,6 @@
 package nl.kennisnet.nummervoorziening.client;
 
 import org.junit.Test;
-import school.id.eck.schemas.v1_0.PingResponse;
 
 import javax.xml.datatype.DatatypeConfigurationException;
 
@@ -18,8 +17,7 @@ public class PingOperationTest extends AbstractUnitTest {
      */
     @Test
     public void testGettingAvailability() {
-        PingResponse pingResponse = schoolIdServiceUtil.ping();
-        assertTrue("Web Service is not available", pingResponse.isAvailable());
+        assertTrue("Web Service is not available", schoolIdServiceUtil.isWebServiceAvailable());
     }
 
     /**
@@ -27,8 +25,7 @@ public class PingOperationTest extends AbstractUnitTest {
      */
     @Test
     public void testGettingApplicationVersion() {
-        PingResponse pingResponse = schoolIdServiceUtil.ping();
-        String applicationVersion = pingResponse.getApplicationVersion();
+        String applicationVersion = schoolIdServiceUtil.getApplicationVersion();
         assertEquals("Version of Web Service is different from intended version", "0.1.0-SNAPSHOT", applicationVersion);
     }
 
@@ -37,8 +34,7 @@ public class PingOperationTest extends AbstractUnitTest {
      */
     @Test
     public void testWebServiceTimezone() throws DatatypeConfigurationException {
-        PingResponse pingResponse = schoolIdServiceUtil.ping();
-        long serverTimeInMillis = pingResponse.getSystemTime().toGregorianCalendar().getTimeInMillis();
+        long serverTimeInMillis = schoolIdServiceUtil.getSystemTime().toGregorianCalendar().getTimeInMillis();
         long localTimeInMillis = System.currentTimeMillis();
         long timeDifference = Math.abs(localTimeInMillis - serverTimeInMillis);
         assertTrue("Time difference is more then 2 minutes", timeDifference  < 120_000);

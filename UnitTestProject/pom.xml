@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <artifactId>UnitTestProject</artifactId>
-	<packaging>jar</packaging>
+    <packaging>jar</packaging>
     <name>UnitTestProject</name>
 
     <parent>
@@ -15,7 +15,7 @@
     </parent>
 
     <dependencies>
-	    <dependency>
+        <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.12</version>
