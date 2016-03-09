@@ -1,13 +1,9 @@
 package nl.kennisnet.nummervoorziening.client;
 
-import org.junit.Ignore;
 import org.junit.Test;
 import school.id.eck.schemas.v1_0.PingResponse;
 
 import javax.xml.datatype.DatatypeConfigurationException;
-import javax.xml.datatype.DatatypeFactory;
-import javax.xml.datatype.XMLGregorianCalendar;
-import java.util.GregorianCalendar;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -37,18 +33,14 @@ public class PingOperationTest extends AbstractUnitTest {
     }
 
     /**
-     * Tests correct timezone configuration. Should we compare timezones?
+     * Tests that time on server is not different from local time.
      */
     @Test
-    @Ignore
     public void testWebServiceTimezone() throws DatatypeConfigurationException {
         PingResponse pingResponse = schoolIdServiceUtil.ping();
-        XMLGregorianCalendar calendar = pingResponse.getSystemTime();
-        int remoteTimezone = calendar.getTimezone();
-        DatatypeFactory datatypeFactory = DatatypeFactory.newInstance();
-        GregorianCalendar gregorianCalendar = (GregorianCalendar) GregorianCalendar.getInstance();
-        int localTimezone = datatypeFactory.newXMLGregorianCalendar(gregorianCalendar).getTimezone();
-        assertEquals("Timezone configured not correctly - current server time is " + calendar,
-                localTimezone, remoteTimezone);
+        long serverTimeInMillis = pingResponse.getSystemTime().toGregorianCalendar().getTimeInMillis();
+        long localTimeInMillis = System.currentTimeMillis();
+        long timeDifference = Math.abs(localTimeInMillis - serverTimeInMillis);
+        assertTrue("Time difference is more then 2 minutes", timeDifference  < 120_000);
     }
 }
