@@ -7,6 +7,7 @@ import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
+import java.util.List;
 
 /**
  * Utility class that helps to work with Web Service.
@@ -34,36 +35,41 @@ public class SchoolIDServiceUtil {
     }
 
     /**
-     * Executes request to Web Service and returns response containing all active chains.
+     * Retrieves a list of currently available chains.
      *
-     * @return RetrieveChainsResponse instance with list of all active chains.
+     * @return list of all active chains.
      */
-    public RetrieveChainsResponse retrieveChains() {
-        return schoolID.retrieveChains(new RetrieveChainsRequest());
+    public List<Chain> getChains() {
+        return schoolID.retrieveChains(new RetrieveChainsRequest()).getChain();
     }
 
     /**
-     * Executes request to Web Service and returns response containing all active sectors.
+     * Retrieves a list of currently available sectors.
      *
-     * @return RetrieveSectorsResponse instance with list of all active sectors.
+     * @return list of all active sectors.
      */
-    public RetrieveSectorsResponse retrieveSectors() {
-        return schoolID.retrieveSectors(new RetrieveSectorsRequest());
+    public List<Sector> getSectors() {
+        return schoolID.retrieveSectors(new RetrieveSectorsRequest()).getSector();
     }
 
     /**
-     * Executes request to Web Service and returns response containing generated EckId.
+     * Invokes the School ID service to generate a School ID based on the
+     * hashed PGN, Chain ID and Sector ID.
      *
-     * @return RetrieveEckIdResponse instance with generated EckId.
+     * @param hpgn The scrypt hashed PGN.
+     * @param chainGuid A valid chain id.
+     * @param sectorGuid A valid sector id.
+     * @return If no validation or operational errors, a School ID.
+     *
      */
-    public RetrieveEckIdResponse retrieveEckId(String chainId, String sectorId, String hPgnValue) {
+    public String generateSchoolID(String hpgn, String chainGuid, String sectorGuid) {
         RetrieveEckIdRequest retrieveEckIdRequest = new RetrieveEckIdRequest();
-        retrieveEckIdRequest.setChainId(chainId);
-        retrieveEckIdRequest.setSectorId(sectorId);
-        HPgn hPgn = new HPgn();
-        hPgn.setValue(hPgnValue);
-        retrieveEckIdRequest.setHpgn(hPgn);
-        return schoolID.retrieveEckId(retrieveEckIdRequest);
+        retrieveEckIdRequest.setChainId(chainGuid);
+        retrieveEckIdRequest.setSectorId(sectorGuid);
+        HPgn hpgnWrapper = new HPgn();
+        hpgnWrapper.setValue(hpgn);
+        retrieveEckIdRequest.setHpgn(hpgnWrapper);
+        return schoolID.retrieveEckId(retrieveEckIdRequest).getEckId().getValue();
     }
 
     /**

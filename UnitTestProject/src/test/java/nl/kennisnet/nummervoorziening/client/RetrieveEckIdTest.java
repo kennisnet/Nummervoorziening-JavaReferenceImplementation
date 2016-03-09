@@ -1,39 +1,64 @@
 package nl.kennisnet.nummervoorziening.client;
 
-import nl.kennisnet.nummervoorziening.client.schoolid.SchoolIDServiceUtil;
-import org.junit.Before;
+import nl.kennisnet.nummervoorziening.client.schoolid.scrypter.ScryptUtil;
 import org.junit.Test;
-import school.id.eck.schemas.v1_0.RetrieveEckIdResponse;
 
-import java.security.KeyManagementException;
-import java.security.NoSuchAlgorithmException;
+import javax.xml.ws.soap.SOAPFaultException;
 
-import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Demonstrates correct work with "Retrieve EckId" operation.
  */
-public class RetrieveEckIdTest {
+public class RetrieveEckIdTest extends AbstractUnitTest {
 
-    private SchoolIDServiceUtil schoolIdServiceUtil;
+    private static final String VALID_PGN = "063138219";
+
+    private static final String VALID_HPGN = ScryptUtil.generateHexHash(VALID_PGN);
+
+    private static  String VALID_CHAIN_GUID = "e7ec7d3c-c235-4513-bfb6-e54e66854795";
+
+    private static  String VALID_SECTOR_GUID = "512e4729-03a4-43a2-95ba-758071d1b725";
+
+    private static final String VALID_EKT_ID = "https://school.id/pilot/998fc3e7c9add25be4369224e18d0876e7598480b184c" +
+        "6a35d8f49a49a3649040016f0aab6e292dd7da23292bd2f499e6018dfdab997d9408d80113d6dc72979";
+
+    private static final String INVALID_HPGN = "";
+
+    private static final String INVALID_CHAIN_GUID = "invalidchainguid";
+
+    private static final String INVALID_SECTOR_GUID = "invalidsectorguid";
 
     /**
-     * Setups util for working with Web Service.
+     * Tests that Web Service throws error on invalid hpgn.
      */
-    @Before
-    public void setup() throws NoSuchAlgorithmException, KeyManagementException {
-        schoolIdServiceUtil = new SchoolIDServiceUtil();
+    @Test(expected = SOAPFaultException.class)
+    public void testGetEckIdWithInvalidHpgn() {
+        schoolIdServiceUtil.generateSchoolID(INVALID_HPGN, VALID_CHAIN_GUID, VALID_SECTOR_GUID);
     }
 
     /**
-     * Tests that Web Service returns non empty string if we tries to create EckId
-     * for first active chain and sector and 'hpgn' string.
+     * Tests that Web Service throws error on invalid chain guid.
+     */
+    @Test(expected = SOAPFaultException.class)
+    public void testGetEckIdWithInvalidChain() {
+        schoolIdServiceUtil.generateSchoolID(VALID_HPGN, INVALID_CHAIN_GUID, VALID_SECTOR_GUID);
+    }
+
+    /**
+     * Tests that Web Service throws error on invalid sector guid.
+     */
+    @Test(expected = SOAPFaultException.class)
+    public void testGetEckIdWithInvalidSector() {
+        schoolIdServiceUtil.generateSchoolID(VALID_HPGN, VALID_CHAIN_GUID, INVALID_SECTOR_GUID);
+    }
+
+    /**
+     * Tests that Web Service returns correct eck_id on valid parameters.
      */
     @Test
-    public void testWebServiceReturnsNonEmptyEckId() {
-        String chainId = schoolIdServiceUtil.retrieveChains().getChain().get(0).getId();
-        String sectorId = schoolIdServiceUtil.retrieveSectors().getSector().get(0).getId();
-        RetrieveEckIdResponse retrieveEckIdResponse = schoolIdServiceUtil.retrieveEckId(chainId, sectorId, "hpgn");
-        assertFalse("Web Service returned empty EckId!", retrieveEckIdResponse.getEckId().getValue().isEmpty());
+    public void testGetEckIdWithValidValues() {
+        String schoolId = schoolIdServiceUtil.generateSchoolID(VALID_HPGN, VALID_CHAIN_GUID, VALID_SECTOR_GUID);
+        assertEquals(VALID_EKT_ID, schoolId);
     }
 }
