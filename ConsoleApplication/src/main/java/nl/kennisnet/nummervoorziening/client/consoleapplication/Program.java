@@ -1,6 +1,7 @@
 package nl.kennisnet.nummervoorziening.client.consoleapplication;
 
 import nl.kennisnet.nummervoorziening.client.schoolid.SchoolIDServiceUtil;
+import nl.kennisnet.nummervoorziening.client.schoolid.scrypter.ScryptUtil;
 import school.id.eck.schemas.v1_0.Chain;
 import school.id.eck.schemas.v1_0.PingResponse;
 import school.id.eck.schemas.v1_0.Sector;
@@ -48,9 +49,11 @@ public class Program {
         System.out.println("ChainId:    " + chainId);
         String sectorId = activeSectors.get(0).getId();
         System.out.println("SectorId:   " + sectorId);
-        String hPgn = "hpgn";
-        System.out.println("HPgn:       " + hPgn);
-        String eckId = schoolIdServiceUtil.generateSchoolID(chainId, sectorId, hPgn);
+        String pgn = "pgn";
+        System.out.println("Pgn:        " + pgn);
+        String hpgn = ScryptUtil.generateHexHash(pgn);
+        System.out.println("HPgn:       " + hpgn);
+        String eckId = schoolIdServiceUtil.generateSchoolID(hpgn, chainId, sectorId);
         System.out.println("Retrieved EckID: " + eckId);
     }
 }
