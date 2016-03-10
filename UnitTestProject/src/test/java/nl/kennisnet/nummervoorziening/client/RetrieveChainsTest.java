@@ -8,16 +8,16 @@ import java.util.List;
 import static org.junit.Assert.assertFalse;
 
 /**
- * Demonstrates correct work with "Retrieve Chains" operation.
+ * Demonstrates correct usage of the "Retrieve Chains" operation.
  */
 public class RetrieveChainsTest extends AbstractUnitTest {
 
     /**
-     * Tests that Web Service returns non empty list of active chains.
+     * Tests that the Nummervoorziening service returns non empty list of active chains.
      */
     @Test
     public void testGettingActiveChains() {
         List<Chain> activeChains = schoolIdServiceUtil.getChains();
-        assertFalse("Web Service returned empty list of active chains!", activeChains.isEmpty());
+        assertFalse("Nummervoorziening service returned empty list of active chains!", activeChains.isEmpty());
     }
 }

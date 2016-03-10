@@ -14,7 +14,7 @@ public class AbstractUnitTest {
     protected SchoolIDServiceUtil schoolIdServiceUtil;
 
     /**
-     * Setups util for working with Web Service.
+     * Setups Service Util for working with Nummervoorziening service.
      */
     @Before
     public void setup() throws NoSuchAlgorithmException, KeyManagementException {
