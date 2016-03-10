@@ -18,12 +18,17 @@ public class Program {
     private static SchoolIDServiceUtil schoolIDServiceUtil;
 
     /**
+     * This class should not be instantiated.
+     */
+    private Program() { }
+
+    /**
      * The main entry point for the program. This function demonstrates work
      * with Web Services via SchoolID project.
      *
      * @param args Command line arguments to the program. Not Used.
      */
-    public static void main(String args[]) throws NoSuchAlgorithmException, KeyManagementException {
+    public static void main(String[] args) throws NoSuchAlgorithmException, KeyManagementException {
         System.out.println("Current server information:");
         schoolIDServiceUtil = new SchoolIDServiceUtil();
 

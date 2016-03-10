@@ -15,6 +15,11 @@ import static com.lambdaworks.codec.Base64.encode;
 public class ScryptUtil {
 
     /**
+     * Static class, should not be instantiated.
+     */
+    private ScryptUtil() { }
+
+    /**
      * Converts input text into hex hash.
      *
      * @param input text for hashing.
@@ -48,9 +53,9 @@ public class ScryptUtil {
             String params = Long.toString(log2(N) << 16L | r << 8 | p, 16);
             return "$s0$" + params + '$' + String.valueOf(encode(salt)) + '$' + String.valueOf(encode(derived));
         } catch (UnsupportedEncodingException e) {
-            throw new IllegalStateException("JVM doesn't support UTF-8?");
+            throw new IllegalStateException("JVM doesn't support UTF-8?", e);
         } catch (GeneralSecurityException e) {
-            throw new IllegalStateException("JVM doesn't support SHA1PRNG or HMAC_SHA256?");
+            throw new IllegalStateException("JVM doesn't support SHA1PRNG or HMAC_SHA256?", e);
         }
     }
 
