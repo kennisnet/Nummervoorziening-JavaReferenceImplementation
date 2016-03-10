@@ -17,7 +17,7 @@ public class PingOperationTest extends AbstractUnitTest {
      */
     @Test
     public void testGettingAvailability() {
-        assertTrue("Web Service is not available", schoolIdServiceUtil.isWebServiceAvailable());
+        assertTrue("Web Service is not available", schoolIdServiceUtil.isNummervoorzieningServiceAvailable());
     }
 
     /**
