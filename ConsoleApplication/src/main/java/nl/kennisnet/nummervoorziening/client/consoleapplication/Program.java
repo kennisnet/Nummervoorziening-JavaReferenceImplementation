@@ -28,7 +28,7 @@ public class Program {
         schoolIDServiceUtil = new SchoolIDServiceUtil();
 
         if (!schoolIDServiceUtil.isNummervoorzieningServiceAvailable()) {
-            System.out.println("Web Service is not available, finishing.");
+            System.out.println("Nummervoorziening service is not available, finishing.");
         } else {
             String applicationVersion = schoolIDServiceUtil.getApplicationVersion();
             System.out.println("Application version:\t\t" + applicationVersion);
@@ -54,7 +54,7 @@ public class Program {
 
             // Execute a number of valid tests
             executeClientTest("063138219", chainId, sectorId);
-            executeClientTest("teacher@school.com", chainId, sectorId);
+            executeClientTest("20DP teacher@school.com", chainId, sectorId);
         }
     }
 

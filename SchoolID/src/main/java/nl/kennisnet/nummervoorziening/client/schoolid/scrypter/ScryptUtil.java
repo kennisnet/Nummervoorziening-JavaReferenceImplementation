@@ -44,7 +44,7 @@ public class ScryptUtil {
         try {
             char[] saltChar = saltString.toCharArray();
             byte[] salt = decode(saltChar);
-            byte[] derived = SCrypt.scrypt(passwd.getBytes("UTF-8"), salt, N, r, p, 32);
+            byte[] derived = SCrypt.scrypt(passwd.toLowerCase().getBytes("UTF-8"), salt, N, r, p, 32);
             String params = Long.toString(log2(N) << 16L | r << 8 | p, 16);
             return "$s0$" + params + '$' + String.valueOf(encode(salt)) + '$' + String.valueOf(encode(derived));
         } catch (UnsupportedEncodingException e) {
