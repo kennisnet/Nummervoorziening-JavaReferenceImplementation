@@ -27,7 +27,7 @@ public class Program {
         System.out.println("Current server information:");
         schoolIDServiceUtil = new SchoolIDServiceUtil();
 
-        if (!schoolIDServiceUtil.isWebServiceAvailable()) {
+        if (!schoolIDServiceUtil.isNummervoorzieningServiceAvailable()) {
             System.out.println("Web Service is not available, finishing.");
         } else {
             String applicationVersion = schoolIDServiceUtil.getApplicationVersion();
@@ -38,7 +38,7 @@ public class Program {
                 return;
             }
             System.out.println("System time:\t\t\t\t" + schoolIDServiceUtil.getSystemTime());
-            System.out.println("Available:\t\t\t\t\t" + schoolIDServiceUtil.isWebServiceAvailable());
+            System.out.println("Available:\t\t\t\t\t" + schoolIDServiceUtil.isNummervoorzieningServiceAvailable());
 
             List<Chain> activeChains = schoolIDServiceUtil.getChains();
             System.out.println("Count of active chains:\t\t" + activeChains.size());

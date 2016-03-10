@@ -31,7 +31,7 @@ public class SchoolIDServiceUtil {
      *
      * @return true if service available, false - otherwise.
      */
-    public boolean isWebServiceAvailable() {
+    public boolean isNummervoorzieningServiceAvailable() {
         return schoolID.ping(new PingRequest()).isAvailable();
     }
 
