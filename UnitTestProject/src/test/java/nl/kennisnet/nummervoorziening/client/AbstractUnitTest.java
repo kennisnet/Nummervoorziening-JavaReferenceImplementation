@@ -9,7 +9,7 @@ import java.security.NoSuchAlgorithmException;
 /**
  * Abstract unit test that initializes SchoolID client before tests.
  */
-public class AbstractUnitTest {
+public abstract class AbstractUnitTest {
 
     protected SchoolIDServiceUtil schoolIdServiceUtil;
 
