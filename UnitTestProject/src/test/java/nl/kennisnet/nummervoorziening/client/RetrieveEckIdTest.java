@@ -24,10 +24,10 @@ public class RetrieveEckIdTest extends AbstractUnitTest {
 
     private static  String VALID_SECTOR_GUID = "512e4729-03a4-43a2-95ba-758071d1b725";
 
-    private static final String VALID_STUDENT_SCHOOL_ID = "https://school.id/pilot/998fc3e7c9add25be4369224e18d0876" +
+    private static final String VALID_STUDENT_SCHOOL_ID = "https://id.school/pilot/998fc3e7c9add25be4369224e18d0876" +
         "e7598480b184c6a35d8f49a49a3649040016f0aab6e292dd7da23292bd2f499e6018dfdab997d9408d80113d6dc72979";
 
-    private static final String VALID_TEACHER_SCHOOL_ID = "https://school.id/pilot/2650076c96066464e76063f92c6dd59" +
+    private static final String VALID_TEACHER_SCHOOL_ID = "https://id.school/pilot/2650076c96066464e76063f92c6dd59" +
         "c46bca515d9e7c0c8dd9ae1c1b733751a3ab20b50688b39dc633a04dbefc76ac2bbbd9e62abe3b68558dbbcb831148d62";
 
     private static final String INVALID_HPGN = "";
