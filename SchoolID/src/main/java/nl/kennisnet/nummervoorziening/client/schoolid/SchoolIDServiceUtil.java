@@ -92,6 +92,31 @@ public class SchoolIDServiceUtil {
     }
 
     /**
+     * Executes Substitution operation for given parameters and returns the School ID.
+     *
+     * @param newHpgnValue The scrypt hashed new PGN.
+     * @param oldHpgnValue The scrypt hashed old PGN.
+     * @param chainGuid A valid chain id.
+     * @param sectorGuid A valid sector id.
+     * @param effectiveDate The date for the substitution to become active (optional).
+     * @return The generated School ID.
+     */
+    public String replaceEckId(String newHpgnValue, String oldHpgnValue, String chainGuid, String sectorGuid,
+                               XMLGregorianCalendar effectiveDate) {
+        ReplaceEckIdRequest replaceEckIdRequest = new ReplaceEckIdRequest();
+        replaceEckIdRequest.setChainId(chainGuid);
+        replaceEckIdRequest.setSectorId(sectorGuid);
+        HPgn newHpgn = new HPgn();
+        newHpgn.setValue(newHpgnValue);
+        replaceEckIdRequest.setHpgnNew(newHpgn);
+        HPgn oldHpgn = new HPgn();
+        oldHpgn.setValue(oldHpgnValue);
+        replaceEckIdRequest.setHpgnOld(oldHpgn);
+        replaceEckIdRequest.setEffectiveDate(effectiveDate);
+        return schoolID.replaceEckId(replaceEckIdRequest).getEckId().getValue();
+    }
+
+    /**
      * Disables ssl verifications. It is needed in development if you are using
      * self signed certificate, this method should not be used in production.
      */
