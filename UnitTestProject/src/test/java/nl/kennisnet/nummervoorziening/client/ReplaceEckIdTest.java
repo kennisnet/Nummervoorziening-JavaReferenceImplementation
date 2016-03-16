@@ -23,7 +23,9 @@ public class ReplaceEckIdTest extends AbstractUnitTest {
 
     private static final String validHpgnNewPrefix = "java01";
 
-    private static final String validHpgnOldPrefix = "java02";
+    private static final String validHpgnIntermediatePrefix = "java02";
+
+    private static final String validHpgnOldPrefix = "java03";
 
     private static final String validChainGuid = "e7ec7d3c-c235-4513-bfb6-e54e66854795";
 
@@ -35,17 +37,27 @@ public class ReplaceEckIdTest extends AbstractUnitTest {
 
     private static final String invalidSectorGuid = "invalidsectorguid";
 
+    private static int sequenceCounter = 0;
+
     private static final DateFormat HPGN_TIMESTAMP_FORMAT = new SimpleDateFormat("yyyyMMddHHmmss");
 
     private String validHpgnNew;
 
+    private String validHpgnIntermediate;
+
     private String validHpgnOld;
+
+    private int getSequentialNumber() {
+        return sequenceCounter++;
+    }
 
     @Before
     public void initValidValues() {
         String dateStr = HPGN_TIMESTAMP_FORMAT.format(new Date());
-        validHpgnNew = ScryptUtil.generateHexHash(validHpgnNewPrefix + dateStr);
-        validHpgnOld = ScryptUtil.generateHexHash(validHpgnOldPrefix + dateStr);
+        validHpgnNew = ScryptUtil.generateHexHash(validHpgnNewPrefix + getSequentialNumber() + dateStr);
+        validHpgnIntermediate = ScryptUtil.generateHexHash(validHpgnIntermediatePrefix +
+            getSequentialNumber() + dateStr);
+        validHpgnOld = ScryptUtil.generateHexHash(validHpgnOldPrefix + getSequentialNumber() + dateStr);
     }
 
     /**
@@ -105,22 +117,48 @@ public class ReplaceEckIdTest extends AbstractUnitTest {
     }
 
     /**
+     * ﻿Tests the Substitution functionality based on the output of the retrieve Eck ID functionality. In this case, a
+     * substitution is submitted to substitution hpgn intermediate to hpgn old, and a second substitution from hpgn new
+     * to hpgn intermediate. The last substitution should give back hpgn old instead of hpgn intermediate, also when
+     * retrieving the Eck Id based on hpgn new.
+     */
+    @Test
+    public void testReplaceEckIdWithIntermediate() {
+        // Use the datasets to retrieve the Eck IDs before substituting
+        String oldEckId = schoolIdServiceUtil.generateSchoolID(validHpgnOld, validChainGuid, validSectorGuid);
+        String intermediateEckId = schoolIdServiceUtil.generateSchoolID(validHpgnOld, validChainGuid, validSectorGuid);
+
+        // Submit the substitutions
+        String eckIdFirstSubstitution = schoolIdServiceUtil.replaceEckId(validHpgnIntermediate, validHpgnOld,
+            validChainGuid, validSectorGuid, null);
+        String eckIdSecondSubstitution = schoolIdServiceUtil.replaceEckId(validHpgnNew, validHpgnIntermediate,
+            validChainGuid, validSectorGuid, null);
+
+        // Retrieve the Eck ID based on the new Hpgn, and check the result
+        String finalEckId = schoolIdServiceUtil.generateSchoolID(validHpgnNew, validChainGuid, validSectorGuid);
+
+        // Assert that the Eck ID retrieved from the first Replace Eck ID operation is correct
+        assertEquals(oldEckId, eckIdFirstSubstitution);
+
+        // Assert that the Eck ID retrieved from the second Replace Eck ID operation is correct
+        assertEquals(oldEckId, eckIdSecondSubstitution);
+
+        // Assert that he Eck ID retrieved based on the new Hpgn equals the old Hpgn
+        assertEquals(oldEckId, finalEckId);
+    }
+
+    /**
      * Tests the Substitution functionality based on the output of the retrieve
      * Eck ID functionality. In this case, the substitution should not be
      * active immediately.
      */
     @Test
     public void testReplaceEckIdFuture() throws DatatypeConfigurationException {
-        // Use a new set of values
-        String currentDateStr = HPGN_TIMESTAMP_FORMAT.format(new Date());
-        String validFutureHpgnNew = ScryptUtil.generateHexHash(validHpgnNewPrefix + currentDateStr);
-        String validFutureHpgnOld = ScryptUtil.generateHexHash(validHpgnOldPrefix + currentDateStr);
-
         // Use the initial dataset to retrieve the Eck ID
-        schoolIdServiceUtil.generateSchoolID(validFutureHpgnOld, validChainGuid, validSectorGuid);
+        schoolIdServiceUtil.generateSchoolID(validHpgnOld, validChainGuid, validSectorGuid);
 
         // Use the future Hpgn to retrieve the Eck ID based on the new Hpgn
-        String newEckId = schoolIdServiceUtil.generateSchoolID(validFutureHpgnNew, validChainGuid, validSectorGuid);
+        String newEckId = schoolIdServiceUtil.generateSchoolID(validHpgnNew, validChainGuid, validSectorGuid);
 
         // Set the effective date to a moment in the future
         GregorianCalendar gregorianCalendar = new GregorianCalendar();
@@ -130,11 +168,11 @@ public class ReplaceEckIdTest extends AbstractUnitTest {
         XMLGregorianCalendar effectiveDate = DatatypeFactory.newInstance().newXMLGregorianCalendar(gregorianCalendar);
 
         // Submit the substitution
-        String processedEckId = schoolIdServiceUtil.replaceEckId(validFutureHpgnNew, validFutureHpgnOld, validChainGuid,
+        String processedEckId = schoolIdServiceUtil.replaceEckId(validHpgnNew, validHpgnOld, validChainGuid,
             validSectorGuid, effectiveDate);
 
         // Retrieve the Eck ID based on the new Hpgn, and check the result
-        String finalEckId = schoolIdServiceUtil.generateSchoolID(validFutureHpgnNew, validChainGuid, validSectorGuid);
+        String finalEckId = schoolIdServiceUtil.generateSchoolID(validHpgnNew, validChainGuid, validSectorGuid);
 
         // Assert that the Eck ID retrieved from the Replace Eck ID operation is correct
         assertEquals(newEckId, processedEckId);
