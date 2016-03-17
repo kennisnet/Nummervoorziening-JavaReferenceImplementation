@@ -27,9 +27,11 @@ public class ReplaceEckIdTest extends AbstractUnitTest {
 
     private static final String validHpgnOldPrefix = "java03";
 
-    private static final String validChainGuid = "e7ec7d3c-c235-4513-bfb6-e54e66854795";
+    private static final String validChainGuid =
+        "http://purl.edustandaard.nl/begrippenkader/e7ec7d3c-c235-4513-bfb6-e54e66854795";
 
-    private static final String validSectorGuid = "512e4729-03a4-43a2-95ba-758071d1b725";
+    private static final String validSectorGuid =
+        "http://purl.edustandaard.nl/begrippenkader/512e4729-03a4-43a2-95ba-758071d1b725";
 
     private static final String invalidHpgn = "";
 
