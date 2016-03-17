@@ -20,63 +20,42 @@ public class ScryptUtil {
     private ScryptUtil() { }
 
     /**
-     * Converts input text into hex hash.
+     * Converts input text into hex hash. For the sake of standardization and to prevent mismatches, the hexadecimal
+     * String is lower cased.
      *
      * @param input text for hashing.
      * @return hashed string in hex format.
      */
     public static String generateHexHash(String input) {
-        String hashed = scrypt(Constants.SALT, input, Constants.N, Constants.r, Constants.p);
-        String[] parts = hashed.split("\\$");
-        String generatedHash = parts[4];
-        char[] hashedChar = generatedHash.toCharArray();
-        return DatatypeConverter.printHexBinary(decode(hashedChar)).toLowerCase();
+        // The input should contain at least one characters
+        if (input != null && input.trim().length() > 1) {
+            byte[] derived = scrypt(Constants.SALT, input, Constants.N, Constants.r, Constants.p);
+            return DatatypeConverter.printHexBinary(derived).toLowerCase();
+        } else {
+            throw new IllegalArgumentException("The supplied input doesn't contain at least one character.");
+        }
     }
 
     /**
-     * Converts input text into hash in base64 format.
-     *
-     * @param input text for hashing.
-     * @return hashed string in base64 format.
-     */
-    public static String generateBase64Hash(String input) {
-        String hashed = scrypt(Constants.SALT, input, Constants.N, Constants.r, Constants.p);
-        String[] parts = hashed.split("\\$");
-        return parts[4];
-    }
+     * Returns a scrypted hash based on the supplied arguments.
 
-    private static String scrypt(String saltString, String passwd, int N, int r, int p) {
+     * @param saltString the salt
+     * @param passwd the password
+     * @param N CPU cost parameter.
+     * @param r Memory cost parameter.
+     * @param p Parallelization parameter.
+     *
+     * @return scrypted hash.
+     */
+    private static byte[] scrypt(String saltString, String passwd, int N, int r, int p) {
         try {
             char[] saltChar = saltString.toCharArray();
             byte[] salt = decode(saltChar);
-            byte[] derived = SCrypt.scrypt(passwd.toLowerCase().getBytes("UTF-8"), salt, N, r, p, 32);
-            String params = Long.toString(log2(N) << 16L | r << 8 | p, 16);
-            return "$s0$" + params + '$' + String.valueOf(encode(salt)) + '$' + String.valueOf(encode(derived));
+            return SCrypt.scrypt(passwd.toLowerCase().getBytes("UTF-8"), salt, N, r, p, 32);
         } catch (UnsupportedEncodingException e) {
             throw new IllegalStateException("JVM doesn't support UTF-8?", e);
         } catch (GeneralSecurityException e) {
             throw new IllegalStateException("JVM doesn't support SHA1PRNG or HMAC_SHA256?", e);
         }
-    }
-
-    private static int log2(int n) {
-        int log = 0;
-        if ((n & 0xffff0000) != 0) {
-            n >>>= 16;
-            log = 16;
-        }
-        if (n >= 256) {
-            n >>>= 8;
-            log += 8;
-        }
-        if (n >= 16) {
-            n >>>= 4;
-            log += 4;
-        }
-        if (n >= 4) {
-            n >>>= 2;
-            log += 2;
-        }
-        return log + (n >>> 1);
     }
 }

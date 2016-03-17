@@ -13,30 +13,12 @@ public class ScryptUtilTest extends AbstractUnitTest {
     private static String INPUT_TEACHER_VALUE = "20DP teacher@school.com";
 
     /**
-     * Tests that generated scrypt hash in Base64 notation is correct.
-     */
-    @Test
-    public void testStudentBase64HashGenerating() {
-        String expectedValue = "lSN80glj5jADRiAyRVCAmj35i74HdKNsNWv128imXns=";
-        assertEquals(expectedValue, ScryptUtil.generateBase64Hash(INPUT_STUDENT_VALUE));
-    }
-
-    /**
      * Tests that generated scrypt hash in hexadecimal notation is correct.
      */
     @Test
     public void testStudentHexHashGenerating() {
         String expectedValue = "95237cd20963e630034620324550809a3df98bbe0774a36c356bf5dbc8a65e7b";
         assertEquals(expectedValue, ScryptUtil.generateHexHash(INPUT_STUDENT_VALUE));
-    }
-
-    /**
-     * Tests that generated scrypt hash in Base64 notation is correct.
-     */
-    @Test
-    public void testTeacherBase64HashGenerating() {
-        String expectedValue = "TK32UewBl5CeZDLLg0c2mtujn0Qnals81Z0XBm8Qqz4=";
-        assertEquals(expectedValue, ScryptUtil.generateBase64Hash(INPUT_TEACHER_VALUE));
     }
 
     /**
