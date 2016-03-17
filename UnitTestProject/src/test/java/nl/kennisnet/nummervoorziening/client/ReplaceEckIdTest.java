@@ -156,9 +156,6 @@ public class ReplaceEckIdTest extends AbstractUnitTest {
      */
     @Test
     public void testReplaceEckIdFuture() throws DatatypeConfigurationException {
-        // Use the initial dataset to retrieve the Eck ID
-        schoolIdServiceUtil.generateSchoolID(validHpgnOld, validChainGuid, validSectorGuid);
-
         // Use the future Hpgn to retrieve the Eck ID based on the new Hpgn
         String newEckId = schoolIdServiceUtil.generateSchoolID(validHpgnNew, validChainGuid, validSectorGuid);
 
@@ -179,7 +176,7 @@ public class ReplaceEckIdTest extends AbstractUnitTest {
         // Assert that the Eck ID retrieved from the Replace Eck ID operation is correct
         assertEquals(newEckId, processedEckId);
 
-        // Assert that he Eck ID retrieved based on the new Hpgn equals the old Hpgn
+        // Assert that the Eck ID retrieved based on the new Hpgn equals the original value (thus not being substituted)
         assertEquals(newEckId, finalEckId);
     }
 }
