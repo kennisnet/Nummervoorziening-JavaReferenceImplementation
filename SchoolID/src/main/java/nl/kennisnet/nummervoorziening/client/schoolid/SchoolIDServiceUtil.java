@@ -118,14 +118,15 @@ public class SchoolIDServiceUtil {
     }
 
     /**
-     * Invokes the School ID service to start generating a batch of School IDs.
+     * Invokes the School ID service to start generating a batch of School IDs
+     * based on passed input values.
      *
      * @param listedHpgnMap Map with hashed PGN values as values and their indexes as keys.
      * @param chainGuid     A valid chain id.
      * @param sectorGuid    A valid sector id.
      * @return If no validation or operational errors, identifier of created batch.
      */
-    public String submitSchoolIdBatch(Map<Integer, String> listedHpgnMap, String chainGuid, String sectorGuid) {
+    public String submitHpgnBatch(Map<Integer, String> listedHpgnMap, String chainGuid, String sectorGuid) {
         SubmitEckIdBatchRequest submitEckIdBatchRequest = new SubmitEckIdBatchRequest();
         submitEckIdBatchRequest.setChainId(chainGuid);
         submitEckIdBatchRequest.setSectorId(sectorGuid);
