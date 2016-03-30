@@ -9,6 +9,8 @@ import javax.xml.datatype.XMLGregorianCalendar;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Utility class that helps to work with Web Service.
@@ -75,11 +77,10 @@ public class SchoolIDServiceUtil {
      * Invokes the School ID service to generate a School ID based on the
      * hashed PGN, Chain ID and Sector ID.
      *
-     * @param hpgn The scrypt hashed PGN.
-     * @param chainGuid A valid chain id.
+     * @param hpgn       The scrypt hashed PGN.
+     * @param chainGuid  A valid chain id.
      * @param sectorGuid A valid sector id.
      * @return If no validation or operational errors, a School ID.
-     *
      */
     public String generateSchoolID(String hpgn, String chainGuid, String sectorGuid) {
         RetrieveEckIdRequest retrieveEckIdRequest = new RetrieveEckIdRequest();
@@ -94,10 +95,10 @@ public class SchoolIDServiceUtil {
     /**
      * Executes Substitution operation for given parameters and returns the School ID.
      *
-     * @param newHpgnValue The scrypt hashed new PGN.
-     * @param oldHpgnValue The scrypt hashed old PGN.
-     * @param chainGuid A valid chain id.
-     * @param sectorGuid A valid sector id.
+     * @param newHpgnValue  The scrypt hashed new PGN.
+     * @param oldHpgnValue  The scrypt hashed old PGN.
+     * @param chainGuid     A valid chain id.
+     * @param sectorGuid    A valid sector id.
      * @param effectiveDate The date for the substitution to become active (optional).
      * @return The generated School ID.
      */
@@ -117,12 +118,54 @@ public class SchoolIDServiceUtil {
     }
 
     /**
+     * Invokes the School ID service to start generating a batch of School IDs.
+     *
+     * @param listedHpgnMap Map with hashed PGN values as values and their indexes as keys.
+     * @param chainGuid     A valid chain id.
+     * @param sectorGuid    A valid sector id.
+     * @return If no validation or operational errors, identifier of created batch.
+     */
+    public String submitSchoolIdBatch(Map<Integer, String> listedHpgnMap, String chainGuid, String sectorGuid) {
+        SubmitEckIdBatchRequest submitEckIdBatchRequest = new SubmitEckIdBatchRequest();
+        submitEckIdBatchRequest.setChainId(chainGuid);
+        submitEckIdBatchRequest.setSectorId(sectorGuid);
+        for (Map.Entry<Integer, String> entry : listedHpgnMap.entrySet()) {
+            ListedHpgn listedHpgn = new ListedHpgn();
+            listedHpgn.setIndex(entry.getKey());
+            HPgn hPgnWrapper = new HPgn();
+            hPgnWrapper.setValue(entry.getValue());
+            listedHpgn.setHPgn(hPgnWrapper);
+            submitEckIdBatchRequest.getHpgnList().add(listedHpgn);
+        }
+        return schoolID.submitEckIdBatch(submitEckIdBatchRequest).getBatchIdentifier().getValue();
+    }
+
+    /**
+     * Invokes the School ID service to get list of generated School IDs for specified batch.
+     *
+     * @return If no validation or operational errors, response with failed and processed School IDs.
+     */
+    public SchoolIDBatch retrieveSchoolIdBatch(String batchIdentifier) {
+        RetrieveEckIdBatchRequest request = new RetrieveEckIdBatchRequest();
+        BatchIdentifier batchIdentifierWrapper = new BatchIdentifier();
+        batchIdentifierWrapper.setValue(batchIdentifier);
+        request.setBatchIdentifier(batchIdentifierWrapper);
+        RetrieveEckIdBatchResponse response = schoolID.retrieveEckIdBatch(request);
+        SchoolIDBatch schoolIDBatch = new SchoolIDBatch();
+        schoolIDBatch.setSuccess(response.getSuccess().stream().collect(Collectors.toMap(ListedEckIdSuccess::getIndex,
+            listedEckIdSuccess -> listedEckIdSuccess.getEckId().getValue())));
+        schoolIDBatch.setFailed(response.getFailed().stream().collect(Collectors.toMap(ListedEckIdFailure::getIndex,
+            ListedEckIdFailure::getErrorMessage)));
+        return schoolIDBatch;
+    }
+
+    /**
      * Disables ssl verifications. It is needed in development if you are using
      * self signed certificate, this method should not be used in production.
      */
     private void disableSsl() throws NoSuchAlgorithmException, KeyManagementException {
         SSLContext sc = SSLContext.getInstance("TLS");
-        sc.init(null, new TrustManager[] { new TrustAllX509TrustManager() }, new java.security.SecureRandom());
+        sc.init(null, new TrustManager[]{new TrustAllX509TrustManager()}, new java.security.SecureRandom());
         HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
         HttpsURLConnection.setDefaultHostnameVerifier((hostname, session) -> true);
     }

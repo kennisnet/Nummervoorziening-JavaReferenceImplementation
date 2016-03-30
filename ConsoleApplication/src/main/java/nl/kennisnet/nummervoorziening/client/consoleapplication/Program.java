@@ -1,13 +1,17 @@
 package nl.kennisnet.nummervoorziening.client.consoleapplication;
 
+import nl.kennisnet.nummervoorziening.client.schoolid.SchoolIDBatch;
 import nl.kennisnet.nummervoorziening.client.schoolid.SchoolIDServiceUtil;
 import nl.kennisnet.nummervoorziening.client.schoolid.scrypter.ScryptUtil;
 import school.id.eck.schemas.v1_0.Chain;
 import school.id.eck.schemas.v1_0.Sector;
 
+import javax.xml.ws.soap.SOAPFaultException;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Main class. Contains program entry point.
@@ -15,12 +19,14 @@ import java.util.List;
 public class Program {
 
     private static final String WEB_SERVICE_APPLICATION_VERSION = "0.1.0-SNAPSHOT";
+    private static final long RETRIEVE_SCHOOL_ID_BATCH_TIMEOUT = 25_000;
     private static SchoolIDServiceUtil schoolIDServiceUtil;
 
     /**
      * This class should not be instantiated.
      */
-    private Program() { }
+    private Program() {
+    }
 
     /**
      * The main entry point for the program. This function demonstrates work
@@ -28,7 +34,7 @@ public class Program {
      *
      * @param args Command line arguments to the program. Not Used.
      */
-    public static void main(String[] args) throws NoSuchAlgorithmException, KeyManagementException {
+    public static void main(String[] args) throws NoSuchAlgorithmException, KeyManagementException, InterruptedException {
         System.out.println("Current server information:");
         schoolIDServiceUtil = new SchoolIDServiceUtil();
 
@@ -52,22 +58,29 @@ public class Program {
             System.out.println("Count of active sectors:\t" + activeSectors.size());
 
             System.out.println("\nRetrieving SchoolID for first active sector and first active chain:");
-            String chainId = activeChains.get(0).getId();
-            System.out.println("ChainId:\t\t\t\t\t" + chainId);
-            String sectorId = activeSectors.get(0).getId();
-            System.out.println("SectorId:\t\t\t\t\t" + sectorId);
+            String chainGuid = activeChains.get(0).getId();
+            System.out.println("Chain Guid:\t\t\t\t\t" + chainGuid);
+            String sectorGuid = activeSectors.get(0).getId();
+            System.out.println("Sector Guid:\t\t\t\t\t" + sectorGuid);
 
             // Execute a number of valid tests
-            executeClientTest("063138219", chainId, sectorId);
-            executeClientTest("20DP teacher@school.com", chainId, sectorId);
+            executeClientTest("063138219", chainGuid, sectorGuid);
+            executeClientTest("20DP teacher@school.com", chainGuid, sectorGuid);
+
+            System.out.println("\nSubmiting SchoolID batch for the same values:");
+            Map<Integer, String> listedHpgnMap = new HashMap<>();
+            listedHpgnMap.put(0, ScryptUtil.generateHexHash("063138219"));
+            listedHpgnMap.put(1, ScryptUtil.generateHexHash("20DP teacher@school.com"));
+            executeBatchOperation(chainGuid, sectorGuid, listedHpgnMap);
         }
     }
 
     /**
-     * Executes test cases
-     * @param pgn The PGN input
-     * @param chainGuid A valid Chain Guid
-     * @param sectorGuid A valid Sector Guid
+     * Executes test cases.
+     *
+     * @param pgn        The PGN input.
+     * @param chainGuid  A valid Chain Guid.
+     * @param sectorGuid A valid Sector Guid.
      */
     private static void executeClientTest(String pgn, String chainGuid, String sectorGuid) {
         System.out.println("Pgn:\t\t\t\t\t\t" + pgn);
@@ -80,5 +93,30 @@ public class Program {
         String eckId = schoolIDServiceUtil.generateSchoolID(hpgn, chainGuid, sectorGuid);
         System.out.println("Retrieved SchoolID:\t\t\t" + eckId);
         System.out.println();
+    }
+
+    /**
+     * Executes batch operation.
+     *
+     * @param chainGuid     A valid Chain Guid.
+     * @param sectorGuid    A valid Sector Guid.
+     * @param listedHpgnMap Map with hashed PGN values as values and their indexes as keys.
+     */
+    private static void executeBatchOperation(String chainGuid, String sectorGuid,
+                                              Map<Integer, String> listedHpgnMap) throws InterruptedException {
+        String batchIdentifier = schoolIDServiceUtil.submitSchoolIdBatch(listedHpgnMap, chainGuid, sectorGuid);
+        System.out.println("Batch identifier:\t\t\t" + batchIdentifier);
+        SchoolIDBatch schoolIDBatch = null;
+        do {
+            System.out.println("Waiting for processing...");
+            Thread.sleep(RETRIEVE_SCHOOL_ID_BATCH_TIMEOUT);
+            try {
+                schoolIDBatch = schoolIDServiceUtil.retrieveSchoolIdBatch(batchIdentifier);
+            } catch (SOAPFaultException e) {
+                System.out.println("Cannot retrieve batch response: " + e.getMessage());
+            }
+        } while (schoolIDBatch == null);
+        System.out.println("Generated School IDs:\t\t" + schoolIDBatch.getSuccess());
+        System.out.println("Failed School IDs:\t\t\t" + schoolIDBatch.getFailed());
     }
 }
