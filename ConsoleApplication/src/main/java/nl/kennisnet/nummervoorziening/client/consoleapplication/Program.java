@@ -61,7 +61,7 @@ public class Program {
             String chainGuid = activeChains.get(0).getId();
             System.out.println("Chain Guid:\t\t\t\t\t" + chainGuid);
             String sectorGuid = activeSectors.get(0).getId();
-            System.out.println("Sector Guid:\t\t\t\t\t" + sectorGuid);
+            System.out.println("Sector Guid:\t\t\t\t" + sectorGuid);
 
             // Execute a number of valid tests
             executeClientTest("063138219", chainGuid, sectorGuid);
