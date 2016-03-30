@@ -104,7 +104,7 @@ public class Program {
      */
     private static void executeBatchOperation(String chainGuid, String sectorGuid,
                                               Map<Integer, String> listedHpgnMap) throws InterruptedException {
-        String batchIdentifier = schoolIDServiceUtil.submitSchoolIdBatch(listedHpgnMap, chainGuid, sectorGuid);
+        String batchIdentifier = schoolIDServiceUtil.submitHpgnBatch(listedHpgnMap, chainGuid, sectorGuid);
         System.out.println("Batch identifier:\t\t\t" + batchIdentifier);
         SchoolIDBatch schoolIDBatch = null;
         do {

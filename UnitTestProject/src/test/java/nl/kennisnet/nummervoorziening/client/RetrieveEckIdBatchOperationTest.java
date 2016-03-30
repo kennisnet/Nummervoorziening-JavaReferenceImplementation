@@ -86,7 +86,7 @@ public class RetrieveEckIdBatchOperationTest extends AbstractUnitTest {
      */
     @Test(expected = SOAPFaultException.class)
     public void testRetrieveBatchTwoTimes() throws InterruptedException {
-        String batchIdentifier = schoolIdServiceUtil.submitSchoolIdBatch(
+        String batchIdentifier = schoolIdServiceUtil.submitHpgnBatch(
             Collections.singletonMap(0, VALID_STUDENT_HPGN), VALID_CHAIN_GUID, VALID_SECTOR_GUID);
         for (int i = 0; i < BATCH_RETRIEVE_ATTEMPTS_COUNT; i++) {
             Thread.sleep(RETRIEVE_SCHOOL_ID_BATCH_TIMEOUT);
@@ -110,7 +110,7 @@ public class RetrieveEckIdBatchOperationTest extends AbstractUnitTest {
      */
     private SchoolIDBatch executeBatchOperation(String chainGuid, String sectorGuid,
                                                 Map<Integer, String> listedHpgnMap) throws InterruptedException {
-        String batchIdentifier = schoolIdServiceUtil.submitSchoolIdBatch(listedHpgnMap, chainGuid, sectorGuid);
+        String batchIdentifier = schoolIdServiceUtil.submitHpgnBatch(listedHpgnMap, chainGuid, sectorGuid);
         SchoolIDBatch schoolIDBatch = null;
         for (int i = 0; i < BATCH_RETRIEVE_ATTEMPTS_COUNT; i++) {
             Thread.sleep(RETRIEVE_SCHOOL_ID_BATCH_TIMEOUT);
