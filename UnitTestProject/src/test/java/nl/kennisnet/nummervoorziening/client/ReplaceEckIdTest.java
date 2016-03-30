@@ -21,23 +21,11 @@ import static org.junit.Assert.assertEquals;
  */
 public class ReplaceEckIdTest extends AbstractUnitTest {
 
-    private static final String validHpgnNewPrefix = "java01";
+    private static final String VALID_HPGN_NEW_PREFIX = "java01";
 
-    private static final String validHpgnIntermediatePrefix = "java02";
+    private static final String VALID_HPGN_INTERMEDIATE_PREFIX = "java02";
 
-    private static final String validHpgnOldPrefix = "java03";
-
-    private static final String validChainGuid =
-        "http://purl.edustandaard.nl/begrippenkader/e7ec7d3c-c235-4513-bfb6-e54e66854795";
-
-    private static final String validSectorGuid =
-        "http://purl.edustandaard.nl/begrippenkader/512e4729-03a4-43a2-95ba-758071d1b725";
-
-    private static final String invalidHpgn = "";
-
-    private static final String invalidChainGuid = "invalidchainguid";
-
-    private static final String invalidSectorGuid = "invalidsectorguid";
+    private static final String VALID_HPGN_OLD_PREFIX = "java03";
 
     private static int sequenceCounter = 0;
 
@@ -56,10 +44,10 @@ public class ReplaceEckIdTest extends AbstractUnitTest {
     @Before
     public void initValidValues() {
         String dateStr = HPGN_TIMESTAMP_FORMAT.format(new Date());
-        validHpgnNew = ScryptUtil.generateHexHash(validHpgnNewPrefix + getSequentialNumber() + dateStr);
-        validHpgnIntermediate = ScryptUtil.generateHexHash(validHpgnIntermediatePrefix +
+        validHpgnNew = ScryptUtil.generateHexHash(VALID_HPGN_NEW_PREFIX + getSequentialNumber() + dateStr);
+        validHpgnIntermediate = ScryptUtil.generateHexHash(VALID_HPGN_INTERMEDIATE_PREFIX +
             getSequentialNumber() + dateStr);
-        validHpgnOld = ScryptUtil.generateHexHash(validHpgnOldPrefix + getSequentialNumber() + dateStr);
+        validHpgnOld = ScryptUtil.generateHexHash(VALID_HPGN_OLD_PREFIX + getSequentialNumber() + dateStr);
     }
 
     /**
@@ -67,7 +55,7 @@ public class ReplaceEckIdTest extends AbstractUnitTest {
      */
     @Test(expected = SOAPFaultException.class)
     public void testReplaceEckIdWithInvalidNewHpgn() {
-        schoolIdServiceUtil.replaceEckId(invalidHpgn, validHpgnOld, validChainGuid, validSectorGuid, null);
+        schoolIdServiceUtil.replaceEckId(INVALID_HPGN, validHpgnOld, VALID_CHAIN_GUID, VALID_SECTOR_GUID, null);
     }
 
     /**
@@ -75,7 +63,7 @@ public class ReplaceEckIdTest extends AbstractUnitTest {
      */
     @Test(expected = SOAPFaultException.class)
     public void testReplaceEckIdWithInvalidOldHpgn() {
-        schoolIdServiceUtil.replaceEckId(validHpgnNew, invalidHpgn, validChainGuid, validSectorGuid, null);
+        schoolIdServiceUtil.replaceEckId(validHpgnNew, INVALID_HPGN, VALID_CHAIN_GUID, VALID_SECTOR_GUID, null);
     }
 
     /**
@@ -83,7 +71,7 @@ public class ReplaceEckIdTest extends AbstractUnitTest {
      */
     @Test(expected = SOAPFaultException.class)
     public void testReplaceEckIdWithInvalidChain() {
-        schoolIdServiceUtil.replaceEckId(validHpgnNew, validHpgnOld, invalidChainGuid, validSectorGuid, null);
+        schoolIdServiceUtil.replaceEckId(validHpgnNew, validHpgnOld, INVALID_SECTOR_GUID, VALID_SECTOR_GUID, null);
     }
 
     /**
@@ -91,7 +79,7 @@ public class ReplaceEckIdTest extends AbstractUnitTest {
      */
     @Test(expected = SOAPFaultException.class)
     public void testReplaceEckIdWithInvalidSector() {
-        schoolIdServiceUtil.replaceEckId(validHpgnNew, validHpgnOld, validChainGuid, invalidSectorGuid, null);
+        schoolIdServiceUtil.replaceEckId(validHpgnNew, validHpgnOld, VALID_CHAIN_GUID, INVALID_SECTOR_GUID, null);
     }
 
 
@@ -103,13 +91,13 @@ public class ReplaceEckIdTest extends AbstractUnitTest {
     @Test
     public void testReplaceEckIdNow() {
         // Use the initial dataset to retrieve the Eck ID
-        String initialEckId = schoolIdServiceUtil.generateSchoolID(validHpgnOld, validChainGuid, validSectorGuid);
+        String initialEckId = schoolIdServiceUtil.generateSchoolID(validHpgnOld, VALID_CHAIN_GUID, VALID_SECTOR_GUID);
 
         // Submit the substitution
-        String processedEckId = schoolIdServiceUtil.replaceEckId(validHpgnNew, validHpgnOld, validChainGuid, validSectorGuid, null);
+        String processedEckId = schoolIdServiceUtil.replaceEckId(validHpgnNew, validHpgnOld, VALID_CHAIN_GUID, VALID_SECTOR_GUID, null);
 
         // Retrieve the Eck ID based on the new Hpgn, and check the result
-        String finalEckId = schoolIdServiceUtil.generateSchoolID(validHpgnNew, validChainGuid, validSectorGuid);
+        String finalEckId = schoolIdServiceUtil.generateSchoolID(validHpgnNew, VALID_CHAIN_GUID, VALID_SECTOR_GUID);
 
         // Assert that the Eck ID retrieved from the Replace Eck ID operation is correct
         assertEquals(initialEckId, processedEckId);
@@ -127,17 +115,17 @@ public class ReplaceEckIdTest extends AbstractUnitTest {
     @Test
     public void testReplaceEckIdWithIntermediate() {
         // Use the datasets to retrieve the Eck IDs before substituting
-        String oldEckId = schoolIdServiceUtil.generateSchoolID(validHpgnOld, validChainGuid, validSectorGuid);
-        String intermediateEckId = schoolIdServiceUtil.generateSchoolID(validHpgnOld, validChainGuid, validSectorGuid);
+        String oldEckId = schoolIdServiceUtil.generateSchoolID(validHpgnOld, VALID_CHAIN_GUID, VALID_SECTOR_GUID);
+        String intermediateEckId = schoolIdServiceUtil.generateSchoolID(validHpgnOld, VALID_CHAIN_GUID, VALID_SECTOR_GUID);
 
         // Submit the substitutions
         String eckIdFirstSubstitution = schoolIdServiceUtil.replaceEckId(validHpgnIntermediate, validHpgnOld,
-            validChainGuid, validSectorGuid, null);
+            VALID_CHAIN_GUID, VALID_SECTOR_GUID, null);
         String eckIdSecondSubstitution = schoolIdServiceUtil.replaceEckId(validHpgnNew, validHpgnIntermediate,
-            validChainGuid, validSectorGuid, null);
+            VALID_CHAIN_GUID, VALID_SECTOR_GUID, null);
 
         // Retrieve the Eck ID based on the new Hpgn, and check the result
-        String finalEckId = schoolIdServiceUtil.generateSchoolID(validHpgnNew, validChainGuid, validSectorGuid);
+        String finalEckId = schoolIdServiceUtil.generateSchoolID(validHpgnNew, VALID_CHAIN_GUID, VALID_SECTOR_GUID);
 
         // Assert that the Eck ID retrieved from the first Replace Eck ID operation is correct
         assertEquals(oldEckId, eckIdFirstSubstitution);
@@ -157,7 +145,7 @@ public class ReplaceEckIdTest extends AbstractUnitTest {
     @Test
     public void testReplaceEckIdFuture() throws DatatypeConfigurationException {
         // Use the future Hpgn to retrieve the Eck ID based on the new Hpgn
-        String newEckId = schoolIdServiceUtil.generateSchoolID(validHpgnNew, validChainGuid, validSectorGuid);
+        String newEckId = schoolIdServiceUtil.generateSchoolID(validHpgnNew, VALID_CHAIN_GUID, VALID_SECTOR_GUID);
 
         // Set the effective date to a moment in the future
         GregorianCalendar gregorianCalendar = new GregorianCalendar();
@@ -167,11 +155,11 @@ public class ReplaceEckIdTest extends AbstractUnitTest {
         XMLGregorianCalendar effectiveDate = DatatypeFactory.newInstance().newXMLGregorianCalendar(gregorianCalendar);
 
         // Submit the substitution
-        String processedEckId = schoolIdServiceUtil.replaceEckId(validHpgnNew, validHpgnOld, validChainGuid,
-            validSectorGuid, effectiveDate);
+        String processedEckId = schoolIdServiceUtil.replaceEckId(validHpgnNew, validHpgnOld, VALID_CHAIN_GUID,
+            VALID_SECTOR_GUID, effectiveDate);
 
         // Retrieve the Eck ID based on the new Hpgn, and check the result
-        String finalEckId = schoolIdServiceUtil.generateSchoolID(validHpgnNew, validChainGuid, validSectorGuid);
+        String finalEckId = schoolIdServiceUtil.generateSchoolID(validHpgnNew, VALID_CHAIN_GUID, VALID_SECTOR_GUID);
 
         // Assert that the Eck ID retrieved from the Replace Eck ID operation is correct
         assertEquals(newEckId, processedEckId);

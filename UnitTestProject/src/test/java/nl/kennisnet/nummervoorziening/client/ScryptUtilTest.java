@@ -9,7 +9,9 @@ import static org.junit.Assert.assertEquals;
  * Demonstrates correct usage of the ScryptUtil class.
  */
 public class ScryptUtilTest extends AbstractUnitTest {
+
     private static String INPUT_STUDENT_VALUE = "063138219";
+
     private static String INPUT_TEACHER_VALUE = "20DP teacher@school.com";
 
     /**
