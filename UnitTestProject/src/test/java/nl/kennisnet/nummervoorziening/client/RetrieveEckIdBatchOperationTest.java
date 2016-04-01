@@ -118,7 +118,10 @@ public class RetrieveEckIdBatchOperationTest extends AbstractUnitTest {
                 schoolIDBatch = schoolIdServiceUtil.retrieveSchoolIdBatch(batchIdentifier);
                 break;
             } catch (SOAPFaultException e) {
-                // do nothing
+                // SOAP fault with actor 'NotFinishedException' is thrown if server did not finish processing yet.
+                if (!"NotFinishedException".equals(e.getFault().getFaultActor())) {
+                    throw e;
+                }
             }
         }
         return schoolIDBatch;
