@@ -7,8 +7,7 @@ import school.id.eck.schemas.v1_0.Chain;
 import school.id.eck.schemas.v1_0.Sector;
 
 import javax.xml.ws.soap.SOAPFaultException;
-import java.security.KeyManagementException;
-import java.security.NoSuchAlgorithmException;
+import java.security.GeneralSecurityException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,7 +33,7 @@ public class Program {
      *
      * @param args Command line arguments to the program. Not Used.
      */
-    public static void main(String[] args) throws NoSuchAlgorithmException, KeyManagementException, InterruptedException {
+    public static void main(String[] args) throws GeneralSecurityException, InterruptedException {
         System.out.println("Current server information:");
         schoolIDServiceUtil = new SchoolIDServiceUtil();
 
