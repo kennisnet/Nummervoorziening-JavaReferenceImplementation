@@ -3,11 +3,14 @@ package nl.kennisnet.nummervoorziening.client.schoolid;
 import school.id.eck.schemas.v1_0.*;
 
 import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 import javax.xml.datatype.XMLGregorianCalendar;
-import java.security.KeyManagementException;
-import java.security.NoSuchAlgorithmException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.security.GeneralSecurityException;
+import java.security.KeyStore;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -17,15 +20,20 @@ import java.util.stream.Collectors;
  */
 public class SchoolIDServiceUtil {
 
+    public static final String CLIENT_CERTIFICATE_TEST_JKS = "/client_certificate_test.jks";
     private final SchoolID schoolID;
+    /** The password of the java keystore which contains the client and server certificates used for this test only. */
+    final char[] KEYSTORE_DEMO_PASSWORD = "changeit_nv".toCharArray();
+
+    final char[] KEY_PASSWORD = "c0;Cb7}/1#".toCharArray();
 
     /**
      * Initializes class for working with SchoolID Web Service.
      */
-    public SchoolIDServiceUtil() throws NoSuchAlgorithmException, KeyManagementException {
+    public SchoolIDServiceUtil() throws GeneralSecurityException {
         SchoolIDService schoolIDService = new SchoolIDService();
         schoolID = schoolIDService.getSchoolIDSoap10();
-        disableSsl();
+        configureSsl();
     }
 
     /**
@@ -163,11 +171,42 @@ public class SchoolIDServiceUtil {
     /**
      * Disables ssl verifications. It is needed in development if you are using
      * self signed certificate, this method should not be used in production.
+     * Configure the SSL configuration to be able to connect/use the weberservices for test purpose only.
+     *
+     * Please note this SSL configuration is added within this code to simplify running these tests on different machines,
+     * without configuring the java keystores outside of this application.
+     *
+     * It's preferred to define/maintain the keystores outside of this application. Neither should the keystore be
+     * supplied within the source (code).
+     * This is only for the sake of demonstration purpose.
+     * The passwords shouldn't be hardcoded in the application code.
+     *
+     * The certificates present in these stores will only work during the test phase!
      */
-    private void disableSsl() throws NoSuchAlgorithmException, KeyManagementException {
-        SSLContext sc = SSLContext.getInstance("TLS");
-        sc.init(null, new TrustManager[]{new TrustAllX509TrustManager()}, new java.security.SecureRandom());
-        HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
-        HttpsURLConnection.setDefaultHostnameVerifier((hostname, session) -> true);
+    private void configureSsl() throws GeneralSecurityException {
+        try {
+            // Let's initialize our test keystore which is supplied within this project to simplify
+            // running these tests on different machines. This should not be used in the actual implementation!!!
+
+            final KeyStore keyStore = KeyStore.getInstance("JKS");
+            final InputStream is = SchoolIDServiceUtil.class.getResourceAsStream(CLIENT_CERTIFICATE_TEST_JKS);
+            keyStore.load(is, KEYSTORE_DEMO_PASSWORD);
+
+            final KeyManagerFactory kmf = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
+            kmf.init(keyStore, KEY_PASSWORD);
+
+            // Instead of using the TrustAllX509TrustManager which will trust all certificates we should limit the
+            // certificates which are accepted, to have at least some restriction.
+            // final TrustManagerFactory tmf = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
+            // tmf.init(keyStore);
+
+            // Creates the socket factory for HttpsURLConnection which will use our keystore
+            SSLContext sc = SSLContext.getInstance("TLS");
+            sc.init(kmf.getKeyManagers(), new TrustManager[] { new TrustAllX509TrustManager() }, new java.security.SecureRandom());
+            HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
+            HttpsURLConnection.setDefaultHostnameVerifier((hostname, session) -> true);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
