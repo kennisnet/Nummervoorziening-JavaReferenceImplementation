@@ -18,6 +18,7 @@ import java.util.Map;
 public class Program {
 
     private static final String WEB_SERVICE_APPLICATION_VERSION = "0.1.0-SNAPSHOT";
+    private static final int BATCH_RETRIEVE_ATTEMPTS_COUNT = 10;
     private static final long RETRIEVE_SCHOOL_ID_BATCH_TIMEOUT = 25_000;
     private static SchoolIDServiceUtil schoolIDServiceUtil;
 
@@ -106,15 +107,25 @@ public class Program {
         String batchIdentifier = schoolIDServiceUtil.submitHpgnBatch(listedHpgnMap, chainGuid, sectorGuid);
         System.out.println("Batch identifier:\t\t\t" + batchIdentifier);
         SchoolIDBatch schoolIDBatch = null;
-        do {
-            System.out.println("Waiting for processing...");
+        System.out.println("Waiting for processing...");
+        for (int i = 0; i < BATCH_RETRIEVE_ATTEMPTS_COUNT; i++) {
             Thread.sleep(RETRIEVE_SCHOOL_ID_BATCH_TIMEOUT);
             try {
                 schoolIDBatch = schoolIDServiceUtil.retrieveSchoolIdBatch(batchIdentifier);
+                break;
             } catch (SOAPFaultException e) {
-                System.out.println("Cannot retrieve batch response: " + e.getMessage());
+                switch (e.getFault().getFaultActor()) {
+                    case "NotFinishedException":
+                        System.out.println("Batch processing not finished yet...");
+                        break;
+                    case "TemporaryBlockedException":
+                    case "ContentAlreadyRetrievedException":
+                    case "ContentRemovedException":
+                    default:
+                        throw e;
+                }
             }
-        } while (schoolIDBatch == null);
+        }
         System.out.println("Generated School IDs:\t\t" + schoolIDBatch.getSuccess());
         System.out.println("Failed School IDs:\t\t\t" + schoolIDBatch.getFailed());
     }
