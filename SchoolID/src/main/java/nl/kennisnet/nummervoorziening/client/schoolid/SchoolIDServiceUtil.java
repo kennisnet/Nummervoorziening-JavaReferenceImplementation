@@ -7,6 +7,9 @@ import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 import javax.xml.datatype.XMLGregorianCalendar;
+import javax.xml.ws.Binding;
+import javax.xml.ws.BindingProvider;
+import javax.xml.ws.handler.Handler;
 import java.io.IOException;
 import java.io.InputStream;
 import java.security.GeneralSecurityException;
@@ -27,12 +30,25 @@ public class SchoolIDServiceUtil {
 
     final char[] KEY_PASSWORD = "c0;Cb7}/1#".toCharArray();
 
+    private static final String INSTANCE_OIN = "00000007123456789012";
+
     /**
      * Initializes class for working with SchoolID Web Service.
      */
     public SchoolIDServiceUtil() throws GeneralSecurityException {
         SchoolIDService schoolIDService = new SchoolIDService();
-        schoolID = schoolIDService.getSchoolIDSoap10();
+
+        // Explicitly enable WS-Addressing (required by the Nummervoorziening service)
+        schoolID = schoolIDService.getSchoolIDSoap10(new javax.xml.ws.soap.AddressingFeature(true, true));
+
+        BindingProvider bindingProvider = (BindingProvider) schoolID;
+        Binding binding = bindingProvider.getBinding();
+
+        // Add a Message Handler to be able to modify the Soap Headers
+        List<Handler> handlerChain = binding.getHandlerChain();
+        handlerChain.add(new AuthorizedSoapHeaderOinInterceptor());
+        binding.setHandlerChain(handlerChain);
+
         configureSsl();
     }
 
@@ -208,5 +224,15 @@ public class SchoolIDServiceUtil {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    /**
+     * Retrieves the Instance OIN of the current application. Normally, this OIN will be based on the BRIN number of
+     * the School which wants to use the Nummervoorziening application.
+     *
+     * @return The configured Instance OIN
+     */
+    public static String getInstanceOin() {
+        return INSTANCE_OIN;
     }
 }
