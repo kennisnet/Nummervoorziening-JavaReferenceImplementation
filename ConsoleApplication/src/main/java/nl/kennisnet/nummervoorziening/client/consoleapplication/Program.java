@@ -67,7 +67,7 @@ public class Program {
             executeClientTest("063138219", chainGuid, sectorGuid);
             executeClientTest("20DP teacher@school.com", chainGuid, sectorGuid);
 
-            System.out.println("\nSubmiting SchoolID batch for the same values:");
+            System.out.println("\nSubmitting SchoolID batch for the same values:");
             Map<Integer, String> listedHpgnMap = new HashMap<>();
             listedHpgnMap.put(0, ScryptUtil.generateHexHash("063138219"));
             listedHpgnMap.put(1, ScryptUtil.generateHexHash("20DP teacher@school.com"));
