@@ -30,7 +30,7 @@ public class SchoolIDServiceUtil {
 
     final char[] KEY_PASSWORD = "c0;Cb7}/1#".toCharArray();
 
-    private static final String INSTANCE_OIN = "00000007123456789012";
+    private static final String INSTANCE_OIN = "0000000700012JR34567";
 
     /**
      * Initializes class for working with SchoolID Web Service.
