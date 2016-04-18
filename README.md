@@ -39,11 +39,10 @@ Bij de ontwikkeling van Nummervoorziening - Java Client Reference Application zi
  
 | GroupId | ArtifactId | Version | Beschrijving |
 | ------- | :--------: | :-----: | -----------: |
-| com.lambdaworks | scrypt | 1.4.0 | SCrypt library |
 |org.apache.maven.plugins|maven-compiler-plugin|2.6|Release compiler|
 |org.apache.maven.plugins|maven-assembly-plugin|2.6|Release packager|
 |org.sonarsource.scanner.maven|sonar-maven-plugin|3.0.1|Code Quality check|
-|org.owasp|dependency-check-maven|3.0.1|Controleert op security issues|
+|org.owasp|dependency-check-maven|1.3.4|Controleert op security issues|
 |org.jvnet.jax-ws-commons|jaxws-maven-plugin|2.3|Classgenerator op basis van WSDL|
 |org.codehaus.mojo|build-helper-maven-plugin|1.10|Classgenerator op basis van WSDL|
 ||||||
@@ -59,7 +58,7 @@ De Client Reference Application communiceert met de Nummervoorziening applicatie
 ## Project Modules
  * **ConsoleApplication**: Voorbeeldapplicatie om de werking van de *schoolID* module te demonstreren 
  * **SchoolID**: Library met de basisfunctionaliteiten om de Nummervoorziening applicatie op een juiste wijze te kunnen bevragen. 
- * **UnitTestProject**: Voorbeeldcode voor het gebruik van de Nummervoorziening applicatie, tevens gebruikmakend van de *SchoolID* module en de *scrypt* library van *com.lambdaworks*.
+ * **UnitTestProject**: Voorbeeldcode voor het gebruik van de Nummervoorziening applicatie, tevens gebruikmakend van de *SchoolID* module en de *scrypt* library van *com.lambdaworks*. Om de Java Reference Application analoog te houden aan de C#.NET variant is er voor gekozen om een separaat UnitTest module op te nemen in de code. 
  * **pom.xml**: Maven parent build bestand voor het gehele project.
 
 ### ConsoleApplication - Structuur
@@ -109,7 +108,7 @@ Vanuit de *pom.xml* in de *SchoolID* module wordt de meegeleverde WSDL gedurende
 De juiste invulling van de *From* SOAP header is tezamen met het ondersteunen van *self-signed* certificaten (voor testdoeleinden) opgenomen in de initialization methode van de *SchoolIDServiceUtil* class. De From header wordt bepaald en toegevoegd vanuit de SOAP interceptor class *AuthorizedSoapHeaderOinInterceptor*. 
 
 ## Installatie
-De applicatie is gebouwd voor Debian 8 en getest op diverse platformen. Om de applicatie succesvol te laten draaien moet aan een aantal randvoorwaarden worden voldaan:
+De applicatie is gebouwd voor Java 8 en getest op diverse platformen. Om de applicatie succesvol te laten draaien moet aan een aantal randvoorwaarden worden voldaan:
  * Java 8 (OpenJDK of Oracle JDK)
  * De machine dient een geldig en geregistreerd TLS client certificaat te hebben waarmee geidentificeerd kan worden bij de Nummervoorziening applicatie
  * Het certificaat is in een Certificate Store (JKS bestand) opgenomen en in de juiste directory geplaatst (*SchoolID/src/main/resources/*)
@@ -121,7 +120,7 @@ Middels het *install* commando kan Maven vervolgens de classes compileren. Vervo
 
 ## Licenties
  * **Nummervoorziening - Java Client Reference Application**: Nog vast te stellen.
- * **CryptSharp**: Copyright (c) 2010, 2013 James F. Bellinger <http://www.zer7.com/software/cryptsharp>
+ * **Scrypt Java library**: Apache License, Version 2.0. <https://github.com/wg/scrypt>
 
 ## Contact
 Voor meer informatie kunt u contact opnemen met [Marc Fleischeuers](mailto:M.Fleischeuers@kennisnet.nl).
@@ -131,4 +130,3 @@ Voor meer informatie kunt u contact opnemen met [Marc Fleischeuers](mailto:M.Fle
 [//]: # (These are reference links used in the body of this note)
    [Edukoppeling Wiki]: <http://developers.wiki.kennisnet.nl/index.php?title=Standaarden:Edukoppeling>
    [Stichting Kennisnet]: <http://www.kennisnet.nl>
-   [CryptSharp]: <http://www.zer7.com/software/cryptsharp>
