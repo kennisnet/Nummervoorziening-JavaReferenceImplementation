@@ -28,7 +28,6 @@ public abstract class AbstractUnitTest {
     protected static final String VALID_STUDENT_SCHOOL_ID = "https://id.school/pilot/a7d5e96cbfc61cddcf9a918150d5137" +
         "c6659497ecb435d97abfc60b7297c750a47a3163af49418acc73148d34915833b1cef077ba687c621aa40654906073571";
 
-
     protected static final String VALID_TEACHER_SCHOOL_ID = "https://id.school/pilot/8dc3d9adad74ee2d588a6456be26da9" +
         "faab1f0b1801bb15897f0e979ada55556aee041e329b27328259ba383af779080209c5c54f3db9b171bd43980aedc47c3";
 
