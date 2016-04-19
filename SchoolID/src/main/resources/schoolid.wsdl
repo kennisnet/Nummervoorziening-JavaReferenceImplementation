@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?xml-stylesheet type="text/xsl" href="wsdl-viewer.xsl"?>
 <wsdl:definitions name="SchoolID"
                   targetNamespace="http://id.school/eck/schemas/v1_0"
                   xmlns:sid="http://id.school/eck/schemas/v1_0"
@@ -9,7 +10,7 @@
 
     <wsdl:documentation>
         Service: SchoolID (Nummervoorziening)
-        Version: 0.2-20160303
+        Version: 0.3-20160419
         Author: Thomas Beekman (T.Beekman@Kennisnet.nl)
 
         Uses WS:Addressing
@@ -405,7 +406,7 @@
         <wsdl:port binding="sid:SchoolIDSoapBinding" name="SchoolIDSoap10">
             <!-- Change server address until we will have available sandbox environment. -->
             <!-- <soap:address location="https://id.school/eck/" /> -->
-            <soap:address location="https://nummervoorziening.192.168.38.10.xip.io/service/201509" />
+            <soap:address location="https://id.school/service/201509" />
         </wsdl:port>
     </wsdl:service>
 </wsdl:definitions>
