@@ -23,26 +23,28 @@ import java.util.stream.Collectors;
  */
 public class SchoolIDServiceUtil {
 
-    public static final String CLIENT_CERTIFICATE_TEST_JKS = "/client_certificate_test.jks";
     private final SchoolID schoolID;
-    /** The password of the java keystore which contains the client and server certificates used for this test only. */
-    final char[] KEYSTORE_DEMO_PASSWORD = "changeit_nv".toCharArray();
 
-    final char[] KEY_PASSWORD = "c0;Cb7}/1#".toCharArray();
-
-    private static final String INSTANCE_OIN = "0000000700012JR34567";
+    private static Configuration configuration;
 
     /**
      * Initializes class for working with SchoolID Web Service.
      */
-    public SchoolIDServiceUtil() throws GeneralSecurityException {
+    public SchoolIDServiceUtil() throws GeneralSecurityException, IOException {
         SchoolIDService schoolIDService = new SchoolIDService();
+
+        // Initialize the Configuration class
+        configuration = new Configuration();
 
         // Explicitly enable WS-Addressing (required by the Nummervoorziening service)
         schoolID = schoolIDService.getSchoolIDSoap10(new javax.xml.ws.soap.AddressingFeature(true, true));
 
         BindingProvider bindingProvider = (BindingProvider) schoolID;
         Binding binding = bindingProvider.getBinding();
+
+        // Override the default endpoint address
+        bindingProvider.getRequestContext().put(bindingProvider.ENDPOINT_ADDRESS_PROPERTY,
+            configuration.getEndpointAddress());
 
         // Add a Message Handler to be able to modify the Soap Headers
         List<Handler> handlerChain = binding.getHandlerChain();
@@ -205,11 +207,14 @@ public class SchoolIDServiceUtil {
             // running these tests on different machines. This should not be used in the actual implementation!!!
 
             final KeyStore keyStore = KeyStore.getInstance("JKS");
-            final InputStream is = SchoolIDServiceUtil.class.getResourceAsStream(CLIENT_CERTIFICATE_TEST_JKS);
-            keyStore.load(is, KEYSTORE_DEMO_PASSWORD);
+            final InputStream is = SchoolIDServiceUtil.class.getResourceAsStream(
+                configuration.getCertificateKeystorePath()
+            );
+
+            keyStore.load(is, configuration.getCertificateKeystorePassword().toCharArray());
 
             final KeyManagerFactory kmf = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
-            kmf.init(keyStore, KEY_PASSWORD);
+            kmf.init(keyStore, configuration.getCertificatePassword().toCharArray());
 
             // Instead of using the TrustAllX509TrustManager which will trust all certificates we should limit the
             // certificates which are accepted, to have at least some restriction.
@@ -233,6 +238,6 @@ public class SchoolIDServiceUtil {
      * @return The configured Instance OIN
      */
     public static String getInstanceOin() {
-        return INSTANCE_OIN;
+        return configuration.getClientInstanceOin();
     }
 }
