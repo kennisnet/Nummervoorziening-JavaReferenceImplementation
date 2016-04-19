@@ -46,6 +46,9 @@ Bij de ontwikkeling van Nummervoorziening - Java Client Reference Application zi
 |org.jvnet.jax-ws-commons|jaxws-maven-plugin|2.3|Classgenerator op basis van WSDL|
 |org.codehaus.mojo|build-helper-maven-plugin|1.10|Classgenerator op basis van WSDL|
 ||||||
+
+Alle dependencies en plugins worden beheerd middels Maven; er hoeven geen aanvullende zaken manueel geïnstalleerd te worden door de ontwikkelaar zelf. 
+
   
 ## Communicatie
 De Client Reference Application communiceert met de Nummervoorziening applicatie middels het SOAP-messaging protocol. Hierbij wordt het profiel 2W-be (tweeweg, Best Effort) zoals beschreven in de Edukoppeling Transactiestandaard versie 1.2 en Digikoppeling WUS 3.0 gevolgd. Praktisch gezien houdt dit het volgende in:
@@ -118,8 +121,15 @@ De applicatie is gebouwd voor Java 8 en getest op diverse platformen. Om de appl
 
 Middels het *install* commando kan Maven vervolgens de classes compileren. Vervolgens kan de ConsoleApplication en/of de Unit testen worden uitgevoerd. 
 
+Client certificaten voor de communicatie met de Nummervoorziening applicatie op de Sandbox omgeving dient bij Kennisnet opgevraagd te worden. Voor de productieomgevingen is een valide PKI-Overheid certificaat vereist.
+
+## Omgevingen
+ * Sandboxomgeving: https://sandbox.id.school/
+ * Kwalificatieomgeving: https://kwalificatie.id.school/
+ * Productieomgeving: https://id.school/
+
 ## Licenties
- * **Nummervoorziening - Java Client Reference Application**: Nog vast te stellen.
+ * **Nummervoorziening - Java Client Reference Application**: Apache License, Version 2.0.
  * **Scrypt Java library**: Apache License, Version 2.0. <https://github.com/wg/scrypt>
 
 ## Contact
