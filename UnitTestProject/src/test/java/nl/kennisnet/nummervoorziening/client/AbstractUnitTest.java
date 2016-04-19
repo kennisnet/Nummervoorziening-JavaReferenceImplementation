@@ -4,6 +4,7 @@ import nl.kennisnet.nummervoorziening.client.schoolid.SchoolIDServiceUtil;
 import nl.kennisnet.nummervoorziening.client.schoolid.scrypter.ScryptUtil;
 import org.junit.Before;
 
+import java.io.IOException;
 import java.security.GeneralSecurityException;
 
 /**
@@ -43,7 +44,7 @@ public abstract class AbstractUnitTest {
      * Setups Service Util for working with Nummervoorziening service.
      */
     @Before
-    public void setup() throws GeneralSecurityException {
+    public void setup() throws GeneralSecurityException, IOException {
         schoolIdServiceUtil = new SchoolIDServiceUtil();
     }
 }

@@ -73,6 +73,7 @@ De Client Reference Application communiceert met de Nummervoorziening applicatie
     * *Constants.java* De SCrypt constanten zoals vastgesteld.
     * *ScryptUtil.java* Bevat de *generateHexHash()* functie die in de rest van de Library wordt gebruikt om de eerste niveau hash te berekenen.  
  * **n.k.n.c.s/AuthorizedSoapHeaderOinInterceptor.java**: Interceptor class voor het toevoegen van de vereiste From header aan de SOAP Header van de berichten.
+ * **n.k.n.c.s/Configuration.java**: Map class voor het ophalen en verwerken van de parameters uit het *config.properties* bestand.
  * **n.k.n.c.s/SchoolIDBatch.java**: Map class voor de opslag en verwerking van opgehaalde batches uit de Nummervoorziening applicatie gebruikmakend van standaard Java objecten.  
  * **n.k.n.c.s/SchoolIDServiceUtil.java**: Service util class voor centrale initializatie van de verbinding met de Nummervoorziening applicatie (certificaten & WS-Adressing) en het uitvoeren van operaties.
  * **n.k.n.c.s/TrustAllX509TrustManager.java**: Override class voor het toestaan van self-signed certificaten.
@@ -93,13 +94,14 @@ De Client Reference Application communiceert met de Nummervoorziening applicatie
  * **pom.xml**: Maven build bestand voor de UnitTestProject module.
 
 ## Applicatie Configuratie
-De applicatie configuratie is opgenomen in de *SchoolIDServiceUtil* class in de vorm van (*final*) variabelen. Zowel de ConsoleApplication als de UnitTestProject maken gebruik van deze configuratie.
+De applicatie configuratie is opgenomen in het *SchoolID/src/main/resources/config.properties* bestand in de vorm van key/value pairs. Zowel de ConsoleApplication als de UnitTestProject maken gebruik van deze configuratie.
 
-### Variabelen
- * **CLIENT_CERTIFICATE_TEST_JKS**: De (relatieve) locatie van de Certificate store waarin het client certificaat is op genomen.
- * **KEYSTORE_DEMO_PASSWORD**: Het wachtwoord van de Certificate store.
- * **KEY_PASSWORD**: Het wachtwoord van het client certificaat.
- * **INSTANCE_OIN**: De op de BRIN4 gebaseerde OIN van de School.
+### Parameters
+ * **endpoint.address**: De url van de Nummervoorziening applicatie.
+ * **certificate.KeyStorePath**: De (relatieve) locatie van de Certificate store waarin het client certificaat is opgenomen.
+ * **certificate.KeyStorePassword **: Het wachtwoord van de Certificate store.
+ * **certificate.Password**: Het wachtwoord van het client certificaat.
+ * **client.instanceOin**: De op de BRIN4 gebaseerde OIN van de School.
    
 ## Ontwikkeling
 
