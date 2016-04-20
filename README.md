@@ -126,6 +126,7 @@ Middels het *install* commando kan Maven vervolgens de classes compileren. Vervo
 Client certificaten voor de communicatie met de Nummervoorziening applicatie op de Sandbox omgeving dient bij Kennisnet opgevraagd te worden. Voor de productieomgevingen is een valide PKI-Overheid certificaat vereist.
 
 ## Omgevingen
+ * Acceptatieomgeving: https://acceptatie.id.school/
  * Sandboxomgeving: https://sandbox.id.school/
  * Kwalificatieomgeving: https://kwalificatie.id.school/
  * Productieomgeving: https://id.school/
