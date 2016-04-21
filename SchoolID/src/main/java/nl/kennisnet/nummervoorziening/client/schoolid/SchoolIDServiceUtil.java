@@ -10,6 +10,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
 import javax.xml.ws.Binding;
 import javax.xml.ws.BindingProvider;
 import javax.xml.ws.handler.Handler;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.security.GeneralSecurityException;
@@ -207,9 +208,20 @@ public class SchoolIDServiceUtil {
             // running these tests on different machines. This should not be used in the actual implementation!!!
 
             final KeyStore keyStore = KeyStore.getInstance("JKS");
-            final InputStream is = SchoolIDServiceUtil.class.getResourceAsStream(
+            InputStream is = SchoolIDServiceUtil.class.getResourceAsStream(
                 configuration.getCertificateKeystorePath()
             );
+
+            // Check if file exists in Class path. If not, retry using absolute path. If still not found, throw
+            // an Exception
+            if (is == null) {
+                is = new FileInputStream(configuration.getCertificateKeystorePath());
+
+                if (is == null) {
+                    throw new IOException("File " + configuration.getCertificateKeystorePath() + " not found in " +
+                        "classpath and/or filesystem");
+                }
+            }
 
             keyStore.load(is, configuration.getCertificateKeystorePassword().toCharArray());
 
