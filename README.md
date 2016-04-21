@@ -102,6 +102,8 @@ De applicatie configuratie is opgenomen in het *SchoolID/src/main/resources/conf
  * **certificate.KeyStorePassword **: Het wachtwoord van de Certificate store.
  * **certificate.Password**: Het wachtwoord van het client certificaat.
  * **client.instanceOin**: De op de BRIN4 gebaseerde OIN van de School.
+
+Let op: bij wijzigingen in de config.properties dient de SchoolID module opnieuw te worden gecompileerd, aangezien dit configuratiebestand binnen het classpath wordt opgenomen als onderdeel van de SchoolID package.
    
 ## Ontwikkeling
 
