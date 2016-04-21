@@ -99,7 +99,7 @@ De applicatie configuratie is opgenomen in het *SchoolID/src/main/resources/conf
 ### Parameters
  * **endpoint.address**: De url van de Nummervoorziening applicatie.
  * **certificate.KeyStorePath**: De (relatieve) locatie van de Certificate store waarin het client certificaat is opgenomen.
- * **certificate.KeyStorePassword **: Het wachtwoord van de Certificate store.
+ * **certificate.KeyStorePassword**: Het wachtwoord van de Certificate store.
  * **certificate.Password**: Het wachtwoord van het client certificaat.
  * **client.instanceOin**: De op de BRIN4 gebaseerde OIN van de School.
 
