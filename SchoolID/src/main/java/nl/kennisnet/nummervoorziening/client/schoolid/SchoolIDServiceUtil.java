@@ -188,19 +188,9 @@ public class SchoolIDServiceUtil {
     }
 
     /**
-     * Disables ssl verifications. It is needed in development if you are using
-     * self signed certificate, this method should not be used in production.
-     * Configure the SSL configuration to be able to connect/use the weberservices for test purpose only.
-     *
-     * Please note this SSL configuration is added within this code to simplify running these tests on different machines,
-     * without configuring the java keystores outside of this application.
-     *
-     * It's preferred to define/maintain the keystores outside of this application. Neither should the keystore be
-     * supplied within the source (code).
-     * This is only for the sake of demonstration purpose.
-     * The passwords shouldn't be hardcoded in the application code.
-     *
-     * The certificates present in these stores will only work during the test phase!
+     * Configures SSL/TLS communication and disables certificate validation. It is needed in development if you are
+     * using self signed certificate, this method should not be used in production.
+     * Configure the SSL configuration to be able to connect/use the webservices for test purpose only.
      */
     private void configureSsl() throws GeneralSecurityException {
         try {

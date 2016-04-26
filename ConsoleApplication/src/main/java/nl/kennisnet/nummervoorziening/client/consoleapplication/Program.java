@@ -19,8 +19,11 @@ import java.util.Map;
 public class Program {
 
     private static final String WEB_SERVICE_APPLICATION_VERSION = "0.1.0-SNAPSHOT";
+
     private static final int BATCH_RETRIEVE_ATTEMPTS_COUNT = 10;
+
     private static final long RETRIEVE_SCHOOL_ID_BATCH_TIMEOUT = 25_000;
+
     private static SchoolIDServiceUtil schoolIDServiceUtil;
 
     /**
@@ -105,16 +108,39 @@ public class Program {
      */
     private static void executeBatchOperation(String chainGuid, String sectorGuid,
                                               Map<Integer, String> listedHpgnMap) throws InterruptedException {
-        String batchIdentifier = schoolIDServiceUtil.submitHpgnBatch(listedHpgnMap, chainGuid, sectorGuid);
+
+        String batchIdentifier;
+
+        try {
+            batchIdentifier = schoolIDServiceUtil.submitHpgnBatch(listedHpgnMap, chainGuid, sectorGuid);
+        } catch (SOAPFaultException e) {
+            System.out.println("Exception thrown by service while trying to submit batch: " +
+                e.getFault().getFaultActor());
+
+            switch(e.getFault().getFaultActor()) {
+                case "LimitDailyBatchSubmissionsExceededException":
+                    System.out.println("Reached the limit of the amount of allowed daily submissions");
+                    break;
+                default:
+                    System.out.println("No additional information available");
+            }
+
+            return;
+        }
+
         System.out.println("Batch identifier:\t\t\t" + batchIdentifier);
         SchoolIDBatch schoolIDBatch = null;
         System.out.println("Waiting for processing...");
+
         for (int i = 0; i < BATCH_RETRIEVE_ATTEMPTS_COUNT; i++) {
             Thread.sleep(RETRIEVE_SCHOOL_ID_BATCH_TIMEOUT);
             try {
                 schoolIDBatch = schoolIDServiceUtil.retrieveSchoolIdBatch(batchIdentifier);
                 break;
             } catch (SOAPFaultException e) {
+                System.out.println("Exception thrown by service while trying to retrieve batch: " +
+                    e.getFault().getFaultActor());
+
                 switch (e.getFault().getFaultActor()) {
                     case "NotFinishedException":
                         System.out.println("Batch processing not finished yet...");
@@ -123,10 +149,11 @@ public class Program {
                     case "ContentAlreadyRetrievedException":
                     case "ContentRemovedException":
                     default:
-                        throw e;
+                        System.out.println("No additional information available");
                 }
             }
         }
+
         System.out.println("Generated School IDs:\t\t" + schoolIDBatch.getSuccess());
         System.out.println("Failed School IDs:\t\t\t" + schoolIDBatch.getFailed());
     }
