@@ -25,6 +25,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
 import javax.xml.ws.Binding;
 import javax.xml.ws.BindingProvider;
 import javax.xml.ws.handler.Handler;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -41,6 +42,10 @@ public class SchoolIDServiceUtil {
 
     private final SchoolID schoolID;
 
+    private static final String PROPERTIES_FILE_NAME = "config.properties";
+
+    private static final String PARENT_DIRECTORY_NAME = "JavaReferenceImplementation";
+
     private static Configuration configuration;
 
     /**
@@ -49,8 +54,13 @@ public class SchoolIDServiceUtil {
     public SchoolIDServiceUtil() throws GeneralSecurityException, IOException {
         SchoolIDService schoolIDService = new SchoolIDService();
 
+        // Set the correct path to the config file (which is in the parent directory)
+        String cwdPath = System.getProperty("user.dir");
+        String parentPath = cwdPath.substring(0, cwdPath.indexOf(PARENT_DIRECTORY_NAME) +
+            PARENT_DIRECTORY_NAME.length());
+
         // Initialize the Configuration class
-        configuration = new Configuration();
+        configuration = new Configuration(parentPath + File.separator + PROPERTIES_FILE_NAME);
 
         // Explicitly enable WS-Addressing (required by the Nummervoorziening service)
         schoolID = schoolIDService.getSchoolIDSoap10(new javax.xml.ws.soap.AddressingFeature(true, true));

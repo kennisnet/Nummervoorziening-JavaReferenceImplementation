@@ -110,7 +110,7 @@ De Client Reference Application communiceert met de Nummervoorziening applicatie
  * **pom.xml**: Maven build bestand voor de UnitTestProject module.
 
 ## Applicatie Configuratie
-De applicatie configuratie is opgenomen in het *SchoolID/src/main/resources/config.properties* bestand in de vorm van key/value pairs. Zowel de ConsoleApplication als de UnitTestProject maken gebruik van deze configuratie.
+De applicatie configuratie is opgenomen in het */config.properties* bestand in de vorm van key/value pairs. Zowel de ConsoleApplication als de UnitTestProject maken gebruik van deze configuratie. Dit configuratiebestand wordt buiten het Classpath aangeroepen zodat wijzigingen hierin niet een hercompilatie vereisen. Omdat de Configuration class vanuit verschillende plekken kan worden aangeroepen, wordt hierbij intern het volledige pad opgevraagd, en alles na */JavaReferenceImplementation/ gestript, zodat altijd wordt verwezen naar de plek waar het bestand zich bevindt. 
 
 ### Parameters
  * **endpoint.address**: De url van de Nummervoorziening applicatie.
