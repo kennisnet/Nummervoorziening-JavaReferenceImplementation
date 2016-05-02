@@ -15,6 +15,7 @@
  */
 package nl.kennisnet.nummervoorziening.client.schoolid;
 
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -25,8 +26,6 @@ import java.util.Properties;
  * SchoolID module.
  */
 public class Configuration {
-
-    private static final String PROPERTIES_FILE_NAME = "config.properties";
 
     private static final String PROPERTIES_ENDPOINT_ADDRESS = "endpoint.address";
 
@@ -45,13 +44,13 @@ public class Configuration {
      *
      * @throws IOException Is thrown is the config.properties file could not be read.
      */
-    public Configuration() throws IOException {
-        InputStream inputStream = getClass().getClassLoader().getResourceAsStream(PROPERTIES_FILE_NAME);
+    public Configuration(String configFilePath) throws IOException {
+        InputStream inputStream = new FileInputStream(configFilePath);
 
         if (inputStream != null) {
             properties.load(inputStream);
         } else {
-            throw new FileNotFoundException("Property file " + PROPERTIES_FILE_NAME + " not found in classpath");
+            throw new FileNotFoundException("Property file " + configFilePath + " not found");
         }
 
         inputStream.close();
