@@ -56,6 +56,8 @@ public class SchoolIDServiceUtil {
 
         // Set the correct path to the config file (which is in the parent directory)
         String cwdPath = System.getProperty("user.dir");
+        // We assume that properties file is placed in project root folder, but
+        // execution of program can be started from any subfolder of project.
         String parentPath = cwdPath.substring(0, cwdPath.indexOf(PARENT_DIRECTORY_NAME) +
             PARENT_DIRECTORY_NAME.length());
 
