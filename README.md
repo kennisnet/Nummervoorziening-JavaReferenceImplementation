@@ -144,10 +144,10 @@ Middels het *install* commando kan Maven vervolgens de classes compileren. Vervo
 Client certificaten voor de communicatie met de Nummervoorziening applicatie op de Sandbox omgeving dient bij Kennisnet opgevraagd te worden. Voor de productieomgevingen is een valide PKI-Overheid certificaat vereist.
 
 ## Omgevingen
- * Acceptatieomgeving: https://acceptatie.id.school/
- * Sandboxomgeving: https://sandbox.id.school/
- * Kwalificatieomgeving: https://kwalificatie.id.school/
- * Productieomgeving: https://id.school/
+ * Acceptatieomgeving: https://service-a.id.school/eck/ws/201509
+ * Sandboxomgeving: https://sandbox.id.school/eck/ws/201509
+ * Kwalificatieomgeving: https://kwalificatie.id.school/eck/ws/201509
+ * Productieomgeving: https://service.id.school/eck/ws/201509
 
 ## Licenties
  * **Nummervoorziening - Java Client Reference Application**: Apache License, Version 2.0.
