@@ -25,7 +25,7 @@
 
     <wsdl:documentation>
         Service: SchoolID (Nummervoorziening)
-        Version: 0.3-20160419
+        Version: 0.4-20160524
         Contact: Marc Fleischeuers (M.Fleischeuers@kennisnet.nl)
 
         Uses WS:Addressing
