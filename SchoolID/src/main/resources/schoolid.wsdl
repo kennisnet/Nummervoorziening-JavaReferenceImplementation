@@ -26,7 +26,7 @@
     <wsdl:documentation>
         Service: SchoolID (Nummervoorziening)
         Version: 0.3-20160419
-        Author: Thomas Beekman (T.Beekman@Kennisnet.nl)
+        Contact: Marc Fleischeuers (M.Fleischeuers@kennisnet.nl)
 
         Uses WS:Addressing
     </wsdl:documentation>
