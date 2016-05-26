@@ -34,7 +34,7 @@ public class ScryptUtilTest extends AbstractUnitTest {
      */
     @Test
     public void testStudentHexHashGenerating() {
-        String expectedValue = "95237cd20963e630034620324550809a3df98bbe0774a36c356bf5dbc8a65e7b";
+        String expectedValue = "9735dfd2235eaeb5f0300886bcc99c82ffc1d6420c4e0bde8de7218def2135fa";
         assertEquals(expectedValue, ScryptUtil.generateHexHash(INPUT_STUDENT_VALUE));
     }
 
@@ -43,7 +43,7 @@ public class ScryptUtilTest extends AbstractUnitTest {
      */
     @Test
     public void testTeacherHexHashGenerating() {
-        String expectedValue = "4cadf651ec0197909e6432cb8347369adba39f44276a5b3cd59d17066f10ab3e";
+        String expectedValue = "0b870ff044775ef0360655c40d5b284b7e3ae2b72207a6894794d787eb019e60";
         assertEquals(expectedValue, ScryptUtil.generateHexHash(INPUT_TEACHER_VALUE));
     }
 

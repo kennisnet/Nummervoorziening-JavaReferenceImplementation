@@ -23,9 +23,9 @@ public interface Constants {
 
     String SALT = "rktYml0MIp9TC9u6Ny6uqw==";
 
-    int N = 16384;
+    int N = 131072;
 
     int r = 8;
 
-    int p = 1;
+    int p = 4;
 }
