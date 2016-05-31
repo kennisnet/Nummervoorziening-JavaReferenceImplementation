@@ -33,7 +33,7 @@ import java.util.Map;
  */
 public class Program {
 
-    private static final String WEB_SERVICE_APPLICATION_VERSION = "0.1.0-SNAPSHOT";
+    private static final String WEB_SERVICE_APPLICATION_VERSION = "1.0.0-SNAPSHOT";
 
     private static final int BATCH_RETRIEVE_ATTEMPTS_COUNT = 10;
 
@@ -64,8 +64,7 @@ public class Program {
             System.out.println("Application version:\t\t" + applicationVersion);
             if (!WEB_SERVICE_APPLICATION_VERSION.equals(applicationVersion)) {
                 System.out.println("Web Service Application version is different from intended (" +
-                    WEB_SERVICE_APPLICATION_VERSION + "), finishing.");
-                return;
+                    WEB_SERVICE_APPLICATION_VERSION + " vs " + applicationVersion + ").");
             }
             System.out.println("System time:\t\t\t\t" + schoolIDServiceUtil.getSystemTime());
             System.out.println("Available:\t\t\t\t\t" + schoolIDServiceUtil.isNummervoorzieningServiceAvailable());
