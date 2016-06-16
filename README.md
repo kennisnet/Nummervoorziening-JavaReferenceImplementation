@@ -145,8 +145,8 @@ Client certificaten voor de communicatie met de Nummervoorziening applicatie op 
 
 ## Omgevingen
  * Acceptatieomgeving: https://service-a.id.school/eck/ws/201509
- * Sandboxomgeving: https://sandbox.id.school/eck/ws/201509
- * Kwalificatieomgeving: https://kwalificatie.id.school/eck/ws/201509
+ * Sandboxomgeving: https://service-s.id.school/eck/ws/201509
+ * Kwalificatieomgeving: https://service-q.id.school/eck/ws/201509
  * Productieomgeving: https://service.id.school/eck/ws/201509
 
 ## Licenties
