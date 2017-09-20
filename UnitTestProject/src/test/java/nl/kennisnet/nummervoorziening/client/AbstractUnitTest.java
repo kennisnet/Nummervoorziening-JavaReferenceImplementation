@@ -41,11 +41,19 @@ public abstract class AbstractUnitTest {
     protected static final String VALID_SECTOR_GUID =
         "http://purl.edustandaard.nl/begrippenkader/512e4729-03a4-43a2-95ba-758071d1b725";
 
-    protected static final String VALID_STUDENT_SCHOOL_ID = "https://id.school/pilot/4b832082b9763b07864ba2365e14561" +
-        "ef66f9e4d6ffa936c4e0d72e444b32160fcf280406202e293a228ddf7e904140bce6b1d17525e73d0e54a57bf920f4ac9";
+    protected static final String VALID_STUDENT_STAMPSEUDONYM = "https://id.school/sppilot/d0f58d6544562db32383d9fb" +
+        "d7e7d1c6857f9eb8fdaf43db9ac4fac8f3c6897cc6149985fe4a7b91b9be09a11c65b6bfd4d900357b0c96336b5521aaee261cf7";
 
-    protected static final String VALID_TEACHER_SCHOOL_ID = "https://id.school/pilot/d90c55703ea0144590a2c5b2d4f2b55" +
-        "b10158c6fb6feb20f8a098a7854810855c4308f8fd2944507f757e98287b4010729fe6b16c30e554a5bc2b9a2207786a3";
+    protected static final String VALID_TEACHER_STAMPSEUDONYM = "https://id.school/sppilot/e16ce3e75ee460e371972bb5" +
+        "b9f0ffee4e6bbdb0d3e0f059f7bf09592a70bb0a5cacf228ca8f1b855f280202c53cf8637c4a911d63969580aaae11ac72a33da4";
+
+    protected static final String VALID_STUDENT_SCHOOL_ID = "https://id.school/pilot/e046daed612e3d3903792c3d7e74b2" +
+        "a6b5993cb1b2f6fec6767e41301d526ffec6082a8c2b3e999734eb4cfabb98297111e850bc41fa1f77b6b15c6a7c7d03dc";
+
+    protected static final String VALID_TEACHER_SCHOOL_ID = "https://id.school/pilot/903a199fde822072dc7ebd64a771f1" +
+        "e17c3d8223d155e0279d8fd1fe7075b67479521a32c9c2ebbd50c1169b53e3e92cfdda46baf87a54bb9a8314dbd6678424";
+
+    protected static final String INVALID_STAMPSEUDONYM = "";
 
     protected static final String INVALID_HPGN = "";
 

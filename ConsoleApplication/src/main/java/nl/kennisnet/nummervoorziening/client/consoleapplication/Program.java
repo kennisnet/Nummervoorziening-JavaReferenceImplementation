@@ -33,7 +33,7 @@ import java.util.Map;
  */
 public class Program {
 
-    private static final String WEB_SERVICE_APPLICATION_VERSION = "1.0.0-SNAPSHOT";
+    private static final String WEB_SERVICE_APPLICATION_VERSION = "1.0.3-SNAPSHOT";
 
     private static final int BATCH_RETRIEVE_ATTEMPTS_COUNT = 10;
 
@@ -48,8 +48,8 @@ public class Program {
     }
 
     /**
-     * The main entry point for the program. This function demonstrates work
-     * with Web Services via SchoolID project.
+     * The main entry point for the program. This function demonstrates how to work with Web Services via the
+     * SchoolID project.
      *
      * @param args Command line arguments to the program. Not Used.
      */
@@ -57,9 +57,11 @@ public class Program {
         System.out.println("Current server information:");
         schoolIDServiceUtil = new SchoolIDServiceUtil();
 
+        // Check if the Service is available
         if (!schoolIDServiceUtil.isNummervoorzieningServiceAvailable()) {
-            System.out.println("Nummervoorziening service is not available, finishing.");
+            System.out.println("Nummervoorziening service is not available, quitting.");
         } else {
+            // Print some information about the service
             String applicationVersion = schoolIDServiceUtil.getApplicationVersion();
             System.out.println("Application version:\t\t" + applicationVersion);
             if (!WEB_SERVICE_APPLICATION_VERSION.equals(applicationVersion)) {
@@ -69,12 +71,29 @@ public class Program {
             System.out.println("System time:\t\t\t\t" + schoolIDServiceUtil.getSystemTime());
             System.out.println("Available:\t\t\t\t\t" + schoolIDServiceUtil.isNummervoorzieningServiceAvailable());
 
+            // List number of active chains and sectors
             List<Chain> activeChains = schoolIDServiceUtil.getChains();
             System.out.println("Count of active chains:\t\t" + activeChains.size());
 
             List<Sector> activeSectors = schoolIDServiceUtil.getSectors();
             System.out.println("Count of active sectors:\t" + activeSectors.size());
 
+            // Retrieve a Stampseudonym
+            System.out.println("\nRetrieving Stampseudonym:");
+            String studentStampseudonym = executeCreateStampseudonymTest("063138219");
+            System.out.println("Retrieved Stampseudonym:\t" + studentStampseudonym + "\n");
+            String teacherStampseudonym = executeCreateStampseudonymTest("20DP teacher@school.com");
+            System.out.println("Retrieved Stampseudonym:\t" + teacherStampseudonym + "\n");
+
+            // Execute a batch operation for retrieving Stampseudonyms
+            Map<Integer, String> listedHpgnMap = new HashMap<>();
+            listedHpgnMap.put(0, ScryptUtil.generateHexHash("063138219"));
+            listedHpgnMap.put(1, ScryptUtil.generateHexHash("20DP teacher@school.com"));
+
+            System.out.println("\nSubmitting Stampseudonym batch (with the same input):");
+            executeStampseudonymBatchOperation(listedHpgnMap);
+
+            // Retrieve a SchoolID
             System.out.println("\nRetrieving SchoolID for first active sector and first active chain:");
             String chainGuid = activeChains.get(0).getId();
             System.out.println("Chain Guid:\t\t\t\t\t" + chainGuid);
@@ -82,51 +101,63 @@ public class Program {
             System.out.println("Sector Guid:\t\t\t\t" + sectorGuid);
 
             // Execute a number of valid tests
-            executeClientTest("063138219", chainGuid, sectorGuid);
-            executeClientTest("20DP teacher@school.com", chainGuid, sectorGuid);
+            System.out.println("Retrieved Student SchoolID:\t" +
+                executeCreateEckIdTest(studentStampseudonym, chainGuid, sectorGuid));
+            System.out.println("Retrieved Teacher SchoolID:\t" +
+                executeCreateEckIdTest(teacherStampseudonym, chainGuid, sectorGuid));
 
-            System.out.println("\nSubmitting SchoolID batch for the same values:");
-            Map<Integer, String> listedHpgnMap = new HashMap<>();
-            listedHpgnMap.put(0, ScryptUtil.generateHexHash("063138219"));
-            listedHpgnMap.put(1, ScryptUtil.generateHexHash("20DP teacher@school.com"));
-            executeBatchOperation(chainGuid, sectorGuid, listedHpgnMap);
+            // Execute a batch operation
+            Map<Integer, String> listedStampseudonymMap = new HashMap<>();
+            listedStampseudonymMap.put(0, studentStampseudonym);
+            listedStampseudonymMap.put(1, teacherStampseudonym);
+
+            System.out.println("\nSubmitting SchoolID batch (with the same input):");
+            executeEckIdBatchOperation(chainGuid, sectorGuid, listedStampseudonymMap);
         }
     }
 
     /**
-     * Executes test cases.
-     *
-     * @param pgn        The PGN input.
-     * @param chainGuid  A valid Chain Guid.
-     * @param sectorGuid A valid Sector Guid.
+     * Executes tests for retrieving Stampseudonym based on PGN
+     * @param pgn The PGN to be hashed and send to Nummervoorziening to create a Stampseudonym.
      */
-    private static void executeClientTest(String pgn, String chainGuid, String sectorGuid) {
+    private static String executeCreateStampseudonymTest(String pgn) {
         System.out.println("Pgn:\t\t\t\t\t\t" + pgn);
 
         // Generate scrypt hash of the given PGN
         String hpgn = ScryptUtil.generateHexHash(pgn);
         System.out.println("HPgn:\t\t\t\t\t\t" + hpgn);
 
+        // Retrieve Stampseudonym from Nummervoorziening service
+        return schoolIDServiceUtil.generateStampseudonym(hpgn);
+    }
+
+    /**
+     * Executes test cases.
+     *
+     * @param stampseudonym     The Stampseudonym input.
+     * @param chainGuid         A valid Chain Guid.
+     * @param sectorGuid        A valid Sector Guid.
+     */
+    private static String executeCreateEckIdTest(String stampseudonym, String chainGuid, String sectorGuid) {
         // Retrieve SchoolID from Nummervoorziening service
-        String eckId = schoolIDServiceUtil.generateSchoolID(hpgn, chainGuid, sectorGuid);
-        System.out.println("Retrieved SchoolID:\t\t\t" + eckId);
-        System.out.println();
+        String eckId = schoolIDServiceUtil.generateSchoolID(stampseudonym, chainGuid, sectorGuid);
+        return eckId;
     }
 
     /**
      * Executes batch operation.
      *
-     * @param chainGuid     A valid Chain Guid.
-     * @param sectorGuid    A valid Sector Guid.
-     * @param listedHpgnMap Map with hashed PGN values as values and their indexes as keys.
+     * @param chainGuid                 A valid Chain Guid.
+     * @param sectorGuid                A valid Sector Guid.
+     * @param listedStampseudonymMap    Map with Stampseudonym values as values and their indexes as keys.
      */
-    private static void executeBatchOperation(String chainGuid, String sectorGuid,
-                                              Map<Integer, String> listedHpgnMap) throws InterruptedException {
+    private static void executeEckIdBatchOperation(
+        String chainGuid, String sectorGuid, Map<Integer, String> listedStampseudonymMap) throws InterruptedException {
 
         String batchIdentifier;
 
         try {
-            batchIdentifier = schoolIDServiceUtil.submitHpgnBatch(listedHpgnMap, chainGuid, sectorGuid);
+            batchIdentifier = schoolIDServiceUtil.submitEckIdBatch(listedStampseudonymMap, chainGuid, sectorGuid);
         } catch (SOAPFaultException e) {
             System.out.println("Exception thrown by service while trying to submit batch: " +
                 e.getFault().getFaultActor());
@@ -143,9 +174,58 @@ public class Program {
         }
 
         System.out.println("Batch identifier:\t\t\t" + batchIdentifier);
-        SchoolIDBatch schoolIDBatch = null;
         System.out.println("Waiting for processing...");
 
+        SchoolIDBatch schoolIDBatch = waitForProcessing(batchIdentifier);
+
+        if (null != schoolIDBatch) {
+            System.out.println("Generated School IDs:\t\t" + schoolIDBatch.getSuccess());
+            System.out.println("Failed School IDs:\t\t\t" + schoolIDBatch.getFailed());
+        } else {
+            System.out.println("Error occured: SchoolIDBatch is null.");
+        }
+    }
+
+    /**
+     * Executes batch operation.
+     *
+     * @param listedHpgnMap Map with hashed PGN values as values and their indexes as keys.
+     */
+    private static void executeStampseudonymBatchOperation(Map<Integer, String> listedHpgnMap) throws InterruptedException {
+        String batchIdentifier;
+
+        try {
+            batchIdentifier = schoolIDServiceUtil.submitStampseudonymBatch(listedHpgnMap);
+        } catch (SOAPFaultException e) {
+            System.out.println("Exception thrown by service while trying to submit batch: " +
+                e.getFault().getFaultActor());
+
+            switch (e.getFault().getFaultActor()) {
+                case "LimitDailyBatchSubmissionsExceededException":
+                    System.out.println("Reached the limit of the amount of allowed daily submissions");
+                    break;
+                default:
+                    System.out.println("No additional information available");
+            }
+
+            return;
+        }
+
+        System.out.println("Batch identifier:\t\t\t" + batchIdentifier);
+        System.out.println("Waiting for processing...");
+
+        SchoolIDBatch schoolIDBatch = waitForProcessing(batchIdentifier);
+
+        if (null != schoolIDBatch) {
+            System.out.println("Generated Stampseudonyms:\t" + schoolIDBatch.getSuccess());
+            System.out.println("Failed Stampseudonyms:\t\t" + schoolIDBatch.getFailed());
+        } else {
+            System.out.println("Error occured: StampseudonymBatch is null.");
+        }
+    }
+
+    private static SchoolIDBatch waitForProcessing(String batchIdentifier) throws InterruptedException {
+        SchoolIDBatch schoolIDBatch = null;
         for (int i = 0; i < BATCH_RETRIEVE_ATTEMPTS_COUNT; i++) {
             Thread.sleep(RETRIEVE_SCHOOL_ID_BATCH_TIMEOUT);
             try {
@@ -167,8 +247,6 @@ public class Program {
                 }
             }
         }
-
-        System.out.println("Generated School IDs:\t\t" + schoolIDBatch.getSuccess());
-        System.out.println("Failed School IDs:\t\t\t" + schoolIDBatch.getFailed());
+        return schoolIDBatch;
     }
 }

@@ -25,7 +25,7 @@ import static org.junit.Assert.assertFalse;
 /**
  * Demonstrates correct usage of the "Retrieve Sectors" operation.
  */
-public class RetrieveSectorsTest extends AbstractUnitTest {
+public class RetrieveSectorsOperationTest extends AbstractUnitTest {
 
     /**
      * Tests that the Nummervoorziening service returns non empty list of active sectors.

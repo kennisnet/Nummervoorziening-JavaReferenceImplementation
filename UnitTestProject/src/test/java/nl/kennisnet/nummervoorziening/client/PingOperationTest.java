@@ -40,7 +40,7 @@ public class PingOperationTest extends AbstractUnitTest {
      */
     @Test
     public void testGettingApplicationVersion() {
-        String expectedVersion = "0.1.0-SNAPSHOT";
+        String expectedVersion = "1.0.3-SNAPSHOT";
 
         String applicationVersion = schoolIdServiceUtil.getApplicationVersion();
         assertEquals("Version of Web Service is different from intended version", expectedVersion, applicationVersion);

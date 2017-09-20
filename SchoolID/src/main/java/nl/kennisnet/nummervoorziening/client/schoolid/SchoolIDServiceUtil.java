@@ -128,71 +128,109 @@ public class SchoolIDServiceUtil {
     }
 
     /**
-     * Invokes the School ID service to generate a School ID based on the
-     * hashed PGN, Chain ID and Sector ID.
+     * Invokes the School ID service to generate a Stampseudonym based on the hashed PGN.
      *
-     * @param hpgn       The scrypt hashed PGN.
+     * @param hpgn      The scrypt hashed PGN.
+     * @return If no validation or operational errors, a Stampseudonym.
+     */
+    public String generateStampseudonym(String hpgn) {
+        RetrieveStampseudonymRequest retrieveStampseudonymRequest = new RetrieveStampseudonymRequest();
+        HPgn hpgnWrapper = new HPgn();
+        hpgnWrapper.setValue(hpgn);
+        retrieveStampseudonymRequest.setHpgn(hpgnWrapper);
+
+        return schoolID.retrieveStampseudonym(retrieveStampseudonymRequest).getStampseudonym().getValue();
+    }
+
+    /**
+     * Invokes the School ID service to generate a School ID based on the stampseudonym, Chain ID and Sector ID.
+     *
+     * @param stampseudonym       The stampseudonym.
      * @param chainGuid  A valid chain id.
      * @param sectorGuid A valid sector id.
      * @return If no validation or operational errors, a School ID.
      */
-    public String generateSchoolID(String hpgn, String chainGuid, String sectorGuid) {
+    public String generateSchoolID(String stampseudonym, String chainGuid, String sectorGuid) {
         RetrieveEckIdRequest retrieveEckIdRequest = new RetrieveEckIdRequest();
         retrieveEckIdRequest.setChainId(chainGuid);
         retrieveEckIdRequest.setSectorId(sectorGuid);
-        HPgn hpgnWrapper = new HPgn();
-        hpgnWrapper.setValue(hpgn);
-        retrieveEckIdRequest.setHpgn(hpgnWrapper);
+
+        Stampseudonym stampseudonymWrapper = new Stampseudonym();
+        stampseudonymWrapper.setValue(stampseudonym);
+        retrieveEckIdRequest.setStampseudonym(stampseudonymWrapper);
+
         return schoolID.retrieveEckId(retrieveEckIdRequest).getEckId().getValue();
     }
 
     /**
-     * Executes Substitution operation for given parameters and returns the School ID.
+     * Executes Substitution operation for given parameters and returns new stampseudonym.
      *
      * @param newHpgnValue  The scrypt hashed new PGN.
      * @param oldHpgnValue  The scrypt hashed old PGN.
-     * @param chainGuid     A valid chain id.
-     * @param sectorGuid    A valid sector id.
      * @param effectiveDate The date for the substitution to become active (optional).
-     * @return The generated School ID.
+     * @return The generated Stampseudonym.
      */
-    public String replaceEckId(String newHpgnValue, String oldHpgnValue, String chainGuid, String sectorGuid,
-                               XMLGregorianCalendar effectiveDate) {
-        ReplaceEckIdRequest replaceEckIdRequest = new ReplaceEckIdRequest();
-        replaceEckIdRequest.setChainId(chainGuid);
-        replaceEckIdRequest.setSectorId(sectorGuid);
+    public String replaceStampseudonym(String newHpgnValue, String oldHpgnValue, XMLGregorianCalendar effectiveDate) {
+        ReplaceStampseudonymRequest replaceStampseudonymRequest = new ReplaceStampseudonymRequest();
         HPgn newHpgn = new HPgn();
-        newHpgn.setValue(newHpgnValue);
-        replaceEckIdRequest.setHpgnNew(newHpgn);
         HPgn oldHpgn = new HPgn();
+
+        newHpgn.setValue(newHpgnValue);
         oldHpgn.setValue(oldHpgnValue);
-        replaceEckIdRequest.setHpgnOld(oldHpgn);
-        replaceEckIdRequest.setEffectiveDate(effectiveDate);
-        return schoolID.replaceEckId(replaceEckIdRequest).getEckId().getValue();
+        replaceStampseudonymRequest.setHpgnNew(newHpgn);
+        replaceStampseudonymRequest.setHpgnOld(oldHpgn);
+        replaceStampseudonymRequest.setEffectiveDate(effectiveDate);
+
+        return schoolID.replaceStampseudonym(replaceStampseudonymRequest).getStampseudonym().getValue();
     }
 
     /**
-     * Invokes the School ID service to start generating a batch of School IDs
-     * based on passed input values.
+     * Invokes the School ID service to start generating a batch of School IDs based on passed input values.
      *
-     * @param listedHpgnMap Map with hashed PGN values as values and their indexes as keys.
+     * @param listedStampseudonymMap Map with Stampseudonym values as values and their indexes as keys.
      * @param chainGuid     A valid chain id.
      * @param sectorGuid    A valid sector id.
-     * @return If no validation or operational errors, identifier of created batch.
+     * @return If no validation or operational errors, identifier of the created batch for retrieving the results.
      */
-    public String submitHpgnBatch(Map<Integer, String> listedHpgnMap, String chainGuid, String sectorGuid) {
+    public String submitEckIdBatch(
+        Map<Integer, String> listedStampseudonymMap, String chainGuid, String sectorGuid) {
+
         SubmitEckIdBatchRequest submitEckIdBatchRequest = new SubmitEckIdBatchRequest();
         submitEckIdBatchRequest.setChainId(chainGuid);
         submitEckIdBatchRequest.setSectorId(sectorGuid);
-        for (Map.Entry<Integer, String> entry : listedHpgnMap.entrySet()) {
+
+        for (Map.Entry<Integer, String> entry : listedStampseudonymMap.entrySet()) {
+            ListedStampseudonym listedStampseudonym = new ListedStampseudonym();
+            listedStampseudonym.setIndex(entry.getKey());
+            Stampseudonym stampseudonymWrapper = new Stampseudonym();
+            stampseudonymWrapper.setValue(entry.getValue());
+            listedStampseudonym.setStampseudonym(stampseudonymWrapper);
+            submitEckIdBatchRequest.getStampseudonymList().add(listedStampseudonym);
+        }
+
+        return schoolID.submitEckIdBatch(submitEckIdBatchRequest).getBatchIdentifier().getValue();
+    }
+
+    /**
+     * Invokes the School ID service to start generating a batch of stampseudonyms based on passed input values.
+     *
+     * @param listedHPgnMap Map with HPgn values as values and their indexes as keys.
+     * @return If no validation or operational errors, identifier of the created batch for retrieving the results.
+     */
+    public String submitStampseudonymBatch(Map<Integer, String> listedHPgnMap) {
+
+        SubmitStampseudonymBatchRequest submitStampseudonymBatchRequest = new SubmitStampseudonymBatchRequest();
+
+        for (Map.Entry<Integer, String> entry : listedHPgnMap.entrySet()) {
             ListedHpgn listedHpgn = new ListedHpgn();
             listedHpgn.setIndex(entry.getKey());
-            HPgn hPgnWrapper = new HPgn();
-            hPgnWrapper.setValue(entry.getValue());
-            listedHpgn.setHPgn(hPgnWrapper);
-            submitEckIdBatchRequest.getHpgnList().add(listedHpgn);
+            HPgn hpgnWrapper = new HPgn();
+            hpgnWrapper.setValue(entry.getValue());
+            listedHpgn.setHPgn(hpgnWrapper);
+            submitStampseudonymBatchRequest.getHpgnList().add(listedHpgn);
         }
-        return schoolID.submitEckIdBatch(submitEckIdBatchRequest).getBatchIdentifier().getValue();
+
+        return schoolID.submitStampseudonymBatch(submitStampseudonymBatchRequest).getBatchIdentifier().getValue();
     }
 
     /**
@@ -201,16 +239,19 @@ public class SchoolIDServiceUtil {
      * @return If no validation or operational errors, response with failed and processed School IDs.
      */
     public SchoolIDBatch retrieveSchoolIdBatch(String batchIdentifier) {
-        RetrieveEckIdBatchRequest request = new RetrieveEckIdBatchRequest();
+        RetrieveBatchRequest request = new RetrieveBatchRequest();
         BatchIdentifier batchIdentifierWrapper = new BatchIdentifier();
+        SchoolIDBatch schoolIDBatch = new SchoolIDBatch();
+
         batchIdentifierWrapper.setValue(batchIdentifier);
         request.setBatchIdentifier(batchIdentifierWrapper);
-        RetrieveEckIdBatchResponse response = schoolID.retrieveEckIdBatch(request);
-        SchoolIDBatch schoolIDBatch = new SchoolIDBatch();
-        schoolIDBatch.setSuccess(response.getSuccess().stream().collect(Collectors.toMap(ListedEckIdSuccess::getIndex,
-            listedEckIdSuccess -> listedEckIdSuccess.getEckId().getValue())));
-        schoolIDBatch.setFailed(response.getFailed().stream().collect(Collectors.toMap(ListedEckIdFailure::getIndex,
-            ListedEckIdFailure::getErrorMessage)));
+        RetrieveBatchResponse response = schoolID.retrieveBatch(request);
+
+        schoolIDBatch.setSuccess(response.getSuccess().stream().collect(Collectors.toMap(ListedEntitySuccess::getIndex,
+            listedEntitySuccess -> listedEntitySuccess.getValue())));
+        schoolIDBatch.setFailed(response.getFailed().stream().collect(Collectors.toMap(ListedEntityFailure::getIndex,
+            ListedEntityFailure::getErrorMessage)));
+
         return schoolIDBatch;
     }
 

@@ -25,7 +25,7 @@ import static org.junit.Assert.assertFalse;
 /**
  * Demonstrates correct usage of the "Retrieve Chains" operation.
  */
-public class RetrieveChainsTest extends AbstractUnitTest {
+public class RetrieveChainsOperationTest extends AbstractUnitTest {
 
     /**
      * Tests that the Nummervoorziening service returns non empty list of active chains.

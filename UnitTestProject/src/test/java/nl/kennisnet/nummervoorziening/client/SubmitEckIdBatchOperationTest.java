@@ -19,6 +19,10 @@ import org.junit.Test;
 
 import javax.xml.ws.soap.SOAPFaultException;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+
+import static org.junit.Assert.assertNotNull;
 
 /**
  * Demonstrates correct usage of the "Submit Eck Id Batch" operation.
@@ -29,8 +33,8 @@ public class SubmitEckIdBatchOperationTest extends AbstractUnitTest {
      * Tests that Nummervoorziening service throws error on invalid Chain Guid.
      */
     @Test(expected = SOAPFaultException.class)
-    public void testSubmitHpgnBatchWithInvalidChainGuid() {
-        schoolIdServiceUtil.submitHpgnBatch(Collections.singletonMap(0, VALID_STUDENT_HPGN), INVALID_CHAIN_GUID,
+    public void testSubmitEckIdBatchWithInvalidChainGuid() {
+        schoolIdServiceUtil.submitEckIdBatch(Collections.singletonMap(0, VALID_STUDENT_STAMPSEUDONYM), INVALID_CHAIN_GUID,
             VALID_SECTOR_GUID);
     }
 
@@ -38,25 +42,38 @@ public class SubmitEckIdBatchOperationTest extends AbstractUnitTest {
      * Tests that Nummervoorziening service throws error on invalid Sector Guid.
      */
     @Test(expected = SOAPFaultException.class)
-    public void testSubmitHpgnBatchWithInvalidSectorGuid() {
-        schoolIdServiceUtil.submitHpgnBatch(Collections.singletonMap(0, VALID_STUDENT_HPGN), VALID_CHAIN_GUID,
+    public void testSubmitEckIdBatchWithInvalidSectorGuid() {
+        schoolIdServiceUtil.submitEckIdBatch(Collections.singletonMap(0, VALID_STUDENT_STAMPSEUDONYM), VALID_CHAIN_GUID,
             INVALID_SECTOR_GUID);
     }
 
     /**
-     * Tests that Nummervoorziening service throws error on empty hpgn list.
+     * Tests that Nummervoorziening service throws error on empty Stampseudonym list.
      */
     @Test(expected = SOAPFaultException.class)
-    public void testSubmitHpgnBatchWithEmptyHpgnList() {
-        schoolIdServiceUtil.submitHpgnBatch(Collections.emptyMap(), VALID_CHAIN_GUID, VALID_SECTOR_GUID);
+    public void testSubmitEckIdBatchWithEmptyStampseudonymList() {
+        schoolIdServiceUtil.submitEckIdBatch(Collections.emptyMap(), VALID_CHAIN_GUID, VALID_SECTOR_GUID);
     }
 
     /**
      * Tests that Nummervoorziening service does not throw error on correct input values.
      */
     @Test
-    public void testSimpleSubmitHpgnBatchWithCorrectValues() {
-        schoolIdServiceUtil.submitHpgnBatch(Collections.singletonMap(0, VALID_STUDENT_HPGN), VALID_CHAIN_GUID,
-            VALID_SECTOR_GUID);
+    public void testSimpleSubmitEckIdBatchWithCorrectValues() {
+        String batchIdentifier = schoolIdServiceUtil.submitEckIdBatch(Collections.singletonMap(0,
+            VALID_STUDENT_STAMPSEUDONYM), VALID_CHAIN_GUID, VALID_SECTOR_GUID);
+        assertNotNull(batchIdentifier);
+    }
+
+    /**
+     * Tests that Nummervoorziening service does not throw error on batch with more than one element.
+     */
+    @Test
+    public void testSubmitEckIdBatchWithMoreThanOneElementWithCorrectValues() {
+        Map<Integer, String> input = new HashMap<>();
+        input.put(0, VALID_STUDENT_STAMPSEUDONYM);
+        input.put(1, VALID_TEACHER_STAMPSEUDONYM);
+        String batchIdentifier = schoolIdServiceUtil.submitEckIdBatch(input, VALID_CHAIN_GUID, VALID_SECTOR_GUID);
+        assertNotNull(batchIdentifier);
     }
 }
