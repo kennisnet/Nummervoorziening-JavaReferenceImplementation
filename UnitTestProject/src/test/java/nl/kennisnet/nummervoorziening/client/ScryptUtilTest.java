@@ -15,7 +15,7 @@
  */
 package nl.kennisnet.nummervoorziening.client;
 
-import nl.kennisnet.nummervoorziening.client.schoolid.scrypter.ScryptUtil;
+import nl.kennisnet.nummervoorziening.client.eckid.scrypter.ScryptUtil;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;

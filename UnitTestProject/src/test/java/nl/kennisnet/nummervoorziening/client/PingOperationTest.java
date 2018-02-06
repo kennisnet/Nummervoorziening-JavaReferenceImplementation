@@ -32,7 +32,7 @@ public class PingOperationTest extends AbstractUnitTest {
      */
     @Test
     public void testGettingAvailability() {
-        assertTrue("Web Service is not available", schoolIdServiceUtil.isNummervoorzieningServiceAvailable());
+        assertTrue("Web Service is not available", eckIdServiceUtil.isNummervoorzieningServiceAvailable());
     }
 
     /**
@@ -40,9 +40,9 @@ public class PingOperationTest extends AbstractUnitTest {
      */
     @Test
     public void testGettingApplicationVersion() {
-        String expectedVersion = "1.0.3-SNAPSHOT";
+        String expectedVersion = "1.0.4-SNAPSHOT";
 
-        String applicationVersion = schoolIdServiceUtil.getApplicationVersion();
+        String applicationVersion = eckIdServiceUtil.getApplicationVersion();
         assertEquals("Version of Web Service is different from intended version", expectedVersion, applicationVersion);
     }
 
@@ -50,10 +50,10 @@ public class PingOperationTest extends AbstractUnitTest {
      * Tests that time on server is not too different from local time.
      */
     @Test
-    public void testSchoolIDDateTime() throws DatatypeConfigurationException {
+    public void testEckIdDateTime() throws DatatypeConfigurationException {
         long allowedGapInMinutes = 180;
 
-        long serverTimeInMillis = schoolIdServiceUtil.getSystemTime().toGregorianCalendar().getTimeInMillis();
+        long serverTimeInMillis = eckIdServiceUtil.getSystemTime().toGregorianCalendar().getTimeInMillis();
         long localTimeInMillis = System.currentTimeMillis();
         long timeDifference = Math.abs(localTimeInMillis - serverTimeInMillis) / 3600000;
 

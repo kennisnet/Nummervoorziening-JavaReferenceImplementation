@@ -15,8 +15,8 @@
  */
 package nl.kennisnet.nummervoorziening.client;
 
+import nl.ketenid.eck.schemas.v1_0.Sector;
 import org.junit.Test;
-import school.id.eck.schemas.v1_0.Sector;
 
 import java.util.List;
 
@@ -32,7 +32,7 @@ public class RetrieveSectorsOperationTest extends AbstractUnitTest {
      */
     @Test
     public void testGettingActiveSectors() {
-        List<Sector> activeSectors = schoolIdServiceUtil.getSectors();
+        List<Sector> activeSectors = eckIdServiceUtil.getSectors();
         assertFalse("Nummervoorziening service returned empty list of active sectors!", activeSectors.isEmpty());
     }
 }

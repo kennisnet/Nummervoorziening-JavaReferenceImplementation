@@ -31,7 +31,7 @@ public class RetrieveEckIdOperationTest extends AbstractUnitTest {
      */
     @Test(expected = SOAPFaultException.class)
     public void testGetEckIdWithInvalidStampseudonym() {
-        schoolIdServiceUtil.generateSchoolID(INVALID_STAMPSEUDONYM, VALID_CHAIN_GUID, VALID_SECTOR_GUID);
+        eckIdServiceUtil.generateEckID(INVALID_STAMPSEUDONYM, VALID_CHAIN_GUID, VALID_SECTOR_GUID);
     }
 
     /**
@@ -39,7 +39,7 @@ public class RetrieveEckIdOperationTest extends AbstractUnitTest {
      */
     @Test(expected = SOAPFaultException.class)
     public void testGetEckIdWithInvalidChain() {
-        schoolIdServiceUtil.generateSchoolID(VALID_STUDENT_STAMPSEUDONYM, INVALID_CHAIN_GUID, VALID_SECTOR_GUID);
+        eckIdServiceUtil.generateEckID(VALID_STUDENT_STAMPSEUDONYM, INVALID_CHAIN_GUID, VALID_SECTOR_GUID);
     }
 
     /**
@@ -47,25 +47,25 @@ public class RetrieveEckIdOperationTest extends AbstractUnitTest {
      */
     @Test(expected = SOAPFaultException.class)
     public void testGetEckIdWithInvalidSector() {
-        schoolIdServiceUtil.generateSchoolID(VALID_STUDENT_STAMPSEUDONYM, VALID_CHAIN_GUID, INVALID_SECTOR_GUID);
+        eckIdServiceUtil.generateEckID(VALID_STUDENT_STAMPSEUDONYM, VALID_CHAIN_GUID, INVALID_SECTOR_GUID);
     }
 
     /**
-     * Tests that Nummervoorziening service returns correct SchoolID on valid parameters.
+     * Tests that Nummervoorziening service returns the correct EckID on valid parameters.
      */
     @Test
-    public void testGetStudentSchoolIdWithValidValues() {
-        String schoolId = schoolIdServiceUtil.generateSchoolID(VALID_STUDENT_STAMPSEUDONYM, VALID_CHAIN_GUID, VALID_SECTOR_GUID);
-        assertEquals(VALID_STUDENT_SCHOOL_ID, schoolId);
+    public void testGetStudentEckIdWithValidValues() {
+        String eckId = eckIdServiceUtil.generateEckID(VALID_STUDENT_STAMPSEUDONYM, VALID_CHAIN_GUID, VALID_SECTOR_GUID);
+        assertEquals(VALID_STUDENT_ECK_ID, eckId);
     }
 
     /**
-     * Tests that Nummervoorziening service returns correct SchoolID on valid parameters.
+     * Tests that Nummervoorziening service returns the correct EckID on valid parameters.
      */
     @Test
-    public void testGetTeacherSchoolIdWithValidValues() {
-        String schoolId = schoolIdServiceUtil.generateSchoolID(VALID_TEACHER_STAMPSEUDONYM, VALID_CHAIN_GUID, VALID_SECTOR_GUID);
-        assertEquals(VALID_TEACHER_SCHOOL_ID, schoolId);
+    public void testGetTeacherEckIdWithValidValues() {
+        String eckId = eckIdServiceUtil.generateEckID(VALID_TEACHER_STAMPSEUDONYM, VALID_CHAIN_GUID, VALID_SECTOR_GUID);
+        assertEquals(VALID_TEACHER_ECK_ID, eckId);
     }
 
     /**
@@ -73,13 +73,13 @@ public class RetrieveEckIdOperationTest extends AbstractUnitTest {
      * retrieve Stampseudonym functionality for student.
      */
     @Test
-    public void testRetrieveStudentSchoolIdAfterRetrieveStampseudonym() {
+    public void testRetrieveStudentEckIdAfterRetrieveStampseudonym() {
         // Use the hPGN to retrieve the Stampseudonym
-        String stampseudonym = schoolIdServiceUtil.generateStampseudonym(VALID_STUDENT_HPGN);
+        String stampseudonym = eckIdServiceUtil.generateStampseudonym(VALID_STUDENT_HPGN);
 
         // Retrieve the Eck ID based on retrieved Stampseudonym, and check the result
-        String schoolId = schoolIdServiceUtil.generateSchoolID(stampseudonym, VALID_CHAIN_GUID, VALID_SECTOR_GUID);
-        assertEquals(VALID_STUDENT_SCHOOL_ID, schoolId);
+        String eckId = eckIdServiceUtil.generateEckID(stampseudonym, VALID_CHAIN_GUID, VALID_SECTOR_GUID);
+        assertEquals(VALID_STUDENT_ECK_ID, eckId);
     }
 
     /**
@@ -87,12 +87,12 @@ public class RetrieveEckIdOperationTest extends AbstractUnitTest {
      * retrieve Stampseudonym functionality for teacher.
      */
     @Test
-    public void testRetrieveTeacherSchoolIdAfterRetrieveStampseudonym() {
+    public void testRetrieveTeacherEckIdAfterRetrieveStampseudonym() {
         // Use the hPGN to retrieve the Stampseudonym
-        String stampseudonym = schoolIdServiceUtil.generateStampseudonym(VALID_TEACHER_HPGN);
+        String stampseudonym = eckIdServiceUtil.generateStampseudonym(VALID_TEACHER_HPGN);
 
         // Retrieve the Eck ID based on retrieved Stampseudonym, and check the result
-        String schoolId = schoolIdServiceUtil.generateSchoolID(stampseudonym, VALID_CHAIN_GUID, VALID_SECTOR_GUID);
-        assertEquals(VALID_TEACHER_SCHOOL_ID, schoolId);
+        String eckId = eckIdServiceUtil.generateEckID(stampseudonym, VALID_CHAIN_GUID, VALID_SECTOR_GUID);
+        assertEquals(VALID_TEACHER_ECK_ID, eckId);
     }
 }

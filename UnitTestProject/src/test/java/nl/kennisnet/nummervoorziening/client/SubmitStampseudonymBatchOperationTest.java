@@ -34,7 +34,7 @@ public class SubmitStampseudonymBatchOperationTest extends AbstractUnitTest {
      */
     @Test(expected = SOAPFaultException.class)
     public void testSubmitStampseudonymBatchWithEmptyStampseudonymList() {
-        schoolIdServiceUtil.submitStampseudonymBatch(Collections.emptyMap());
+        eckIdServiceUtil.submitStampseudonymBatch(Collections.emptyMap());
     }
 
     /**
@@ -42,7 +42,7 @@ public class SubmitStampseudonymBatchOperationTest extends AbstractUnitTest {
      */
     @Test
     public void testSimpleSubmitStampseudonymBatchWithCorrectValues() {
-        schoolIdServiceUtil.submitStampseudonymBatch(Collections.singletonMap(0, VALID_STUDENT_HPGN));
+        eckIdServiceUtil.submitStampseudonymBatch(Collections.singletonMap(0, VALID_STUDENT_HPGN));
     }
 
     /**
@@ -53,7 +53,7 @@ public class SubmitStampseudonymBatchOperationTest extends AbstractUnitTest {
         Map<Integer, String> input = new HashMap<>();
         input.put(0, VALID_STUDENT_HPGN);
         input.put(1, VALID_TEACHER_HPGN);
-        String batchIdentifier = schoolIdServiceUtil.submitStampseudonymBatch(input);
+        String batchIdentifier = eckIdServiceUtil.submitStampseudonymBatch(input);
         assertNotNull(batchIdentifier);
     }
 }

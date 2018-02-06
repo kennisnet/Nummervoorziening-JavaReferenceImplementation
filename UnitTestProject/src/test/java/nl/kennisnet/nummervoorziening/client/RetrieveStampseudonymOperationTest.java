@@ -31,7 +31,7 @@ public class RetrieveStampseudonymOperationTest extends AbstractUnitTest {
      */
     @Test(expected = SOAPFaultException.class)
     public void testGetStampseudonymWithInvalidHpgn() {
-        schoolIdServiceUtil.generateStampseudonym(INVALID_HPGN);
+        eckIdServiceUtil.generateStampseudonym(INVALID_HPGN);
     }
 
     /**
@@ -39,7 +39,7 @@ public class RetrieveStampseudonymOperationTest extends AbstractUnitTest {
      */
     @Test
     public void testGetStudentStampseudonymWithValidValues() {
-        String stampseudonym = schoolIdServiceUtil.generateStampseudonym(VALID_STUDENT_HPGN);
+        String stampseudonym = eckIdServiceUtil.generateStampseudonym(VALID_STUDENT_HPGN);
         System.out.println(VALID_STUDENT_HPGN);
         assertEquals(VALID_STUDENT_STAMPSEUDONYM, stampseudonym);
     }
@@ -49,7 +49,7 @@ public class RetrieveStampseudonymOperationTest extends AbstractUnitTest {
      */
     @Test
     public void testGetTeacherStampseudonymWithValidValues() {
-        String stampseudonym = schoolIdServiceUtil.generateStampseudonym(VALID_TEACHER_HPGN);
+        String stampseudonym = eckIdServiceUtil.generateStampseudonym(VALID_TEACHER_HPGN);
         assertEquals(VALID_TEACHER_STAMPSEUDONYM, stampseudonym);
     }
 }

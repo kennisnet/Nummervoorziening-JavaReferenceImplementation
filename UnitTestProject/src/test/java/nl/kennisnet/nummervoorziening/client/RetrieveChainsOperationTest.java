@@ -15,8 +15,8 @@
  */
 package nl.kennisnet.nummervoorziening.client;
 
+import nl.ketenid.eck.schemas.v1_0.Chain;
 import org.junit.Test;
-import school.id.eck.schemas.v1_0.Chain;
 
 import java.util.List;
 
@@ -32,7 +32,7 @@ public class RetrieveChainsOperationTest extends AbstractUnitTest {
      */
     @Test
     public void testGettingActiveChains() {
-        List<Chain> activeChains = schoolIdServiceUtil.getChains();
+        List<Chain> activeChains = eckIdServiceUtil.getChains();
         assertFalse("Nummervoorziening service returned empty list of active chains!", activeChains.isEmpty());
     }
 }

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <?xml-stylesheet type="text/xsl" href="wsdl-viewer.xsl"?>
 <!--
-    Copyright 2016, Stichting Kennisnet
+    Copyright 2017, Stichting Kennisnet
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -15,24 +15,24 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 -->
-<wsdl:definitions name="SchoolID"
-                  targetNamespace="http://id.school/eck/schemas/v1_0"
-                  xmlns:sid="http://id.school/eck/schemas/v1_0"
+<wsdl:definitions name="EckID"
+                  targetNamespace="http://ketenid.nl/eck/schemas/v1_0"
+                  xmlns:sid="http://ketenid.nl/eck/schemas/v1_0"
                   xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
                   xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl"
                   xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
                   xmlns:xsd="http://www.w3.org/2001/XMLSchema">
 
     <wsdl:documentation>
-        Service: SchoolID (Nummervoorziening)
-        Version: 0.5-20170419
-        Contact: Marc Fleischeuers (M.Fleischeuers@kennisnet.nl)
+        Service: EckID (Nummervoorziening)
+        Version: 0.7-20171229
+        Contact: Vincent Tedjakusuma (V.Tedjakusuma@kennisnet.nl)
 
         Uses WS:Addressing
     </wsdl:documentation>
 
     <wsdl:types>
-        <xsd:schema targetNamespace="http://id.school/eck/schemas/v1_0"
+        <xsd:schema targetNamespace="http://ketenid.nl/eck/schemas/v1_0"
                     elementFormDefault="qualified">
             <xsd:element name="pingRequest" type="sid:PingRequest"></xsd:element>
             <xsd:element name="pingResponse" type="sid:PingResponse"></xsd:element>
@@ -380,7 +380,7 @@
         <wsdl:part name="retrieveSectorsResponse" element="sid:retrieveSectorsResponse"></wsdl:part>
     </wsdl:message>
 
-    <wsdl:portType name="SchoolID">
+    <wsdl:portType name="EckIDPort">
         <wsdl:documentation>Omschrijving van de Nummervoorziening interface.</wsdl:documentation>
 
         <wsdl:operation name="ping">
@@ -438,68 +438,68 @@
         </wsdl:operation>
     </wsdl:portType>
 
-    <wsdl:binding name="SchoolIDSoapBinding" type="sid:SchoolID">
+    <wsdl:binding name="EckIDSoapBinding" type="sid:EckIDPort">
         <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http" />
         <wsaw:UsingAddressing wsdl:required="true" />
 
         <wsdl:operation name="ping">
-            <soap:operation soapAction="http://id.school/eck/schemas/v1_0/ping" />
+            <soap:operation soapAction="http://ketenid.nl/eck/schemas/v1_0/ping" />
             <wsdl:input><soap:body use="literal" /></wsdl:input>
             <wsdl:output><soap:body use="literal" /></wsdl:output>
         </wsdl:operation>
 
         <wsdl:operation name="retrieveStampseudonym">
-            <soap:operation soapAction="http://id.school/eck/schemas/v1_0/retrieveStampseudonym" />
+            <soap:operation soapAction="http://ketenid.nl/eck/schemas/v1_0/retrieveStampseudonym" />
             <wsdl:input><soap:body use="literal" /></wsdl:input>
             <wsdl:output><soap:body use="literal" /></wsdl:output>
         </wsdl:operation>
 
         <wsdl:operation name="retrieveEckId">
-            <soap:operation soapAction="http://id.school/eck/schemas/v1_0/retrieveEckId" />
+            <soap:operation soapAction="http://ketenid.nl/eck/schemas/v1_0/retrieveEckId" />
             <wsdl:input><soap:body use="literal" /></wsdl:input>
             <wsdl:output><soap:body use="literal" /></wsdl:output>
         </wsdl:operation>
 
         <wsdl:operation name="submitEckIdBatch">
-            <soap:operation soapAction="http://id.school/eck/schemas/v1_0/submitEckIdBatch" />
+            <soap:operation soapAction="http://ketenid.nl/eck/schemas/v1_0/submitEckIdBatch" />
             <wsdl:input><soap:body use="literal" /></wsdl:input>
             <wsdl:output><soap:body use="literal" /></wsdl:output>
         </wsdl:operation>
 
         <wsdl:operation name="submitStampseudonymBatch">
-            <soap:operation soapAction="http://id.school/eck/schemas/v1_0/submitStampseudonymBatch" />
+            <soap:operation soapAction="http://ketenid.nl/eck/schemas/v1_0/submitStampseudonymBatch" />
             <wsdl:input><soap:body use="literal" /></wsdl:input>
             <wsdl:output><soap:body use="literal" /></wsdl:output>
         </wsdl:operation>
 
         <wsdl:operation name="retrieveBatch">
-            <soap:operation soapAction="http://id.school/eck/schemas/v1_0/retrieveBatch" />
+            <soap:operation soapAction="http://ketenid.nl/eck/schemas/v1_0/retrieveBatch" />
             <wsdl:input><soap:body use="literal" /></wsdl:input>
             <wsdl:output><soap:body use="literal" /></wsdl:output>
         </wsdl:operation>
 
         <wsdl:operation name="replaceStampseudonym">
-            <soap:operation soapAction="http://id.school/eck/schemas/v1_0/replaceStampseudonym" />
+            <soap:operation soapAction="http://ketenid.nl/eck/schemas/v1_0/replaceStampseudonym" />
             <wsdl:input><soap:body use="literal" /></wsdl:input>
             <wsdl:output><soap:body use="literal" /></wsdl:output>
         </wsdl:operation>
 
         <wsdl:operation name="retrieveChains">
-            <soap:operation soapAction="http://id.school/eck/schemas/v1_0/retrieveChains" />
+            <soap:operation soapAction="http://ketenid.nl/eck/schemas/v1_0/retrieveChains" />
             <wsdl:input><soap:body use="literal" /></wsdl:input>
             <wsdl:output><soap:body use="literal" /></wsdl:output>
         </wsdl:operation>
 
         <wsdl:operation name="retrieveSectors">
-            <soap:operation soapAction="http://id.school/eck/schemas/v1_0/retrieveSectors" />
+            <soap:operation soapAction="http://ketenid.nl/eck/schemas/v1_0/retrieveSectors" />
             <wsdl:input><soap:body use="literal" /></wsdl:input>
             <wsdl:output><soap:body use="literal" /></wsdl:output>
         </wsdl:operation>
     </wsdl:binding>
 
-    <wsdl:service name="SchoolIDService">
-        <wsdl:port binding="sid:SchoolIDSoapBinding" name="SchoolIDSoap10">
-            <soap:address location="https://id.school/service/201703" />
+    <wsdl:service name="EckIDService">
+        <wsdl:port binding="sid:EckIDSoapBinding" name="EckIDSoap10">
+            <soap:address location="https://service.ketenid.nl/eck/ws/201703" />
         </wsdl:port>
     </wsdl:service>
 </wsdl:definitions>

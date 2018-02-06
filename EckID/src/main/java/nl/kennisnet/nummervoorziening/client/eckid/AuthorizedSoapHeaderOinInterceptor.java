@@ -13,15 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package nl.kennisnet.nummervoorziening.client.schoolid;
+package nl.kennisnet.nummervoorziening.client.eckid;
 
-import java.util.Collections;
-import java.util.Set;
 import javax.xml.namespace.QName;
 import javax.xml.soap.*;
 import javax.xml.ws.handler.MessageContext;
 import javax.xml.ws.handler.soap.SOAPHandler;
 import javax.xml.ws.handler.soap.SOAPMessageContext;
+import java.util.Collections;
+import java.util.Set;
 
 public class AuthorizedSoapHeaderOinInterceptor implements SOAPHandler<SOAPMessageContext> {
 
@@ -45,7 +45,7 @@ public class AuthorizedSoapHeaderOinInterceptor implements SOAPHandler<SOAPMessa
                 SOAPHeaderElement soapHeaderElement = soapHeader.addHeaderElement(new QName(ADDRESSING_NS, "From"));
                 SOAPElement addressElement = soapHeaderElement.addChildElement(new QName(ADDRESSING_NS, "Address"));
 
-                String fromValue = ANONYMOUS_OIN + SchoolIDServiceUtil.getInstanceOin();
+                String fromValue = ANONYMOUS_OIN + EckIDServiceUtil.getInstanceOin();
                 addressElement.addTextNode(fromValue);
 
             } catch(SOAPException e) {

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package nl.kennisnet.nummervoorziening.client.schoolid.scrypter;
+package nl.kennisnet.nummervoorziening.client.eckid.scrypter;
 
 /**
  * Constants for hashing pgn values. Should not be changed if you want always

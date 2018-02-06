@@ -15,15 +15,15 @@
  */
 package nl.kennisnet.nummervoorziening.client;
 
-import nl.kennisnet.nummervoorziening.client.schoolid.SchoolIDServiceUtil;
-import nl.kennisnet.nummervoorziening.client.schoolid.scrypter.ScryptUtil;
+import nl.kennisnet.nummervoorziening.client.eckid.EckIDServiceUtil;
+import nl.kennisnet.nummervoorziening.client.eckid.scrypter.ScryptUtil;
 import org.junit.Before;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 
 /**
- * Abstract unit test that initializes SchoolID client before tests.
+ * Abstract unit test that initializes the EckID Service client before tests.
  */
 public abstract class AbstractUnitTest {
 
@@ -41,17 +41,17 @@ public abstract class AbstractUnitTest {
     protected static final String VALID_SECTOR_GUID =
         "http://purl.edustandaard.nl/begrippenkader/512e4729-03a4-43a2-95ba-758071d1b725";
 
-    protected static final String VALID_STUDENT_STAMPSEUDONYM = "https://id.school/sppilot/d0f58d6544562db32383d9fb" +
+    protected static final String VALID_STUDENT_STAMPSEUDONYM = "https://ketenid.nl/sppilot/d0f58d6544562db32383d9fb" +
         "d7e7d1c6857f9eb8fdaf43db9ac4fac8f3c6897cc6149985fe4a7b91b9be09a11c65b6bfd4d900357b0c96336b5521aaee261cf7";
 
-    protected static final String VALID_TEACHER_STAMPSEUDONYM = "https://id.school/sppilot/e16ce3e75ee460e371972bb5" +
+    protected static final String VALID_TEACHER_STAMPSEUDONYM = "https://ketenid.nl/sppilot/e16ce3e75ee460e371972bb5" +
         "b9f0ffee4e6bbdb0d3e0f059f7bf09592a70bb0a5cacf228ca8f1b855f280202c53cf8637c4a911d63969580aaae11ac72a33da4";
 
-    protected static final String VALID_STUDENT_SCHOOL_ID = "https://id.school/pilot/e046daed612e3d3903792c3d7e74b2" +
-        "a6b5993cb1b2f6fec6767e41301d526ffec6082a8c2b3e999734eb4cfabb98297111e850bc41fa1f77b6b15c6a7c7d03dc";
+    protected static final String VALID_STUDENT_ECK_ID = "https://ketenid.nl/pilot/5889fc51565c5488833c42cb2b724c671" +
+        "07bb250be8ed99c881c89632adc37b05dd197ee95af1c75be47cb7f9a593ad9ddb2e1f25d2e52c90dbb8dcae4515763";
 
-    protected static final String VALID_TEACHER_SCHOOL_ID = "https://id.school/pilot/903a199fde822072dc7ebd64a771f1" +
-        "e17c3d8223d155e0279d8fd1fe7075b67479521a32c9c2ebbd50c1169b53e3e92cfdda46baf87a54bb9a8314dbd6678424";
+    protected static final String VALID_TEACHER_ECK_ID = "https://ketenid.nl/pilot/79163b48538cea31249879c2362df75f8" +
+        "30b2723fe199fbf11a7881dfc1cd33200705cb195f6997c0a2dd150f9915cfe6f869e8df2513536ffe303088414b1ac";
 
     protected static final String INVALID_STAMPSEUDONYM = "";
 
@@ -61,13 +61,13 @@ public abstract class AbstractUnitTest {
 
     protected static final String INVALID_SECTOR_GUID = "invalidsectorguid";
 
-    protected SchoolIDServiceUtil schoolIdServiceUtil;
+    protected EckIDServiceUtil eckIdServiceUtil;
 
     /**
      * Setups Service Util for working with Nummervoorziening service.
      */
     @Before
     public void setup() throws GeneralSecurityException, IOException {
-        schoolIdServiceUtil = new SchoolIDServiceUtil();
+        eckIdServiceUtil = new EckIDServiceUtil();
     }
 }

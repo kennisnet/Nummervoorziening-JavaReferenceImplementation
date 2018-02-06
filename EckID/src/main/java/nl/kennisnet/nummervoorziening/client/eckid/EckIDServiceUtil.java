@@ -13,9 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package nl.kennisnet.nummervoorziening.client.schoolid;
+package nl.kennisnet.nummervoorziening.client.eckid;
 
-import school.id.eck.schemas.v1_0.*;
+import nl.ketenid.eck.schemas.v1_0.*;
 
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.KeyManagerFactory;
@@ -38,9 +38,9 @@ import java.util.stream.Collectors;
 /**
  * Utility class that helps to work with Web Service.
  */
-public class SchoolIDServiceUtil {
+public class EckIDServiceUtil {
 
-    private final SchoolID schoolID;
+    private final EckIDPort eckIDPort;
 
     private static final String PROPERTIES_FILE_NAME = "config.properties";
 
@@ -49,10 +49,10 @@ public class SchoolIDServiceUtil {
     private static Configuration configuration;
 
     /**
-     * Initializes class for working with SchoolID Web Service.
+     * Initializes class for working with EckID Web Service.
      */
-    public SchoolIDServiceUtil() throws GeneralSecurityException, IOException {
-        SchoolIDService schoolIDService = new SchoolIDService();
+    public EckIDServiceUtil() throws GeneralSecurityException, IOException {
+        EckIDService eckIDService = new EckIDService();
 
         // Set the correct path to the config file (which is in the parent directory)
         String cwdPath = System.getProperty("user.dir");
@@ -65,9 +65,9 @@ public class SchoolIDServiceUtil {
         configuration = new Configuration(parentPath + File.separator + PROPERTIES_FILE_NAME);
 
         // Explicitly enable WS-Addressing (required by the Nummervoorziening service)
-        schoolID = schoolIDService.getSchoolIDSoap10(new javax.xml.ws.soap.AddressingFeature(true, true));
+        eckIDPort = eckIDService.getEckIDSoap10(new javax.xml.ws.soap.AddressingFeature(true, true));
 
-        BindingProvider bindingProvider = (BindingProvider) schoolID;
+        BindingProvider bindingProvider = (BindingProvider) eckIDPort;
         Binding binding = bindingProvider.getBinding();
 
         // Override the default endpoint address
@@ -88,7 +88,7 @@ public class SchoolIDServiceUtil {
      * @return true if service available, false - otherwise.
      */
     public boolean isNummervoorzieningServiceAvailable() {
-        return schoolID.ping(new PingRequest()).isAvailable();
+        return eckIDPort.ping(new PingRequest()).isAvailable();
     }
 
     /**
@@ -97,7 +97,7 @@ public class SchoolIDServiceUtil {
      * @return current web service application version.
      */
     public String getApplicationVersion() {
-        return schoolID.ping(new PingRequest()).getApplicationVersion();
+        return eckIDPort.ping(new PingRequest()).getApplicationVersion();
     }
 
     /**
@@ -106,7 +106,7 @@ public class SchoolIDServiceUtil {
      * @return server's system time.
      */
     public XMLGregorianCalendar getSystemTime() {
-        return schoolID.ping(new PingRequest()).getSystemTime();
+        return eckIDPort.ping(new PingRequest()).getSystemTime();
     }
 
     /**
@@ -115,7 +115,7 @@ public class SchoolIDServiceUtil {
      * @return list of all active chains.
      */
     public List<Chain> getChains() {
-        return schoolID.retrieveChains(new RetrieveChainsRequest()).getChain();
+        return eckIDPort.retrieveChains(new RetrieveChainsRequest()).getChain();
     }
 
     /**
@@ -124,11 +124,11 @@ public class SchoolIDServiceUtil {
      * @return list of all active sectors.
      */
     public List<Sector> getSectors() {
-        return schoolID.retrieveSectors(new RetrieveSectorsRequest()).getSector();
+        return eckIDPort.retrieveSectors(new RetrieveSectorsRequest()).getSector();
     }
 
     /**
-     * Invokes the School ID service to generate a Stampseudonym based on the hashed PGN.
+     * Invokes the EckID service to generate a Stampseudonym based on the hashed PGN.
      *
      * @param hpgn      The scrypt hashed PGN.
      * @return If no validation or operational errors, a Stampseudonym.
@@ -139,18 +139,18 @@ public class SchoolIDServiceUtil {
         hpgnWrapper.setValue(hpgn);
         retrieveStampseudonymRequest.setHpgn(hpgnWrapper);
 
-        return schoolID.retrieveStampseudonym(retrieveStampseudonymRequest).getStampseudonym().getValue();
+        return eckIDPort.retrieveStampseudonym(retrieveStampseudonymRequest).getStampseudonym().getValue();
     }
 
     /**
-     * Invokes the School ID service to generate a School ID based on the stampseudonym, Chain ID and Sector ID.
+     * Invokes the EckID service to generate a EckID based on the stampseudonym, Chain ID and Sector ID.
      *
      * @param stampseudonym       The stampseudonym.
      * @param chainGuid  A valid chain id.
      * @param sectorGuid A valid sector id.
-     * @return If no validation or operational errors, a School ID.
+     * @return If no validation or operational errors, an EckID.
      */
-    public String generateSchoolID(String stampseudonym, String chainGuid, String sectorGuid) {
+    public String generateEckID(String stampseudonym, String chainGuid, String sectorGuid) {
         RetrieveEckIdRequest retrieveEckIdRequest = new RetrieveEckIdRequest();
         retrieveEckIdRequest.setChainId(chainGuid);
         retrieveEckIdRequest.setSectorId(sectorGuid);
@@ -159,7 +159,7 @@ public class SchoolIDServiceUtil {
         stampseudonymWrapper.setValue(stampseudonym);
         retrieveEckIdRequest.setStampseudonym(stampseudonymWrapper);
 
-        return schoolID.retrieveEckId(retrieveEckIdRequest).getEckId().getValue();
+        return eckIDPort.retrieveEckId(retrieveEckIdRequest).getEckId().getValue();
     }
 
     /**
@@ -181,11 +181,11 @@ public class SchoolIDServiceUtil {
         replaceStampseudonymRequest.setHpgnOld(oldHpgn);
         replaceStampseudonymRequest.setEffectiveDate(effectiveDate);
 
-        return schoolID.replaceStampseudonym(replaceStampseudonymRequest).getStampseudonym().getValue();
+        return eckIDPort.replaceStampseudonym(replaceStampseudonymRequest).getStampseudonym().getValue();
     }
 
     /**
-     * Invokes the School ID service to start generating a batch of School IDs based on passed input values.
+     * Invokes the EckID service to start generating a batch of EckIDs based on passed input values.
      *
      * @param listedStampseudonymMap Map with Stampseudonym values as values and their indexes as keys.
      * @param chainGuid     A valid chain id.
@@ -208,11 +208,11 @@ public class SchoolIDServiceUtil {
             submitEckIdBatchRequest.getStampseudonymList().add(listedStampseudonym);
         }
 
-        return schoolID.submitEckIdBatch(submitEckIdBatchRequest).getBatchIdentifier().getValue();
+        return eckIDPort.submitEckIdBatch(submitEckIdBatchRequest).getBatchIdentifier().getValue();
     }
 
     /**
-     * Invokes the School ID service to start generating a batch of stampseudonyms based on passed input values.
+     * Invokes the EckID service to start generating a batch of stampseudonyms based on passed input values.
      *
      * @param listedHPgnMap Map with HPgn values as values and their indexes as keys.
      * @return If no validation or operational errors, identifier of the created batch for retrieving the results.
@@ -230,29 +230,29 @@ public class SchoolIDServiceUtil {
             submitStampseudonymBatchRequest.getHpgnList().add(listedHpgn);
         }
 
-        return schoolID.submitStampseudonymBatch(submitStampseudonymBatchRequest).getBatchIdentifier().getValue();
+        return eckIDPort.submitStampseudonymBatch(submitStampseudonymBatchRequest).getBatchIdentifier().getValue();
     }
 
     /**
-     * Invokes the School ID service to get list of generated School IDs for specified batch.
+     * Invokes the EckID service to get list of generated EckIDs for specified batch.
      *
-     * @return If no validation or operational errors, response with failed and processed School IDs.
+     * @return If no validation or operational errors, response with failed and processed EckIDs.
      */
-    public SchoolIDBatch retrieveSchoolIdBatch(String batchIdentifier) {
+    public EckIDServiceBatch retrieveEckIDBatch(String batchIdentifier) {
         RetrieveBatchRequest request = new RetrieveBatchRequest();
         BatchIdentifier batchIdentifierWrapper = new BatchIdentifier();
-        SchoolIDBatch schoolIDBatch = new SchoolIDBatch();
+        EckIDServiceBatch eckIDServiceBatch = new EckIDServiceBatch();
 
         batchIdentifierWrapper.setValue(batchIdentifier);
         request.setBatchIdentifier(batchIdentifierWrapper);
-        RetrieveBatchResponse response = schoolID.retrieveBatch(request);
+        RetrieveBatchResponse response = eckIDPort.retrieveBatch(request);
 
-        schoolIDBatch.setSuccess(response.getSuccess().stream().collect(Collectors.toMap(ListedEntitySuccess::getIndex,
+        eckIDServiceBatch.setSuccess(response.getSuccess().stream().collect(Collectors.toMap(ListedEntitySuccess::getIndex,
             listedEntitySuccess -> listedEntitySuccess.getValue())));
-        schoolIDBatch.setFailed(response.getFailed().stream().collect(Collectors.toMap(ListedEntityFailure::getIndex,
+        eckIDServiceBatch.setFailed(response.getFailed().stream().collect(Collectors.toMap(ListedEntityFailure::getIndex,
             ListedEntityFailure::getErrorMessage)));
 
-        return schoolIDBatch;
+        return eckIDServiceBatch;
     }
 
     /**
@@ -266,7 +266,7 @@ public class SchoolIDServiceUtil {
             // running these tests on different machines. This should not be used in the actual implementation!!!
 
             final KeyStore keyStore = KeyStore.getInstance("JKS");
-            InputStream is = SchoolIDServiceUtil.class.getResourceAsStream(
+            InputStream is = EckIDServiceUtil.class.getResourceAsStream(
                 configuration.getCertificateKeystorePath()
             );
 

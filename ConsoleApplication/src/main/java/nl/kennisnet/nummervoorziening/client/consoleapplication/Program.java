@@ -15,11 +15,11 @@
  */
 package nl.kennisnet.nummervoorziening.client.consoleapplication;
 
-import nl.kennisnet.nummervoorziening.client.schoolid.SchoolIDBatch;
-import nl.kennisnet.nummervoorziening.client.schoolid.SchoolIDServiceUtil;
-import nl.kennisnet.nummervoorziening.client.schoolid.scrypter.ScryptUtil;
-import school.id.eck.schemas.v1_0.Chain;
-import school.id.eck.schemas.v1_0.Sector;
+import nl.kennisnet.nummervoorziening.client.eckid.EckIDServiceBatch;
+import nl.kennisnet.nummervoorziening.client.eckid.EckIDServiceUtil;
+import nl.kennisnet.nummervoorziening.client.eckid.scrypter.ScryptUtil;
+import nl.ketenid.eck.schemas.v1_0.Chain;
+import nl.ketenid.eck.schemas.v1_0.Sector;
 
 import javax.xml.ws.soap.SOAPFaultException;
 import java.io.IOException;
@@ -33,13 +33,13 @@ import java.util.Map;
  */
 public class Program {
 
-    private static final String WEB_SERVICE_APPLICATION_VERSION = "1.0.3-SNAPSHOT";
+    private static final String WEB_SERVICE_APPLICATION_VERSION = "1.0.4-SNAPSHOT";
 
     private static final int BATCH_RETRIEVE_ATTEMPTS_COUNT = 10;
 
-    private static final long RETRIEVE_SCHOOL_ID_BATCH_TIMEOUT = 25_000;
+    private static final long RETRIEVE_ECK_ID_BATCH_TIMEOUT = 25_000;
 
-    private static SchoolIDServiceUtil schoolIDServiceUtil;
+    private static EckIDServiceUtil eckIDServiceUtil;
 
     /**
      * This class should not be instantiated.
@@ -49,33 +49,33 @@ public class Program {
 
     /**
      * The main entry point for the program. This function demonstrates how to work with Web Services via the
-     * SchoolID project.
+     * EckID module.
      *
      * @param args Command line arguments to the program. Not Used.
      */
     public static void main(String[] args) throws GeneralSecurityException, InterruptedException, IOException {
         System.out.println("Current server information:");
-        schoolIDServiceUtil = new SchoolIDServiceUtil();
+        eckIDServiceUtil = new EckIDServiceUtil();
 
         // Check if the Service is available
-        if (!schoolIDServiceUtil.isNummervoorzieningServiceAvailable()) {
+        if (!eckIDServiceUtil.isNummervoorzieningServiceAvailable()) {
             System.out.println("Nummervoorziening service is not available, quitting.");
         } else {
             // Print some information about the service
-            String applicationVersion = schoolIDServiceUtil.getApplicationVersion();
+            String applicationVersion = eckIDServiceUtil.getApplicationVersion();
             System.out.println("Application version:\t\t" + applicationVersion);
             if (!WEB_SERVICE_APPLICATION_VERSION.equals(applicationVersion)) {
                 System.out.println("Web Service Application version is different from intended (" +
                     WEB_SERVICE_APPLICATION_VERSION + " vs " + applicationVersion + ").");
             }
-            System.out.println("System time:\t\t\t\t" + schoolIDServiceUtil.getSystemTime());
-            System.out.println("Available:\t\t\t\t\t" + schoolIDServiceUtil.isNummervoorzieningServiceAvailable());
+            System.out.println("System time:\t\t\t\t" + eckIDServiceUtil.getSystemTime());
+            System.out.println("Available:\t\t\t\t\t" + eckIDServiceUtil.isNummervoorzieningServiceAvailable());
 
             // List number of active chains and sectors
-            List<Chain> activeChains = schoolIDServiceUtil.getChains();
+            List<Chain> activeChains = eckIDServiceUtil.getChains();
             System.out.println("Count of active chains:\t\t" + activeChains.size());
 
-            List<Sector> activeSectors = schoolIDServiceUtil.getSectors();
+            List<Sector> activeSectors = eckIDServiceUtil.getSectors();
             System.out.println("Count of active sectors:\t" + activeSectors.size());
 
             // Retrieve a Stampseudonym
@@ -93,17 +93,17 @@ public class Program {
             System.out.println("\nSubmitting Stampseudonym batch (with the same input):");
             executeStampseudonymBatchOperation(listedHpgnMap);
 
-            // Retrieve a SchoolID
-            System.out.println("\nRetrieving SchoolID for first active sector and first active chain:");
+            // Retrieve an EckID
+            System.out.println("\nRetrieving EckID for first active sector and first active chain:");
             String chainGuid = activeChains.get(0).getId();
             System.out.println("Chain Guid:\t\t\t\t\t" + chainGuid);
             String sectorGuid = activeSectors.get(0).getId();
             System.out.println("Sector Guid:\t\t\t\t" + sectorGuid);
 
             // Execute a number of valid tests
-            System.out.println("Retrieved Student SchoolID:\t" +
+            System.out.println("Retrieved Student EckID:\t" +
                 executeCreateEckIdTest(studentStampseudonym, chainGuid, sectorGuid));
-            System.out.println("Retrieved Teacher SchoolID:\t" +
+            System.out.println("Retrieved Teacher EckID:\t" +
                 executeCreateEckIdTest(teacherStampseudonym, chainGuid, sectorGuid));
 
             // Execute a batch operation
@@ -111,7 +111,7 @@ public class Program {
             listedStampseudonymMap.put(0, studentStampseudonym);
             listedStampseudonymMap.put(1, teacherStampseudonym);
 
-            System.out.println("\nSubmitting SchoolID batch (with the same input):");
+            System.out.println("\nSubmitting EckID batch (with the same input):");
             executeEckIdBatchOperation(chainGuid, sectorGuid, listedStampseudonymMap);
         }
     }
@@ -128,7 +128,7 @@ public class Program {
         System.out.println("HPgn:\t\t\t\t\t\t" + hpgn);
 
         // Retrieve Stampseudonym from Nummervoorziening service
-        return schoolIDServiceUtil.generateStampseudonym(hpgn);
+        return eckIDServiceUtil.generateStampseudonym(hpgn);
     }
 
     /**
@@ -139,8 +139,8 @@ public class Program {
      * @param sectorGuid        A valid Sector Guid.
      */
     private static String executeCreateEckIdTest(String stampseudonym, String chainGuid, String sectorGuid) {
-        // Retrieve SchoolID from Nummervoorziening service
-        String eckId = schoolIDServiceUtil.generateSchoolID(stampseudonym, chainGuid, sectorGuid);
+        // Retrieve EckID from Nummervoorziening service
+        String eckId = eckIDServiceUtil.generateEckID(stampseudonym, chainGuid, sectorGuid);
         return eckId;
     }
 
@@ -157,7 +157,7 @@ public class Program {
         String batchIdentifier;
 
         try {
-            batchIdentifier = schoolIDServiceUtil.submitEckIdBatch(listedStampseudonymMap, chainGuid, sectorGuid);
+            batchIdentifier = eckIDServiceUtil.submitEckIdBatch(listedStampseudonymMap, chainGuid, sectorGuid);
         } catch (SOAPFaultException e) {
             System.out.println("Exception thrown by service while trying to submit batch: " +
                 e.getFault().getFaultActor());
@@ -176,13 +176,13 @@ public class Program {
         System.out.println("Batch identifier:\t\t\t" + batchIdentifier);
         System.out.println("Waiting for processing...");
 
-        SchoolIDBatch schoolIDBatch = waitForProcessing(batchIdentifier);
+        EckIDServiceBatch eckIDServiceBatch = waitForProcessing(batchIdentifier);
 
-        if (null != schoolIDBatch) {
-            System.out.println("Generated School IDs:\t\t" + schoolIDBatch.getSuccess());
-            System.out.println("Failed School IDs:\t\t\t" + schoolIDBatch.getFailed());
+        if (null != eckIDServiceBatch) {
+            System.out.println("Generated EckIDs:\t\t" + eckIDServiceBatch.getSuccess());
+            System.out.println("Failed EckIDs:\t\t\t" + eckIDServiceBatch.getFailed());
         } else {
-            System.out.println("Error occured: SchoolIDBatch is null.");
+            System.out.println("Error occured: EckIDServiceBatch is null.");
         }
     }
 
@@ -195,7 +195,7 @@ public class Program {
         String batchIdentifier;
 
         try {
-            batchIdentifier = schoolIDServiceUtil.submitStampseudonymBatch(listedHpgnMap);
+            batchIdentifier = eckIDServiceUtil.submitStampseudonymBatch(listedHpgnMap);
         } catch (SOAPFaultException e) {
             System.out.println("Exception thrown by service while trying to submit batch: " +
                 e.getFault().getFaultActor());
@@ -214,22 +214,22 @@ public class Program {
         System.out.println("Batch identifier:\t\t\t" + batchIdentifier);
         System.out.println("Waiting for processing...");
 
-        SchoolIDBatch schoolIDBatch = waitForProcessing(batchIdentifier);
+        EckIDServiceBatch eckIDServiceBatch = waitForProcessing(batchIdentifier);
 
-        if (null != schoolIDBatch) {
-            System.out.println("Generated Stampseudonyms:\t" + schoolIDBatch.getSuccess());
-            System.out.println("Failed Stampseudonyms:\t\t" + schoolIDBatch.getFailed());
+        if (null != eckIDServiceBatch) {
+            System.out.println("Generated Stampseudonyms:\t" + eckIDServiceBatch.getSuccess());
+            System.out.println("Failed Stampseudonyms:\t\t" + eckIDServiceBatch.getFailed());
         } else {
             System.out.println("Error occured: StampseudonymBatch is null.");
         }
     }
 
-    private static SchoolIDBatch waitForProcessing(String batchIdentifier) throws InterruptedException {
-        SchoolIDBatch schoolIDBatch = null;
+    private static EckIDServiceBatch waitForProcessing(String batchIdentifier) throws InterruptedException {
+        EckIDServiceBatch eckIDServiceBatch = null;
         for (int i = 0; i < BATCH_RETRIEVE_ATTEMPTS_COUNT; i++) {
-            Thread.sleep(RETRIEVE_SCHOOL_ID_BATCH_TIMEOUT);
+            Thread.sleep(RETRIEVE_ECK_ID_BATCH_TIMEOUT);
             try {
-                schoolIDBatch = schoolIDServiceUtil.retrieveSchoolIdBatch(batchIdentifier);
+                eckIDServiceBatch = eckIDServiceUtil.retrieveEckIDBatch(batchIdentifier);
                 break;
             } catch (SOAPFaultException e) {
                 System.out.println("Exception thrown by service while trying to retrieve batch: " +
@@ -247,6 +247,6 @@ public class Program {
                 }
             }
         }
-        return schoolIDBatch;
+        return eckIDServiceBatch;
     }
 }

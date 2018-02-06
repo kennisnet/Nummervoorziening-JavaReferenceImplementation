@@ -13,32 +13,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package nl.kennisnet.nummervoorziening.client.schoolid;
+package nl.kennisnet.nummervoorziening.client.eckid;
 
 import java.util.Map;
 
 /**
- * Entity with information about generated in batch operation School IDs.
+ * Entity with information about generated in batch operation EckIDs.
  */
-public class SchoolIDBatch {
+public class EckIDServiceBatch {
 
     private Map<Integer, String> success;
 
     private Map<Integer, String> failed;
 
     /**
-     * Gets the map with indexes of passed hashed PGN as keys and School IDs as values.
+     * Gets the map with indexes of passed hashed PGN as keys and EckIDs as values.
      *
-     * @return Map with indexes of passed hashed PGN as keys and School IDs as values.
+     * @return Map with indexes of passed hashed PGN as keys and EckIDs as values.
      */
     public Map<Integer, String> getSuccess() {
         return success;
     }
 
     /**
-     * Sets the map with indexes of passed hashed PGN as keys and School IDs as values.
+     * Sets the map with indexes of passed hashed PGN as keys and EckIDs as values.
      *
-     * @param success Map with indexes of passed hashed PGN as keys and School IDs as values.
+     * @param success Map with indexes of passed hashed PGN as keys and EckIDs as values.
      */
     public void setSuccess(Map<Integer, String> success) {
         this.success = success;

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package nl.kennisnet.nummervoorziening.client.schoolid;
+package nl.kennisnet.nummervoorziening.client.eckid;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -23,7 +23,7 @@ import java.util.Properties;
 
 /**
  * Reads the configuration from the config.properties file and makes their values accessible throughout the
- * SchoolID module.
+ * EckID module.
  */
 public class Configuration {
 

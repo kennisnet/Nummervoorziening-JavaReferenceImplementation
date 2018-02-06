@@ -15,7 +15,7 @@
  */
 package nl.kennisnet.nummervoorziening.client;
 
-import nl.kennisnet.nummervoorziening.client.schoolid.scrypter.ScryptUtil;
+import nl.kennisnet.nummervoorziening.client.eckid.scrypter.ScryptUtil;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -75,7 +75,7 @@ public class ReplaceStampseudonymTest extends AbstractUnitTest {
      */
     @Test(expected = SOAPFaultException.class)
     public void testReplaceStampseudonymWithInvalidNewHpgn() {
-        schoolIdServiceUtil.replaceStampseudonym(INVALID_HPGN, validHpgnOld, null);
+        eckIdServiceUtil.replaceStampseudonym(INVALID_HPGN, validHpgnOld, null);
     }
 
     /**
@@ -83,7 +83,7 @@ public class ReplaceStampseudonymTest extends AbstractUnitTest {
      */
     @Test(expected = SOAPFaultException.class)
     public void testReplaceStampseudonymWithInvalidOldHpgn() {
-        schoolIdServiceUtil.replaceStampseudonym(validHpgnNew, INVALID_HPGN, null);
+        eckIdServiceUtil.replaceStampseudonym(validHpgnNew, INVALID_HPGN, null);
     }
 
     /**
@@ -94,13 +94,13 @@ public class ReplaceStampseudonymTest extends AbstractUnitTest {
     @Test
     public void testReplaceStampseudonymNow() {
         // Use the initial dataset to retrieve the Stampseudonym
-        String initialStampseudonym = schoolIdServiceUtil.generateStampseudonym(validHpgnOld);
+        String initialStampseudonym = eckIdServiceUtil.generateStampseudonym(validHpgnOld);
 
         // Submit the substitution
-        String processedStampseudonym = schoolIdServiceUtil.replaceStampseudonym(validHpgnNew, validHpgnOld, null);
+        String processedStampseudonym = eckIdServiceUtil.replaceStampseudonym(validHpgnNew, validHpgnOld, null);
 
         // Retrieve the Stampseudonym based on the new Hpgn, and check the result
-        String finalStampseudonym = schoolIdServiceUtil.generateStampseudonym(validHpgnNew);
+        String finalStampseudonym = eckIdServiceUtil.generateStampseudonym(validHpgnNew);
 
         // Assert that the Stampseudonym retrieved from the Replace Stampseudonym operation is correct
         assertEquals(initialStampseudonym, processedStampseudonym);
@@ -118,16 +118,16 @@ public class ReplaceStampseudonymTest extends AbstractUnitTest {
     @Test
     public void testReplaceStampseudonymWithIntermediate() {
         // Use the datasets to retrieve the Stampseudonym before substituting
-        String oldStampseudonym = schoolIdServiceUtil.generateStampseudonym(validHpgnOld);
+        String oldStampseudonym = eckIdServiceUtil.generateStampseudonym(validHpgnOld);
 
         // Submit the substitutions
-        String stampseudonymFirstSubstitution = schoolIdServiceUtil.replaceStampseudonym(validHpgnIntermediate,
+        String stampseudonymFirstSubstitution = eckIdServiceUtil.replaceStampseudonym(validHpgnIntermediate,
             validHpgnOld,null);
-        String stampseudonymSecondSubstitution = schoolIdServiceUtil.replaceStampseudonym(validHpgnNew,
+        String stampseudonymSecondSubstitution = eckIdServiceUtil.replaceStampseudonym(validHpgnNew,
             validHpgnIntermediate, null);
 
         // Retrieve the Stampseudonym based on the new Hpgn, and check the result
-        String finalStampseudonym = schoolIdServiceUtil.generateStampseudonym(validHpgnNew);
+        String finalStampseudonym = eckIdServiceUtil.generateStampseudonym(validHpgnNew);
 
         // Assert that the Stampseudonym retrieved from the first Replace Stampseudonym operation is correct
         assertEquals(oldStampseudonym, stampseudonymFirstSubstitution);
@@ -147,7 +147,7 @@ public class ReplaceStampseudonymTest extends AbstractUnitTest {
     @Test
     public void testReplaceStampseudonymFuture() throws DatatypeConfigurationException {
         // Use the future Hpgn to retrieve the Stampseudonym based on the new Hpgn
-        String newStampseudonym = schoolIdServiceUtil.generateStampseudonym(validHpgnNew);
+        String newStampseudonym = eckIdServiceUtil.generateStampseudonym(validHpgnNew);
 
         // Set the effective date to a moment in the future
         GregorianCalendar gregorianCalendar = new GregorianCalendar();
@@ -157,11 +157,11 @@ public class ReplaceStampseudonymTest extends AbstractUnitTest {
         XMLGregorianCalendar effectiveDate = DatatypeFactory.newInstance().newXMLGregorianCalendar(gregorianCalendar);
 
         // Submit the substitution
-        String processedStampseudonym = schoolIdServiceUtil.replaceStampseudonym(validHpgnNew, validHpgnOld,
+        String processedStampseudonym = eckIdServiceUtil.replaceStampseudonym(validHpgnNew, validHpgnOld,
             effectiveDate);
 
         // Retrieve the Stampseudonym based on the new Hpgn, and check the result
-        String finalStampseudonym = schoolIdServiceUtil.generateStampseudonym(validHpgnNew);
+        String finalStampseudonym = eckIdServiceUtil.generateStampseudonym(validHpgnNew);
 
         // Assert that the Stampseudonym retrieved from the Replace Stampseudonym operation is correct
         assertEquals(newStampseudonym, processedStampseudonym);

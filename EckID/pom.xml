@@ -18,8 +18,8 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>SchoolID</artifactId>
-    <name>SchoolID</name>
+    <artifactId>EckID</artifactId>
+    <name>EckID</name>
 
     <parent>
         <groupId>nl.kennisnet.nummervoorziening</groupId>
@@ -44,9 +44,9 @@
                 <version>2.3</version>
                 <configuration>
                     <wsdlUrls>
-                        <wsdlUrl>src/main/resources/schoolid.wsdl</wsdlUrl>
+                        <wsdlUrl>src/main/resources/eckid.wsdl</wsdlUrl>
                     </wsdlUrls>
-                    <sourceDestDir>target/generated-sources/wsdlimport/schoolid</sourceDestDir>
+                    <sourceDestDir>target/generated-sources/wsdlimport/eckid</sourceDestDir>
                     <vmArgs>
                         <vmArg>-Djavax.xml.accessExternalSchema=all</vmArg>
                     </vmArgs>
@@ -72,7 +72,7 @@
                         </goals>
                         <configuration>
                             <sources>
-                                <source>target/generated-sources/wsdlimport/schoolid</source>
+                                <source>target/generated-sources/wsdlimport/eckid</source>
                             </sources>
                         </configuration>
                     </execution>

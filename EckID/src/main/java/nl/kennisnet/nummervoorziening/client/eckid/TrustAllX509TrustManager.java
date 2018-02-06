@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package nl.kennisnet.nummervoorziening.client.schoolid;
+package nl.kennisnet.nummervoorziening.client.eckid;
 
 import javax.net.ssl.X509TrustManager;
 import java.security.cert.X509Certificate;

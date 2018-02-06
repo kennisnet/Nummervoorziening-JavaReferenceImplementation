@@ -34,7 +34,7 @@ public class SubmitEckIdBatchOperationTest extends AbstractUnitTest {
      */
     @Test(expected = SOAPFaultException.class)
     public void testSubmitEckIdBatchWithInvalidChainGuid() {
-        schoolIdServiceUtil.submitEckIdBatch(Collections.singletonMap(0, VALID_STUDENT_STAMPSEUDONYM), INVALID_CHAIN_GUID,
+        eckIdServiceUtil.submitEckIdBatch(Collections.singletonMap(0, VALID_STUDENT_STAMPSEUDONYM), INVALID_CHAIN_GUID,
             VALID_SECTOR_GUID);
     }
 
@@ -43,7 +43,7 @@ public class SubmitEckIdBatchOperationTest extends AbstractUnitTest {
      */
     @Test(expected = SOAPFaultException.class)
     public void testSubmitEckIdBatchWithInvalidSectorGuid() {
-        schoolIdServiceUtil.submitEckIdBatch(Collections.singletonMap(0, VALID_STUDENT_STAMPSEUDONYM), VALID_CHAIN_GUID,
+        eckIdServiceUtil.submitEckIdBatch(Collections.singletonMap(0, VALID_STUDENT_STAMPSEUDONYM), VALID_CHAIN_GUID,
             INVALID_SECTOR_GUID);
     }
 
@@ -52,7 +52,7 @@ public class SubmitEckIdBatchOperationTest extends AbstractUnitTest {
      */
     @Test(expected = SOAPFaultException.class)
     public void testSubmitEckIdBatchWithEmptyStampseudonymList() {
-        schoolIdServiceUtil.submitEckIdBatch(Collections.emptyMap(), VALID_CHAIN_GUID, VALID_SECTOR_GUID);
+        eckIdServiceUtil.submitEckIdBatch(Collections.emptyMap(), VALID_CHAIN_GUID, VALID_SECTOR_GUID);
     }
 
     /**
@@ -60,7 +60,7 @@ public class SubmitEckIdBatchOperationTest extends AbstractUnitTest {
      */
     @Test
     public void testSimpleSubmitEckIdBatchWithCorrectValues() {
-        String batchIdentifier = schoolIdServiceUtil.submitEckIdBatch(Collections.singletonMap(0,
+        String batchIdentifier = eckIdServiceUtil.submitEckIdBatch(Collections.singletonMap(0,
             VALID_STUDENT_STAMPSEUDONYM), VALID_CHAIN_GUID, VALID_SECTOR_GUID);
         assertNotNull(batchIdentifier);
     }
@@ -73,7 +73,7 @@ public class SubmitEckIdBatchOperationTest extends AbstractUnitTest {
         Map<Integer, String> input = new HashMap<>();
         input.put(0, VALID_STUDENT_STAMPSEUDONYM);
         input.put(1, VALID_TEACHER_STAMPSEUDONYM);
-        String batchIdentifier = schoolIdServiceUtil.submitEckIdBatch(input, VALID_CHAIN_GUID, VALID_SECTOR_GUID);
+        String batchIdentifier = eckIdServiceUtil.submitEckIdBatch(input, VALID_CHAIN_GUID, VALID_SECTOR_GUID);
         assertNotNull(batchIdentifier);
     }
 }

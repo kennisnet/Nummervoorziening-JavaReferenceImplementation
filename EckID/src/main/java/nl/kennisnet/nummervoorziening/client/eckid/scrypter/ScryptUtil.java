@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package nl.kennisnet.nummervoorziening.client.schoolid.scrypter;
+package nl.kennisnet.nummervoorziening.client.eckid.scrypter;
 
 import com.lambdaworks.crypto.SCrypt;
 
@@ -22,7 +22,6 @@ import java.io.UnsupportedEncodingException;
 import java.security.GeneralSecurityException;
 
 import static com.lambdaworks.codec.Base64.decode;
-import static com.lambdaworks.codec.Base64.encode;
 
 /**
  * Util that helps to work with hashes.
