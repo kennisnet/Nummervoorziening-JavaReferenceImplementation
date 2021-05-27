@@ -36,15 +36,6 @@ public class EckIDServiceBatch {
     }
 
     /**
-     * Sets the map with indexes of passed hashed PGN as keys and EckIDs as values.
-     *
-     * @param success Map with indexes of passed hashed PGN as keys and EckIDs as values.
-     */
-    public void setSuccess(Map<Integer, String> success) {
-        this.success = success;
-    }
-
-    /**
      * Gets the map with indexes of passed hashed PGN as keys and error messages as values.
      *
      * @return Map with indexes of passed hashed PGN as keys and error messages as values.
@@ -54,11 +45,20 @@ public class EckIDServiceBatch {
     }
 
     /**
+     * Sets the map with indexes of passed hashed PGN as keys and EckIDs as values.
+     *
+     * @param success Map with indexes of passed hashed PGN as keys and EckIDs as values.
+     */
+    void setSuccess(Map<Integer, String> success) {
+        this.success = success;
+    }
+
+    /**
      * Sets the map with indexes of passed hashed PGN as keys and error messages as values.
      *
      * @param failed Map with indexes of passed hashed PGN as keys and error messages as values.
      */
-    public void setFailed(Map<Integer, String> failed) {
+    void setFailed(Map<Integer, String> failed) {
         this.failed = failed;
     }
 }

@@ -40,7 +40,6 @@ public class RetrieveStampseudonymOperationTest extends AbstractUnitTest {
     @Test
     public void testGetStudentStampseudonymWithValidValues() {
         String stampseudonym = eckIdServiceUtil.generateStampseudonym(VALID_STUDENT_HPGN);
-        System.out.println(VALID_STUDENT_HPGN);
         assertEquals(VALID_STUDENT_STAMPSEUDONYM, stampseudonym);
     }
 

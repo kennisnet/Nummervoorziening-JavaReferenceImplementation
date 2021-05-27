@@ -37,9 +37,9 @@ Voor alle bovenstaande functionaliteiten wordt gebruik gemaakt van SOAP Messagin
 ## Gebruikte Technologiën
 
 Bij de ontwikkeling van Nummervoorziening - Java Client Reference Application zijn diverse technologiën ingezet:
- * Java 8
- * IntelliJ IDEA 2016.3 - Ontwikkelomgeving
-  * Maven 3.3.9 (bundled) - Build tool
+ * Java 11
+ * IntelliJ IDEA 2021.1 - Ontwikkelomgeving
+ * Maven 3.6.0 (bundled) - Build tool
  * Fiddler - TLS/SSL debugging
  * Wireshark - TLS/SSL debugging
  * SOAP UI - Functional Testing framework for SOAP and REST APIs
@@ -59,7 +59,7 @@ Bij de ontwikkeling van Nummervoorziening - Java Client Reference Application zi
 |org.apache.maven.plugins|maven-compiler-plugin|2.6|Release compiler|
 |org.apache.maven.plugins|maven-assembly-plugin|2.6|Release packager|
 |org.sonarsource.scanner.maven|sonar-maven-plugin|3.0.1|Code Quality check|
-|org.owasp|dependency-check-maven|1.3.4|Controleert op security issues|
+|org.owasp|dependency-check-maven|6.1.5|Controleert op security issues|
 |org.jvnet.jax-ws-commons|jaxws-maven-plugin|2.3|Classgenerator op basis van WSDL|
 |org.codehaus.mojo|build-helper-maven-plugin|1.10|Classgenerator op basis van WSDL|
 ||||||
@@ -157,7 +157,7 @@ Client certificaten voor de communicatie met de Nummervoorziening applicatie op 
  * **Scrypt Java library**: Apache License, Version 2.0. <https://github.com/wg/scrypt>
 
 ## Contact
-Voor meer informatie kunt u contact opnemen met [Vincent Tedjakusuma](mailto:V.Tedjakusuma@kennisnet.nl).
+Voor meer informatie kunt u contact opnemen met [Stichting Kennisnet](mailto:implementaties@kennisnet.nl).
 
 ** Copyright(c) 2017 [Stichting Kennisnet]**
 

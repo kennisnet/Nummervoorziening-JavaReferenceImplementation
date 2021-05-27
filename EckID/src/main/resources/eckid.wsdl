@@ -26,7 +26,7 @@
     <wsdl:documentation>
         Service: EckID (Nummervoorziening)
         Version: 0.7-20171229
-        Contact: Vincent Tedjakusuma (V.Tedjakusuma@kennisnet.nl)
+        Contact: Stichting Kennisnet (implementaties@kennisnet.nl)
 
         Uses WS:Addressing
     </wsdl:documentation>

@@ -16,7 +16,6 @@
 package nl.kennisnet.nummervoorziening.client;
 
 import nl.kennisnet.nummervoorziening.client.eckid.EckIDServiceUtil;
-import nl.kennisnet.nummervoorziening.client.eckid.scrypter.ScryptUtil;
 import org.junit.Before;
 
 import java.io.IOException;
@@ -29,11 +28,11 @@ public abstract class AbstractUnitTest {
 
     protected static final String VALID_STUDENT_PGN = "063138219";
 
-    protected static final String VALID_STUDENT_HPGN = ScryptUtil.generateHexHash(VALID_STUDENT_PGN);
+    protected static final String VALID_STUDENT_HPGN = "9735dfd2235eaeb5f0300886bcc99c82ffc1d6420c4e0bde8de7218def2135fa";
 
     protected static final String VALID_TEACHER_PGN = "20DP teacher@school.com";
 
-    protected static final String VALID_TEACHER_HPGN = ScryptUtil.generateHexHash(VALID_TEACHER_PGN);
+    protected static final String VALID_TEACHER_HPGN = "0b870ff044775ef0360655c40d5b284b7e3ae2b72207a6894794d787eb019e60";
 
     protected static final String VALID_CHAIN_GUID =
         "http://purl.edustandaard.nl/begrippenkader/e7ec7d3c-c235-4513-bfb6-e54e66854795";
@@ -68,6 +67,6 @@ public abstract class AbstractUnitTest {
      */
     @Before
     public void setup() throws GeneralSecurityException, IOException {
-        eckIdServiceUtil = new EckIDServiceUtil();
+        eckIdServiceUtil = EckIDServiceUtil.EckIDServiceUtilFromConfigFile();
     }
 }

@@ -18,7 +18,7 @@ package nl.kennisnet.nummervoorziening.client.eckid.scrypter;
 import com.lambdaworks.crypto.SCrypt;
 
 import javax.xml.bind.DatatypeConverter;
-import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
 
 import static com.lambdaworks.codec.Base64.decode;
@@ -29,9 +29,18 @@ import static com.lambdaworks.codec.Base64.decode;
 public class ScryptUtil {
 
     /**
-     * Static class, should not be instantiated.
+     * The first level salt to use for this ScryptUtil instance.
      */
-    private ScryptUtil() { }
+    private String firstLevelSalt = null;
+
+    /**
+     * Create a new ScryptUtil helper with the supplied salt.
+     *
+     * @param salt the salt to use.
+     */
+    public ScryptUtil(String salt) {
+        setSalt(salt);
+    }
 
     /**
      * Converts input text into hex hash. For the sake of standardization and to prevent mismatches, the hexadecimal
@@ -40,14 +49,26 @@ public class ScryptUtil {
      * @param input text for hashing.
      * @return hashed string in hex format.
      */
-    public static String generateHexHash(String input) {
+    public String generateHexHash(String input) {
         // The input should contain at least one characters
         if (input != null && input.trim().length() > 1) {
-            byte[] derived = scrypt(Constants.SALT, input, Constants.N, Constants.r, Constants.p);
+            byte[] derived = scrypt(firstLevelSalt, input, Constants.N, Constants.r, Constants.p);
             return DatatypeConverter.printHexBinary(derived).toLowerCase();
         } else {
             throw new IllegalArgumentException("The supplied input doesn't contain at least one character.");
         }
+    }
+
+    /**
+     * Set the firstLevelsalt to the supplied value.
+     *
+     * @param salt the salt to set
+     */
+    private void setSalt(String salt) {
+        if (salt == null || salt.trim().length() < 1) {
+            throw new IllegalArgumentException("The first level salt is not set properly.");
+        }
+        firstLevelSalt = salt;
     }
 
     /**
@@ -65,9 +86,7 @@ public class ScryptUtil {
         try {
             char[] saltChar = saltString.toCharArray();
             byte[] salt = decode(saltChar);
-            return SCrypt.scrypt(passwd.toLowerCase().getBytes("UTF-8"), salt, N, r, p, 32);
-        } catch (UnsupportedEncodingException e) {
-            throw new IllegalStateException("JVM doesn't support UTF-8?", e);
+            return SCrypt.scrypt(passwd.toLowerCase().getBytes(StandardCharsets.UTF_8), salt, N, r, p, 32);
         } catch (GeneralSecurityException e) {
             throw new IllegalStateException("JVM doesn't support SHA1PRNG or HMAC_SHA256?", e);
         }

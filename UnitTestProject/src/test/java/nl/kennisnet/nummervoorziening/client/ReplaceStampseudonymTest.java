@@ -15,7 +15,6 @@
  */
 package nl.kennisnet.nummervoorziening.client;
 
-import nl.kennisnet.nummervoorziening.client.eckid.scrypter.ScryptUtil;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -42,9 +41,9 @@ public class ReplaceStampseudonymTest extends AbstractUnitTest {
 
     private static final String VALID_HPGN_OLD_PREFIX = "java03";
 
-    private static int sequenceCounter = 0;
-
     private static final DateFormat HPGN_TIMESTAMP_FORMAT = new SimpleDateFormat("yyyyMMddHHmmss");
+
+    private static int sequenceCounter = 0;
 
     private String validHpgnNew;
 
@@ -64,10 +63,10 @@ public class ReplaceStampseudonymTest extends AbstractUnitTest {
     @Before
     public void initValidValues() {
         String dateStr = HPGN_TIMESTAMP_FORMAT.format(new Date());
-        validHpgnNew = ScryptUtil.generateHexHash(VALID_HPGN_NEW_PREFIX + getSequentialNumber() + dateStr);
-        validHpgnIntermediate = ScryptUtil.generateHexHash(VALID_HPGN_INTERMEDIATE_PREFIX +
+        validHpgnNew = eckIdServiceUtil.getScryptUtil().generateHexHash(VALID_HPGN_NEW_PREFIX + getSequentialNumber() + dateStr);
+        validHpgnIntermediate = eckIdServiceUtil.getScryptUtil().generateHexHash(VALID_HPGN_INTERMEDIATE_PREFIX +
             getSequentialNumber() + dateStr);
-        validHpgnOld = ScryptUtil.generateHexHash(VALID_HPGN_OLD_PREFIX + getSequentialNumber() + dateStr);
+        validHpgnOld = eckIdServiceUtil.getScryptUtil().generateHexHash(VALID_HPGN_OLD_PREFIX + getSequentialNumber() + dateStr);
     }
 
     /**

@@ -18,10 +18,11 @@ package nl.kennisnet.nummervoorziening.client.eckid.scrypter;
 /**
  * Constants for hashing pgn values. Should not be changed if you want always
  * get the same values after hashing.
+ *
+ * The salt is configured in a property file which should remain the same as well, to always get the same value.
+ * However the salt value does differ per environment.
  */
 public interface Constants {
-
-    String SALT = "rktYml0MIp9TC9u6Ny6uqw==";
 
     int N = 131072;
 

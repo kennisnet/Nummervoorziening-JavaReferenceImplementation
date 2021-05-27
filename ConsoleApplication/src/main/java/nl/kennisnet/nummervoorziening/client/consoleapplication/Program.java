@@ -17,7 +17,6 @@ package nl.kennisnet.nummervoorziening.client.consoleapplication;
 
 import nl.kennisnet.nummervoorziening.client.eckid.EckIDServiceBatch;
 import nl.kennisnet.nummervoorziening.client.eckid.EckIDServiceUtil;
-import nl.kennisnet.nummervoorziening.client.eckid.scrypter.ScryptUtil;
 import nl.ketenid.eck.schemas.v1_0.Chain;
 import nl.ketenid.eck.schemas.v1_0.Sector;
 
@@ -33,7 +32,7 @@ import java.util.Map;
  */
 public class Program {
 
-    private static final String WEB_SERVICE_APPLICATION_VERSION = "1.0.4-SNAPSHOT";
+    private static final String WEB_SERVICE_APPLICATION_VERSION = "1.1.5-SNAPSHOT";
 
     private static final int BATCH_RETRIEVE_ATTEMPTS_COUNT = 10;
 
@@ -44,8 +43,7 @@ public class Program {
     /**
      * This class should not be instantiated.
      */
-    private Program() {
-    }
+    private Program() { }
 
     /**
      * The main entry point for the program. This function demonstrates how to work with Web Services via the
@@ -55,7 +53,7 @@ public class Program {
      */
     public static void main(String[] args) throws GeneralSecurityException, InterruptedException, IOException {
         System.out.println("Current server information:");
-        eckIDServiceUtil = new EckIDServiceUtil();
+        eckIDServiceUtil = EckIDServiceUtil.EckIDServiceUtilFromConfigFile();
 
         // Check if the Service is available
         if (!eckIDServiceUtil.isNummervoorzieningServiceAvailable()) {
@@ -87,8 +85,8 @@ public class Program {
 
             // Execute a batch operation for retrieving Stampseudonyms
             Map<Integer, String> listedHpgnMap = new HashMap<>();
-            listedHpgnMap.put(0, ScryptUtil.generateHexHash("063138219"));
-            listedHpgnMap.put(1, ScryptUtil.generateHexHash("20DP teacher@school.com"));
+            listedHpgnMap.put(0, eckIDServiceUtil.getScryptUtil().generateHexHash("063138219"));
+            listedHpgnMap.put(1, eckIDServiceUtil.getScryptUtil().generateHexHash("20DP teacher@school.com"));
 
             System.out.println("\nSubmitting Stampseudonym batch (with the same input):");
             executeStampseudonymBatchOperation(listedHpgnMap);
@@ -124,7 +122,7 @@ public class Program {
         System.out.println("Pgn:\t\t\t\t\t\t" + pgn);
 
         // Generate scrypt hash of the given PGN
-        String hpgn = ScryptUtil.generateHexHash(pgn);
+        String hpgn = eckIDServiceUtil.getScryptUtil().generateHexHash(pgn);
         System.out.println("HPgn:\t\t\t\t\t\t" + hpgn);
 
         // Retrieve Stampseudonym from Nummervoorziening service
@@ -140,8 +138,7 @@ public class Program {
      */
     private static String executeCreateEckIdTest(String stampseudonym, String chainGuid, String sectorGuid) {
         // Retrieve EckID from Nummervoorziening service
-        String eckId = eckIDServiceUtil.generateEckID(stampseudonym, chainGuid, sectorGuid);
-        return eckId;
+        return eckIDServiceUtil.generateEckID(stampseudonym, chainGuid, sectorGuid);
     }
 
     /**
@@ -162,12 +159,10 @@ public class Program {
             System.out.println("Exception thrown by service while trying to submit batch: " +
                 e.getFault().getFaultActor());
 
-            switch (e.getFault().getFaultActor()) {
-                case "LimitDailyBatchSubmissionsExceededException":
-                    System.out.println("Reached the limit of the amount of allowed daily submissions");
-                    break;
-                default:
-                    System.out.println("No additional information available");
+            if ("LimitDailyBatchSubmissionsExceededException".equals(e.getFault().getFaultActor())) {
+                System.out.println("Reached the limit of the amount of allowed daily submissions");
+            } else {
+                System.out.println("No additional information available");
             }
 
             return;
@@ -200,12 +195,10 @@ public class Program {
             System.out.println("Exception thrown by service while trying to submit batch: " +
                 e.getFault().getFaultActor());
 
-            switch (e.getFault().getFaultActor()) {
-                case "LimitDailyBatchSubmissionsExceededException":
-                    System.out.println("Reached the limit of the amount of allowed daily submissions");
-                    break;
-                default:
-                    System.out.println("No additional information available");
+            if ("LimitDailyBatchSubmissionsExceededException".equals(e.getFault().getFaultActor())) {
+                System.out.println("Reached the limit of the amount of allowed daily submissions");
+            } else {
+                System.out.println("No additional information available");
             }
 
             return;

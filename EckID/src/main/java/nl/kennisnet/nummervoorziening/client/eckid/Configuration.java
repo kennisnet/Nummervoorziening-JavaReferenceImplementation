@@ -15,54 +15,30 @@
  */
 package nl.kennisnet.nummervoorziening.client.eckid;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Properties;
 
 /**
- * Reads the configuration from the config.properties file and makes their values accessible throughout the
- * EckID module.
+ * The configuration options which needs to be supplied to be able to use the EckIdService.
  */
-public class Configuration {
+public interface Configuration {
 
-    private static final String PROPERTIES_ENDPOINT_ADDRESS = "endpoint.address";
+    String PROPERTIES_ENDPOINT_ADDRESS = "endpoint.address";
 
-    private static final String PROPERTIES_CLIENT_INSTANCEOIN = "client.instanceOin";
+    String PROPERTIES_CLIENT_INSTANCEOIN = "client.instanceOin";
 
-    private static final String PROPERTIES_CERTIFICATE_KEYSTOREPATH = "certificate.KeyStorePath";
+    String PROPERTIES_CERTIFICATE_KEYSTOREPATH = "certificate.KeyStorePath";
 
-    private static final String PROPERTIES_CERTIFICATE_KEYSTORE_PASSWORD = "certificate.KeyStorePassword";
+    String PROPERTIES_CERTIFICATE_KEYSTORE_PASSWORD = "certificate.KeyStorePassword";
 
-    private static final String PROPERTIES_CERTIFICATE_PASSWORD = "certificate.Password";
+    String PROPERTIES_CERTIFICATE_PASSWORD = "certificate.Password";
 
-    private Properties properties = new Properties();
-
-    /**
-     * Instantiate the object and tries to load the config.properties file.
-     *
-     * @throws IOException Is thrown is the config.properties file could not be read.
-     */
-    public Configuration(String configFilePath) throws IOException {
-        InputStream inputStream = new FileInputStream(configFilePath);
-
-        if (inputStream != null) {
-            properties.load(inputStream);
-        } else {
-            throw new FileNotFoundException("Property file " + configFilePath + " not found");
-        }
-
-        inputStream.close();
-    }
+    /** Salt to be used as input for the client side first level hashing algorithm. */
+    String PROPERTIES_FIRST_LEVEL_SALT = "first_level.salt";
 
     /**
      * Gets the configured Endpoint URL Address as provided in the config.properties file.
      * @return The Endpoint URL Address
      */
-    public String getEndpointAddress() {
-        return properties.getProperty(PROPERTIES_ENDPOINT_ADDRESS);
-    }
+    String getEndpointAddress();
 
     /**
      * Gets the configured client Instance OIN as provided in the config.properties file. This value will be used
@@ -70,35 +46,31 @@ public class Configuration {
      *
      * @return The client Instance OIN
      */
-    public String getClientInstanceOin() {
-        return properties.getProperty(PROPERTIES_CLIENT_INSTANCEOIN);
-    }
+    String getClientInstanceOin();
 
     /**
-     * Gets the configured path to the Certificate Keystore  as provided in the config.properties file.
+     * Gets the configured path to the Certificate Keystore as provided in the config.properties file.
      * @return The path to the Certificate Keystore. Can be relative to the classpath, or an absolute value on the
      * filesystem.
      */
-    public String getCertificateKeystorePath() {
-        return properties.getProperty(PROPERTIES_CERTIFICATE_KEYSTOREPATH);
-    }
+    String getCertificateKeyStorePath();
+
 
     /**
      * Gets the configured password of the Keystore as provided in the config.properties file.
      * @return The password for the Keystore
      */
-    public String getCertificateKeystorePassword() {
-        return properties.getProperty(PROPERTIES_CERTIFICATE_KEYSTORE_PASSWORD);
-    }
-
+    String getCertificateKeyStorePassword();
     /**
      * Gets the configured password of the Certificate as provided in the config.properties file.
      * @return The password of the Certificate
      */
-    public String getCertificatePassword() {
-        return properties.getProperty(PROPERTIES_CERTIFICATE_PASSWORD);
-    }
+    String getCertificatePassword();
 
-
+    /**
+     * Gets the configured first level salt.
+     * @return the configured first level salt.
+     */
+    String getFirstLevelSalt();
 
 }

@@ -206,12 +206,12 @@ public class RetrieveBatchOperationTest extends AbstractUnitTest {
      * @param listedStampseudonymMap Map with Stampseudonym values as values and their indexes as keys.
      * @return result of batch processing.
      */
-    private EckIDServiceBatch executeEckIdBatchOperation(
-        String chainGuid, String sectorGuid, Map<Integer, String> listedStampseudonymMap) throws InterruptedException {
+    private EckIDServiceBatch executeEckIdBatchOperation(String chainGuid, String sectorGuid,
+                                             Map<Integer, String> listedStampseudonymMap) throws InterruptedException {
+
         String batchIdentifier =
             eckIdServiceUtil.submitEckIdBatch(listedStampseudonymMap, chainGuid, sectorGuid);
-        EckIDServiceBatch eckIDServiceBatch = retrieveSubmittedBatch(batchIdentifier);
-        return eckIDServiceBatch;
+        return retrieveSubmittedBatch(batchIdentifier);
     }
 
     /**
@@ -222,8 +222,7 @@ public class RetrieveBatchOperationTest extends AbstractUnitTest {
      */
     private EckIDServiceBatch executeStampseudonymBatchOperation(Map<Integer, String> listedHPgnMap) throws InterruptedException {
         String batchIdentifier = eckIdServiceUtil.submitStampseudonymBatch(listedHPgnMap);
-        EckIDServiceBatch eckIDServiceBatch = retrieveSubmittedBatch(batchIdentifier);
-        return eckIDServiceBatch;
+        return retrieveSubmittedBatch(batchIdentifier);
     }
 
     private EckIDServiceBatch retrieveSubmittedBatch(String batchIdentifier) throws InterruptedException {

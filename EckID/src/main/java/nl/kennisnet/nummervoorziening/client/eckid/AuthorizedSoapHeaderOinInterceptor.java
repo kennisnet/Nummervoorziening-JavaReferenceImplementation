@@ -26,10 +26,10 @@ import java.util.Set;
 public class AuthorizedSoapHeaderOinInterceptor implements SOAPHandler<SOAPMessageContext> {
 
     // The Namespace of the WS-Addressing version
-    protected static final String ADDRESSING_NS = "http://www.w3.org/2005/08/addressing";
+    private static final String ADDRESSING_NS = "http://www.w3.org/2005/08/addressing";
 
     // The suffix used in the Address elements as defined by Edukoppeling
-    protected static final String ANONYMOUS_OIN = ADDRESSING_NS + "/anonymous?oin=";
+    private static final String ANONYMOUS_OIN = ADDRESSING_NS + "/anonymous?oin=";
 
     @Override
     public boolean handleMessage(SOAPMessageContext context) {
@@ -47,9 +47,8 @@ public class AuthorizedSoapHeaderOinInterceptor implements SOAPHandler<SOAPMessa
 
                 String fromValue = ANONYMOUS_OIN + EckIDServiceUtil.getInstanceOin();
                 addressElement.addTextNode(fromValue);
-
             } catch(SOAPException e) {
-                System.err.println(e);
+                System.err.println(e.getMessage());
             }
         }
 

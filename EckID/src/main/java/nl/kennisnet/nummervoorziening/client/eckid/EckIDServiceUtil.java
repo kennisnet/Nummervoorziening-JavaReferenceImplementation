@@ -15,6 +15,8 @@
  */
 package nl.kennisnet.nummervoorziening.client.eckid;
 
+import nl.kennisnet.nummervoorziening.client.eckid.impl.ConfigurationImpl;
+import nl.kennisnet.nummervoorziening.client.eckid.scrypter.ScryptUtil;
 import nl.ketenid.eck.schemas.v1_0.*;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -25,8 +27,8 @@ import javax.xml.datatype.XMLGregorianCalendar;
 import javax.xml.ws.Binding;
 import javax.xml.ws.BindingProvider;
 import javax.xml.ws.handler.Handler;
-import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.security.GeneralSecurityException;
@@ -42,27 +44,38 @@ public class EckIDServiceUtil {
 
     private final EckIDPort eckIDPort;
 
-    private static final String PROPERTIES_FILE_NAME = "config.properties";
-
-    private static final String PARENT_DIRECTORY_NAME = "JavaReferenceImplementation";
+    private final ScryptUtil scryptUtil;
 
     private static Configuration configuration;
 
     /**
-     * Initializes class for working with EckID Web Service.
+     * Create a new EckIDServiceUtil based on a config.properties file.
+     *
+     * @return the initialized class for working with EckID Web Service.
+     *
+     * @throws GeneralSecurityException if a security-related issue is raised.
+     * @throws IOException if a I/O-related issue is raised.
      */
-    public EckIDServiceUtil() throws GeneralSecurityException, IOException {
-        EckIDService eckIDService = new EckIDService();
-
+    public static EckIDServiceUtil EckIDServiceUtilFromConfigFile() throws GeneralSecurityException, IOException {
         // Set the correct path to the config file (which is in the parent directory)
         String cwdPath = System.getProperty("user.dir");
         // We assume that properties file is placed in project root folder, but
         // execution of program can be started from any subfolder of project.
-        String parentPath = cwdPath.substring(0, cwdPath.indexOf(PARENT_DIRECTORY_NAME) +
-            PARENT_DIRECTORY_NAME.length());
 
         // Initialize the Configuration class
-        configuration = new Configuration(parentPath + File.separator + PROPERTIES_FILE_NAME);
+        configuration = new ConfigurationImpl(cwdPath);
+        return new EckIDServiceUtil(configuration);
+    }
+
+    /**
+     * Initializes class for working with EckID Web Service. Needs to be public for usage in third party applications.
+     */
+    public EckIDServiceUtil(Configuration configuration) throws GeneralSecurityException {
+        EckIDServiceUtil.configuration = configuration;
+
+        EckIDService eckIDService = new EckIDService();
+
+        scryptUtil = new ScryptUtil(configuration.getFirstLevelSalt());
 
         // Explicitly enable WS-Addressing (required by the Nummervoorziening service)
         eckIDPort = eckIDService.getEckIDSoap10(new javax.xml.ws.soap.AddressingFeature(true, true));
@@ -248,7 +261,7 @@ public class EckIDServiceUtil {
         RetrieveBatchResponse response = eckIDPort.retrieveBatch(request);
 
         eckIDServiceBatch.setSuccess(response.getSuccess().stream().collect(Collectors.toMap(ListedEntitySuccess::getIndex,
-            listedEntitySuccess -> listedEntitySuccess.getValue())));
+            ListedEntitySuccess::getValue)));
         eckIDServiceBatch.setFailed(response.getFailed().stream().collect(Collectors.toMap(ListedEntityFailure::getIndex,
             ListedEntityFailure::getErrorMessage)));
 
@@ -267,22 +280,17 @@ public class EckIDServiceUtil {
 
             final KeyStore keyStore = KeyStore.getInstance("JKS");
             InputStream is = EckIDServiceUtil.class.getResourceAsStream(
-                configuration.getCertificateKeystorePath()
+                configuration.getCertificateKeyStorePath()
             );
 
             // Check if file exists in Class path. If not, retry using absolute path. If still not found, throw
             // an Exception
             if (is == null) {
-                is = new FileInputStream(configuration.getCertificateKeystorePath());
-
-                if (is == null) {
-                    throw new IOException("File " + configuration.getCertificateKeystorePath() + " not found in " +
-                        "classpath and/or filesystem");
-                }
+                is = new FileInputStream(configuration.getCertificateKeyStorePath());
             }
 
-            keyStore.load(is, configuration.getCertificateKeystorePassword().toCharArray());
-
+            keyStore.load(is, configuration.getCertificateKeyStorePassword().toCharArray());
+            is.close();
             final KeyManagerFactory kmf = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
             kmf.init(keyStore, configuration.getCertificatePassword().toCharArray());
 
@@ -296,9 +304,23 @@ public class EckIDServiceUtil {
             sc.init(kmf.getKeyManagers(), new TrustManager[] { new TrustAllX509TrustManager() }, new java.security.SecureRandom());
             HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
             HttpsURLConnection.setDefaultHostnameVerifier((hostname, session) -> true);
-        } catch (IOException e) {
+        }
+        catch (FileNotFoundException e) {
+            throw new RuntimeException("File " + configuration.getCertificateKeyStorePath() + " not found in " +
+                "classpath and/or filesystem");
+        }
+        catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    /**
+     * Return the Scrypt util instance to use.
+     *
+     * @return the configured Script Util instance.
+     */
+    public ScryptUtil getScryptUtil() {
+        return scryptUtil;
     }
 
     /**
@@ -307,7 +329,7 @@ public class EckIDServiceUtil {
      *
      * @return The configured Instance OIN
      */
-    public static String getInstanceOin() {
+    static String getInstanceOin() {
         return configuration.getClientInstanceOin();
     }
 }
