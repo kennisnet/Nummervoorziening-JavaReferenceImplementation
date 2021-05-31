@@ -32,7 +32,7 @@ De Nummervoorziening - Java Client Reference Application is een client implement
 Voor alle bovenstaande functionaliteiten wordt gebruik gemaakt van SOAP Messaging tussen de verschillende actoren. Authenticatie vindt plaats middels PKI-Certificaten die over TLS worden uitgewisseld. Aanvullende informatie over Nummervoorziening kan gevonden worden op de [Edukoppeling Wiki] van [Stichting Kennisnet].  
 
 ## Version
-0.3-20170408
+0.1.2-SNAPSHOT (20210531)
 
 ## Gebruikte Technologiën
 
@@ -134,8 +134,8 @@ Vanuit de *pom.xml* in de *EckID* module wordt de meegeleverde WSDL gedurende he
 De juiste invulling van de *From* SOAP header is tezamen met het ondersteunen van *self-signed* certificaten (voor testdoeleinden) opgenomen in de initialization methode van de *EckIdServiceUtil* class. De From header wordt bepaald en toegevoegd vanuit de SOAP interceptor class *AuthorizedSoapHeaderOinInterceptor*. 
 
 ## Installatie
-De applicatie is gebouwd voor Java 8 en getest op diverse platformen. Om de applicatie succesvol te laten draaien moet aan een aantal randvoorwaarden worden voldaan:
- * Java 8 (OpenJDK of Oracle JDK)
+De applicatie is gebouwd voor Java 11 en getest op diverse platformen. Om de applicatie succesvol te laten draaien moet aan een aantal randvoorwaarden worden voldaan:
+ * Java 11 (OpenJDK of Oracle JDK)
  * De machine dient een geldig en geregistreerd TLS client certificaat te hebben waarmee geidentificeerd kan worden bij de Nummervoorziening applicatie
  * Het certificaat is in een Certificate Store (JKS bestand) opgenomen en in de juiste directory geplaatst (*EckID/src/main/resources/*)
  * *EckIdServiceUtil* variabelen zijn aangepast op basis van certificaat gegevens
