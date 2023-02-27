@@ -32,13 +32,13 @@ De Nummervoorziening - Java Client Reference Application is een client implement
 Voor alle bovenstaande functionaliteiten wordt gebruik gemaakt van SOAP Messaging tussen de verschillende actoren. Authenticatie vindt plaats middels PKI-Certificaten die over TLS worden uitgewisseld. Aanvullende informatie over Nummervoorziening kan gevonden worden op de [Edukoppeling Wiki] van [Stichting Kennisnet].  
 
 ## Version
-0.1.2-SNAPSHOT (20210531)
+0.1.2 (20230227)
 
 ## Gebruikte Technologiën
 
 Bij de ontwikkeling van Nummervoorziening - Java Client Reference Application zijn diverse technologiën ingezet:
  * Java 11
- * IntelliJ IDEA 2021.1 - Ontwikkelomgeving
+ * IntelliJ IDEA - Ontwikkelomgeving
  * Maven 3.6.0 (bundled) - Build tool
  * Fiddler - TLS/SSL debugging
  * Wireshark - TLS/SSL debugging
@@ -46,29 +46,30 @@ Bij de ontwikkeling van Nummervoorziening - Java Client Reference Application zi
  
 ### Dependencies
 
-| GroupId | ArtifactId | Version | Beschrijving |
-| ------- | :--------: | :-----: | -----------: |
-|com.lambdaworks|scrypt|1.4.0|SCrypt library|
-|junit|junit|4.12|Unit Test framework|
-||||||
+| GroupId         | ArtifactId  | Version  |       Beschrijving  |
+|-----------------|:-----------:|:--------:|--------------------:|
+| com.lambdaworks |   scrypt    |  1.4.0   |      SCrypt library |
+| junit           |    junit    |   4.12   | Unit Test framework |
 
  ### Plugins
  
-| GroupId | ArtifactId | Version | Beschrijving |
-| ------- | :--------: | :-----: | -----------: |
-|org.apache.maven.plugins|maven-compiler-plugin|2.6|Release compiler|
-|org.apache.maven.plugins|maven-assembly-plugin|2.6|Release packager|
-|org.sonarsource.scanner.maven|sonar-maven-plugin|3.0.1|Code Quality check|
-|org.owasp|dependency-check-maven|6.1.5|Controleert op security issues|
-|org.jvnet.jax-ws-commons|jaxws-maven-plugin|2.3|Classgenerator op basis van WSDL|
-|org.codehaus.mojo|build-helper-maven-plugin|1.10|Classgenerator op basis van WSDL|
-||||||
+| GroupId                       |        ArtifactId         | Version  |                     Beschrijving |
+|-------------------------------|:-------------------------:|:--------:|---------------------------------:|
+| org.apache.maven.plugins      |   maven-compiler-plugin   |   2.6    |                 Release compiler |
+| org.apache.maven.plugins      |   maven-assembly-plugin   |   2.6    |                 Release packager |
+| org.sonarsource.scanner.maven |    sonar-maven-plugin     |  3.0.1   |               Code Quality check |
+| org.owasp                     |  dependency-check-maven   |  6.1.5   |   Controleert op security issues |
+| org.jvnet.jax-ws-commons      |    jaxws-maven-plugin     |   2.3    | Classgenerator op basis van WSDL |
+| org.codehaus.mojo             | build-helper-maven-plugin |   1.10   | Classgenerator op basis van WSDL |
 
-Alle dependencies en plugins worden beheerd middels Maven; er hoeven geen aanvullende zaken manueel geïnstalleerd te worden door de ontwikkelaar zelf. 
+Alle dependencies en plugins worden beheerd middels Maven; er hoeven geen aanvullende zaken manueel geïnstalleerd te 
+worden door de ontwikkelaar zelf. 
 
   
 ## Communicatie
-De Client Reference Application communiceert met de Nummervoorziening applicatie middels het SOAP-messaging protocol. Hierbij wordt het profiel 2W-be (tweeweg, Best Effort) zoals beschreven in de Edukoppeling Transactiestandaard versie 1.2 en Digikoppeling WUS 3.0 gevolgd. Praktisch gezien houdt dit het volgende in:
+De Client Reference Application communiceert met de Nummervoorziening applicatie middels het SOAP-messaging protocol. 
+Hierbij wordt het profiel 2W-be (tweeweg, Best Effort) zoals beschreven in de Edukoppeling Transactiestandaard versie 
+1.2 en Digikoppeling WUS 3.0 gevolgd. Praktisch gezien houdt dit het volgende in:
  * synchrone uitwisselingen die geen faciliteiten voor betrouwbaarheid (ontvangstbevestigingen, duplicaateliminatie etc.) vereisen. Voorbeelden zijn toepassingen waar het eventueel verloren raken van sommige berichten niet problematisch is en waar snelle verwerking gewenst is.
  * gebaseerd op SOAP 1.1.
  * gebruik van de verplichte WS-Addressing 1.0 headers, waarbij de From header verplicht is, en de ReplyTo header niet wordt gebruikt.

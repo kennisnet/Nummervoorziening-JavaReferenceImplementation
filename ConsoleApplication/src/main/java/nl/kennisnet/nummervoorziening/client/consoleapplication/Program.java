@@ -20,7 +20,7 @@ import nl.kennisnet.nummervoorziening.client.eckid.EckIDServiceUtil;
 import nl.ketenid.eck.schemas.v1_0.Chain;
 import nl.ketenid.eck.schemas.v1_0.Sector;
 
-import javax.xml.ws.soap.SOAPFaultException;
+import jakarta.xml.ws.soap.SOAPFaultException;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.HashMap;
@@ -32,7 +32,7 @@ import java.util.Map;
  */
 public class Program {
 
-    private static final String WEB_SERVICE_APPLICATION_VERSION = "1.1.5-SNAPSHOT";
+    private static final String WEB_SERVICE_APPLICATION_VERSION = "1.1.13";
 
     private static final int BATCH_RETRIEVE_ATTEMPTS_COUNT = 10;
 
@@ -66,8 +66,8 @@ public class Program {
                 System.out.println("Web Service Application version is different from intended (" +
                     WEB_SERVICE_APPLICATION_VERSION + " vs " + applicationVersion + ").");
             }
-            System.out.println("System time:\t\t\t\t" + eckIDServiceUtil.getSystemTime());
-            System.out.println("Available:\t\t\t\t\t" + eckIDServiceUtil.isNummervoorzieningServiceAvailable());
+            System.out.println("System time:\t\t\t" + eckIDServiceUtil.getSystemTime());
+            System.out.println("Available:\t\t\t" + eckIDServiceUtil.isNummervoorzieningServiceAvailable());
 
             // List number of active chains and sectors
             List<Chain> activeChains = eckIDServiceUtil.getChains();
@@ -94,9 +94,9 @@ public class Program {
             // Retrieve an EckID
             System.out.println("\nRetrieving EckID for first active sector and first active chain:");
             String chainGuid = activeChains.get(0).getId();
-            System.out.println("Chain Guid:\t\t\t\t\t" + chainGuid);
+            System.out.println("Chain Guid:\t\t\t" + chainGuid);
             String sectorGuid = activeSectors.get(0).getId();
-            System.out.println("Sector Guid:\t\t\t\t" + sectorGuid);
+            System.out.println("Sector Guid:\t\t\t" + sectorGuid);
 
             // Execute a number of valid tests
             System.out.println("Retrieved Student EckID:\t" +
@@ -119,11 +119,11 @@ public class Program {
      * @param pgn The PGN to be hashed and send to Nummervoorziening to create a Stampseudonym.
      */
     private static String executeCreateStampseudonymTest(String pgn) {
-        System.out.println("Pgn:\t\t\t\t\t\t" + pgn);
+        System.out.println("Pgn:\t\t\t\t" + pgn);
 
         // Generate scrypt hash of the given PGN
         String hpgn = eckIDServiceUtil.getScryptUtil().generateHexHash(pgn);
-        System.out.println("HPgn:\t\t\t\t\t\t" + hpgn);
+        System.out.println("HPgn:\t\t\t\t" + hpgn);
 
         // Retrieve Stampseudonym from Nummervoorziening service
         return eckIDServiceUtil.generateStampseudonym(hpgn);
@@ -168,7 +168,7 @@ public class Program {
             return;
         }
 
-        System.out.println("Batch identifier:\t\t\t" + batchIdentifier);
+        System.out.println("Batch identifier:\t\t" + batchIdentifier);
         System.out.println("Waiting for processing...");
 
         EckIDServiceBatch eckIDServiceBatch = waitForProcessing(batchIdentifier);
@@ -204,7 +204,7 @@ public class Program {
             return;
         }
 
-        System.out.println("Batch identifier:\t\t\t" + batchIdentifier);
+        System.out.println("Batch identifier:\t\t" + batchIdentifier);
         System.out.println("Waiting for processing...");
 
         EckIDServiceBatch eckIDServiceBatch = waitForProcessing(batchIdentifier);

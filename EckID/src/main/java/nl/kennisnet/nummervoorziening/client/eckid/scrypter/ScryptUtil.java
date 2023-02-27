@@ -16,8 +16,8 @@
 package nl.kennisnet.nummervoorziening.client.eckid.scrypter;
 
 import com.lambdaworks.crypto.SCrypt;
+import jakarta.xml.bind.DatatypeConverter;
 
-import javax.xml.bind.DatatypeConverter;
 import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
 

@@ -40,7 +40,7 @@ public class PingOperationTest extends AbstractUnitTest {
      */
     @Test
     public void testGettingApplicationVersion() {
-        String expectedVersion = "1.1.5-SNAPSHOT";
+        String expectedVersion = "1.1.13";
 
         String applicationVersion = eckIdServiceUtil.getApplicationVersion();
         assertEquals("Version of Web Service is different from intended version", expectedVersion, applicationVersion);

@@ -16,10 +16,10 @@
 package nl.kennisnet.nummervoorziening.client.eckid;
 
 import javax.xml.namespace.QName;
-import javax.xml.soap.*;
-import javax.xml.ws.handler.MessageContext;
-import javax.xml.ws.handler.soap.SOAPHandler;
-import javax.xml.ws.handler.soap.SOAPMessageContext;
+import jakarta.xml.soap.*;
+import jakarta.xml.ws.handler.MessageContext;
+import jakarta.xml.ws.handler.soap.SOAPHandler;
+import jakarta.xml.ws.handler.soap.SOAPMessageContext;
 import java.util.Collections;
 import java.util.Set;
 

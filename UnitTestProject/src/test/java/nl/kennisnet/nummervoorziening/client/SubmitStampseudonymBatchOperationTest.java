@@ -17,7 +17,7 @@ package nl.kennisnet.nummervoorziening.client;
 
 import org.junit.Test;
 
-import javax.xml.ws.soap.SOAPFaultException;
+import jakarta.xml.ws.soap.SOAPFaultException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;

@@ -24,9 +24,9 @@ import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 import javax.xml.datatype.XMLGregorianCalendar;
-import javax.xml.ws.Binding;
-import javax.xml.ws.BindingProvider;
-import javax.xml.ws.handler.Handler;
+import jakarta.xml.ws.Binding;
+import jakarta.xml.ws.BindingProvider;
+import jakarta.xml.ws.handler.Handler;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -78,7 +78,7 @@ public class EckIDServiceUtil {
         scryptUtil = new ScryptUtil(configuration.getFirstLevelSalt());
 
         // Explicitly enable WS-Addressing (required by the Nummervoorziening service)
-        eckIDPort = eckIDService.getEckIDSoap10(new javax.xml.ws.soap.AddressingFeature(true, true));
+        eckIDPort = eckIDService.getEckIDSoap10(new jakarta.xml.ws.soap.AddressingFeature(true, true));
 
         BindingProvider bindingProvider = (BindingProvider) eckIDPort;
         Binding binding = bindingProvider.getBinding();
