@@ -37,30 +37,29 @@ Voor alle bovenstaande functionaliteiten wordt gebruik gemaakt van SOAP Messagin
 ## Gebruikte Technologiën
 
 Bij de ontwikkeling van Nummervoorziening - Java Client Reference Application zijn diverse technologiën ingezet:
- * Java 11
+ * Java 17
  * IntelliJ IDEA - Ontwikkelomgeving
- * Maven 3.6.0 (bundled) - Build tool
+ * Maven 3.3.9 - Build tool
  * Fiddler - TLS/SSL debugging
  * Wireshark - TLS/SSL debugging
  * SOAP UI - Functional Testing framework for SOAP and REST APIs
  
 ### Dependencies
 
-| GroupId         | ArtifactId  | Version  |        Beschrijving |
-|-----------------|:-----------:|:--------:|--------------------:|
-| com.lambdaworks |   scrypt    |  1.4.0   |      SCrypt library |
-| junit           |    junit    |   4.12   | Unit Test framework |
+| GroupId            | ArtifactId         | Version | Beschrijving        |
+|--------------------|:-------------------|:--------|:--------------------|
+| com.lambdaworks    | scrypt             | 1.4.0   | SCrypt library      |
+| org.junit.jupiter  | junit-jupiter-api  | 5.10.2  | Unit Test framework |
 
  ### Plugins
  
-| GroupId                       |        ArtifactId         | Version  |                     Beschrijving |
-|-------------------------------|:-------------------------:|:--------:|---------------------------------:|
-| org.apache.maven.plugins      |   maven-compiler-plugin   |   2.6    |                 Release compiler |
-| org.apache.maven.plugins      |   maven-assembly-plugin   |   2.6    |                 Release packager |
-| org.sonarsource.scanner.maven |    sonar-maven-plugin     |  3.0.1   |               Code Quality check |
-| org.owasp                     |  dependency-check-maven   |  6.1.5   |   Controleert op security issues |
-| org.jvnet.jax-ws-commons      |    jaxws-maven-plugin     |   2.3    | Classgenerator op basis van WSDL |
-| org.codehaus.mojo             | build-helper-maven-plugin |   1.10   | Classgenerator op basis van WSDL |
+| GroupId                       | ArtifactId                 | Version | Beschrijving                                           |
+|-------------------------------|:---------------------------|:--------|:-------------------------------------------------------|
+| org.apache.maven.plugins      | maven-compiler-plugin      | 3.8.1   | Release compiler                                       |
+| org.sonarsource.scanner.maven | sonar-maven-plugin         | 3.0.1   | Code Quality check                                     |
+| org.owasp                     | dependency-check-maven     | 9.0.10  | Controleert op bekende vulnerabilities in dependencies |
+| com.sun.xml.ws                | jaxws-maven-plugin         | 4.0.2   | Classgenerator op basis van WSDL                       |
+| org.codehaus.mojo             | build-helper-maven-plugin  | 3.2.0   | Classgenerator op basis van WSDL                       |
 
 Alle dependencies en plugins worden beheerd middels Maven; er hoeven geen aanvullende zaken manueel geïnstalleerd te 
 worden door de ontwikkelaar zelf. 
