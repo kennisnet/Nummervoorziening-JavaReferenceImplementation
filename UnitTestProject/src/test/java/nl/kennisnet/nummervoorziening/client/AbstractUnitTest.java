@@ -16,7 +16,7 @@
 package nl.kennisnet.nummervoorziening.client;
 
 import nl.kennisnet.nummervoorziening.client.eckid.EckIDServiceUtil;
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
@@ -65,8 +65,9 @@ public abstract class AbstractUnitTest {
     /**
      * Setups Service Util for working with Nummervoorziening service.
      */
-    @Before
+    @BeforeEach
     public void setup() throws GeneralSecurityException, IOException {
         eckIdServiceUtil = EckIDServiceUtil.EckIDServiceUtilFromConfigFile();
     }
+
 }

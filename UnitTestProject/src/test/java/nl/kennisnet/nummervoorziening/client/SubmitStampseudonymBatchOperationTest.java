@@ -15,14 +15,15 @@
  */
 package nl.kennisnet.nummervoorziening.client;
 
-import org.junit.Test;
-
 import jakarta.xml.ws.soap.SOAPFaultException;
+import org.junit.jupiter.api.Test;
+
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * Demonstrates correct usage of the "Submit Stampseudonym Batch" operation.
@@ -32,9 +33,10 @@ public class SubmitStampseudonymBatchOperationTest extends AbstractUnitTest {
     /**
      * Tests that Nummervoorziening service throws error on empty HPgn list.
      */
-    @Test(expected = SOAPFaultException.class)
+    @Test
     public void testSubmitStampseudonymBatchWithEmptyStampseudonymList() {
-        eckIdServiceUtil.submitStampseudonymBatch(Collections.emptyMap());
+        assertThrows(SOAPFaultException.class, () ->
+            eckIdServiceUtil.submitStampseudonymBatch(Collections.emptyMap()));
     }
 
     /**
@@ -56,4 +58,5 @@ public class SubmitStampseudonymBatchOperationTest extends AbstractUnitTest {
         String batchIdentifier = eckIdServiceUtil.submitStampseudonymBatch(input);
         assertNotNull(batchIdentifier);
     }
+
 }

@@ -16,16 +16,16 @@
 package nl.kennisnet.nummervoorziening.client;
 
 import nl.kennisnet.nummervoorziening.client.eckid.EckIDServiceBatch;
-import org.junit.Test;
 
 import jakarta.xml.ws.soap.SOAPFaultException;
+import org.junit.jupiter.api.Test;
+
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
+
 
 /**
  * Demonstrates correct usage of the "Retrieve Batch" operation for ECK-ID and stampseudonym batches.
@@ -41,9 +41,10 @@ public class RetrieveBatchOperationTest extends AbstractUnitTest {
     /**
      * Tests that Nummervoorziening service throws error on invalid batch identifier.
      */
-    @Test(expected = SOAPFaultException.class)
+    @Test
     public void testRetrieveBatchWithInvalidBatchIdentifier() {
-        eckIdServiceUtil.retrieveEckIDBatch(INVALID_BATCH_IDENTIFIER);
+        assertThrows(SOAPFaultException.class, () ->
+        eckIdServiceUtil.retrieveEckIDBatch(INVALID_BATCH_IDENTIFIER));
     }
 
     /**
@@ -164,7 +165,7 @@ public class RetrieveBatchOperationTest extends AbstractUnitTest {
     /**
      * Tests that Nummervoorziening service throws error on retrieving batch content two times for an EckID batch.
      */
-    @Test(expected = SOAPFaultException.class)
+    @Test
     public void testRetrieveEckIdBatchTwoTimes() throws InterruptedException {
         String batchIdentifier = eckIdServiceUtil.submitEckIdBatch(
             Collections.singletonMap(0, VALID_STUDENT_STAMPSEUDONYM), VALID_CHAIN_GUID, VALID_SECTOR_GUID);
@@ -177,13 +178,15 @@ public class RetrieveBatchOperationTest extends AbstractUnitTest {
                 // do nothing
             }
         }
-        eckIdServiceUtil.retrieveEckIDBatch(batchIdentifier);
+
+        assertThrows(SOAPFaultException.class, () ->
+            eckIdServiceUtil.retrieveEckIDBatch(batchIdentifier));
     }
 
     /**
      * Tests that Nummervoorziening service throws error on retrieving batch content two times for stampseudonym batch.
      */
-    @Test(expected = SOAPFaultException.class)
+    @Test
     public void testRetrieveStampseudonymBatchTwoTimes() throws InterruptedException {
         String batchIdentifier = eckIdServiceUtil.submitStampseudonymBatch(Collections.singletonMap(0, VALID_STUDENT_HPGN));
         for (int i = 0; i < BATCH_RETRIEVE_ATTEMPTS_COUNT; i++) {
@@ -195,7 +198,9 @@ public class RetrieveBatchOperationTest extends AbstractUnitTest {
                 // do nothing
             }
         }
-        eckIdServiceUtil.retrieveEckIDBatch(batchIdentifier);
+
+        assertThrows(SOAPFaultException.class, () ->
+            eckIdServiceUtil.retrieveEckIDBatch(batchIdentifier));
     }
 
     /**
@@ -241,4 +246,5 @@ public class RetrieveBatchOperationTest extends AbstractUnitTest {
         }
         return eckIDServiceBatch;
     }
+
 }

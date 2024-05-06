@@ -15,20 +15,21 @@
  */
 package nl.kennisnet.nummervoorziening.client;
 
-import org.junit.Before;
-import org.junit.Test;
-
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 import jakarta.xml.ws.soap.SOAPFaultException;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * Demonstrates correct usage of the "Replace Stampseudonym" operation.
@@ -56,11 +57,11 @@ public class ReplaceStampseudonymTest extends AbstractUnitTest {
     }
 
     /**
-     * ﻿ For this test, the PGN is extended with a sequential number and a date string. This is for
+     *  For this test, the PGN is extended with a sequential number and a date string. This is for
      *  demonstration purpose only! On production environment, only PGN with no extensions should be used as the input
      *  for the Scrypt operation.
      */
-    @Before
+    @BeforeEach
     public void initValidValues() {
         String dateStr = HPGN_TIMESTAMP_FORMAT.format(new Date());
         validHpgnNew = eckIdServiceUtil.getScryptUtil().generateHexHash(VALID_HPGN_NEW_PREFIX + getSequentialNumber() + dateStr);
@@ -72,17 +73,19 @@ public class ReplaceStampseudonymTest extends AbstractUnitTest {
     /**
      * Tests that Nummervoorziening service throws error on invalid new HPgn.
      */
-    @Test(expected = SOAPFaultException.class)
+    @Test
     public void testReplaceStampseudonymWithInvalidNewHpgn() {
-        eckIdServiceUtil.replaceStampseudonym(INVALID_HPGN, validHpgnOld, null);
+        assertThrows(SOAPFaultException.class, () ->
+            eckIdServiceUtil.replaceStampseudonym(INVALID_HPGN, validHpgnOld, null));
     }
 
     /**
      * Tests that Nummervoorziening service throws error on invalid old HPgn.
      */
-    @Test(expected = SOAPFaultException.class)
+    @Test
     public void testReplaceStampseudonymWithInvalidOldHpgn() {
-        eckIdServiceUtil.replaceStampseudonym(validHpgnNew, INVALID_HPGN, null);
+        assertThrows(SOAPFaultException.class, () ->
+            eckIdServiceUtil.replaceStampseudonym(validHpgnNew, INVALID_HPGN, null));
     }
 
     /**
@@ -109,7 +112,7 @@ public class ReplaceStampseudonymTest extends AbstractUnitTest {
     }
 
     /**
-     * ﻿Tests the Substitution functionality based on the output of the retrieve stampseudonym functionality. In this case,
+     * Tests the Substitution functionality based on the output of the retrieve stampseudonym functionality. In this case,
      * a substitution is submitted to substitution hpgn intermediate to hpgn old, and a second substitution from hpgn new
      * to hpgn intermediate. The last substitution should give back hpgn old instead of hpgn intermediate, also when
      * retrieving the Eck Id based on hpgn new.
@@ -169,4 +172,5 @@ public class ReplaceStampseudonymTest extends AbstractUnitTest {
         // substituted yet)
         assertEquals(newStampseudonym, finalStampseudonym);
     }
+
 }

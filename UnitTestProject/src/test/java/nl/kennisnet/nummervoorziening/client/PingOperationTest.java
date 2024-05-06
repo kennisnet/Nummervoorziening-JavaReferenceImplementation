@@ -15,12 +15,9 @@
  */
 package nl.kennisnet.nummervoorziening.client;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import javax.xml.datatype.DatatypeConfigurationException;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Demonstrates correct usage of the "Ping" operation.
@@ -32,7 +29,7 @@ public class PingOperationTest extends AbstractUnitTest {
      */
     @Test
     public void testGettingAvailability() {
-        assertTrue("Web Service is not available", eckIdServiceUtil.isNummervoorzieningServiceAvailable());
+        assertTrue(eckIdServiceUtil.isNummervoorzieningServiceAvailable(), "Web Service is not available");
     }
 
     /**
@@ -40,23 +37,24 @@ public class PingOperationTest extends AbstractUnitTest {
      */
     @Test
     public void testGettingApplicationVersion() {
-        String expectedVersion = "1.1.13";
+        String expectedVersion = "2.0";
 
         String applicationVersion = eckIdServiceUtil.getApplicationVersion();
-        assertEquals("Version of Web Service is different from intended version", expectedVersion, applicationVersion);
+        assertTrue(applicationVersion.startsWith(expectedVersion), "Version of Web Service is different from intended version");
     }
 
     /**
      * Tests that time on server is not too different from local time.
      */
     @Test
-    public void testEckIdDateTime() throws DatatypeConfigurationException {
+    public void testEckIdDateTime() {
         long allowedGapInMinutes = 180;
 
         long serverTimeInMillis = eckIdServiceUtil.getSystemTime().toGregorianCalendar().getTimeInMillis();
         long localTimeInMillis = System.currentTimeMillis();
         long timeDifference = Math.abs(localTimeInMillis - serverTimeInMillis) / 3600000;
 
-        assertTrue("Time difference is more then 3 hours", timeDifference  < allowedGapInMinutes);
+        assertTrue(timeDifference  < allowedGapInMinutes, "Time difference is more then 3 hours");
     }
+
 }

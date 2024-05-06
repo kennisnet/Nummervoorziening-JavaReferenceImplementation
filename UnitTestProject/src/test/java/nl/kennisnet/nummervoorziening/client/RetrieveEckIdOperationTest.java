@@ -15,11 +15,11 @@
  */
 package nl.kennisnet.nummervoorziening.client;
 
-import org.junit.Test;
-
 import jakarta.xml.ws.soap.SOAPFaultException;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * Demonstrates correct usage of the "Retrieve EckId" operation.
@@ -29,25 +29,28 @@ public class RetrieveEckIdOperationTest extends AbstractUnitTest {
     /**
      * Tests that Nummervoorziening service throws error on invalid Stampseudonym.
      */
-    @Test(expected = SOAPFaultException.class)
+    @Test
     public void testGetEckIdWithInvalidStampseudonym() {
-        eckIdServiceUtil.generateEckID(INVALID_STAMPSEUDONYM, VALID_CHAIN_GUID, VALID_SECTOR_GUID);
+        assertThrows(SOAPFaultException.class, () ->
+            eckIdServiceUtil.generateEckID(INVALID_STAMPSEUDONYM, VALID_CHAIN_GUID, VALID_SECTOR_GUID));
     }
 
     /**
      * Tests that Nummervoorziening service throws error on invalid Chain Guid.
      */
-    @Test(expected = SOAPFaultException.class)
+    @Test
     public void testGetEckIdWithInvalidChain() {
-        eckIdServiceUtil.generateEckID(VALID_STUDENT_STAMPSEUDONYM, INVALID_CHAIN_GUID, VALID_SECTOR_GUID);
+        assertThrows(SOAPFaultException.class, () ->
+            eckIdServiceUtil.generateEckID(VALID_STUDENT_STAMPSEUDONYM, INVALID_CHAIN_GUID, VALID_SECTOR_GUID));
     }
 
     /**
      * Tests that Nummervoorziening service throws error on invalid Sector Guid.
      */
-    @Test(expected = SOAPFaultException.class)
+    @Test
     public void testGetEckIdWithInvalidSector() {
-        eckIdServiceUtil.generateEckID(VALID_STUDENT_STAMPSEUDONYM, VALID_CHAIN_GUID, INVALID_SECTOR_GUID);
+        assertThrows(SOAPFaultException.class, () ->
+            eckIdServiceUtil.generateEckID(VALID_STUDENT_STAMPSEUDONYM, VALID_CHAIN_GUID, INVALID_SECTOR_GUID));
     }
 
     /**
@@ -95,4 +98,5 @@ public class RetrieveEckIdOperationTest extends AbstractUnitTest {
         String eckId = eckIdServiceUtil.generateEckID(stampseudonym, VALID_CHAIN_GUID, VALID_SECTOR_GUID);
         assertEquals(VALID_TEACHER_ECK_ID, eckId);
     }
+
 }

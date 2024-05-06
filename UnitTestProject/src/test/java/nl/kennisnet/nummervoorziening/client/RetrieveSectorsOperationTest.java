@@ -16,11 +16,11 @@
 package nl.kennisnet.nummervoorziening.client;
 
 import nl.ketenid.eck.schemas.v1_0.Sector;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static org.junit.Assert.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 /**
  * Demonstrates correct usage of the "Retrieve Sectors" operation.
@@ -33,6 +33,7 @@ public class RetrieveSectorsOperationTest extends AbstractUnitTest {
     @Test
     public void testGettingActiveSectors() {
         List<Sector> activeSectors = eckIdServiceUtil.getSectors();
-        assertFalse("Nummervoorziening service returned empty list of active sectors!", activeSectors.isEmpty());
+        assertFalse(activeSectors.isEmpty(), "Nummervoorziening service returned empty list of active sectors!");
     }
+
 }

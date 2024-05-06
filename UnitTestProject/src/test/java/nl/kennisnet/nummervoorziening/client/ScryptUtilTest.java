@@ -15,9 +15,9 @@
  */
 package nl.kennisnet.nummervoorziening.client;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Demonstrates correct usage of the ScryptUtil class.
@@ -49,4 +49,5 @@ public class ScryptUtilTest extends AbstractUnitTest {
     public void testIsInputLowerCased() {
         assertEquals(eckIdServiceUtil.getScryptUtil().generateHexHash("INPUT"), eckIdServiceUtil.getScryptUtil().generateHexHash("input"));
     }
+
 }

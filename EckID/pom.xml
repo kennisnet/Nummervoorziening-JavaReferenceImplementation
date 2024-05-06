@@ -23,27 +23,20 @@
     <parent>
         <groupId>nl.kennisnet.nummervoorziening</groupId>
         <artifactId>nummervoorziening-java-reference-implementation</artifactId>
-        <version>0.1.2</version>
+        <version>1.0.0</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
-
-    <properties>
-        <jakarta.version>4.0.0</jakarta.version>
-        <jaxws-maven-plugin.version>4.0.1</jaxws-maven-plugin.version>
-        <rt.version>4.0.1</rt.version>
-        <scrypt.version>1.4.0</scrypt.version>
-    </properties>
 
     <dependencies>
         <dependency>
             <groupId>jakarta.xml.bind</groupId>
             <artifactId>jakarta.xml.bind-api</artifactId>
-            <version>${jakarta.version}</version>
+            <version>${bind-api.version}</version>
         </dependency>
         <dependency>
             <groupId>com.sun.xml.bind</groupId>
             <artifactId>jaxb-impl</artifactId>
-            <version>${jakarta.version}</version>
+            <version>${jaxb-impl.version}</version>
             <scope>runtime</scope>
         </dependency>
         <dependency>
@@ -54,7 +47,7 @@
         <dependency>
             <groupId>com.sun.xml.ws</groupId>
             <artifactId>rt</artifactId>
-            <version>${rt.version}</version>
+            <version>${jaxws.version}</version>
         </dependency>
     </dependencies>
 
@@ -72,7 +65,7 @@
             <plugin>
                 <groupId>com.sun.xml.ws</groupId>
                 <artifactId>jaxws-maven-plugin</artifactId>
-                <version>${jaxws-maven-plugin.version}</version>
+                <version>${jaxws.version}</version>
                 <configuration>
                     <wsdlLocation>/META-INF/eckid.wsdl</wsdlLocation>
                     <wsdlUrls>

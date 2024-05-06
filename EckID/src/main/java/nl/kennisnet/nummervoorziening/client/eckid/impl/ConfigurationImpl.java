@@ -30,7 +30,7 @@ public class ConfigurationImpl implements Configuration {
 
     private static final String PARENT_DIRECTORY_NAME = "JavaReferenceImplementation";
 
-    private Properties properties = new Properties();
+    private final Properties properties = new Properties();
 
     /**
      * Instantiate the object and tries to load the config.properties file.

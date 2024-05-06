@@ -15,14 +15,15 @@
  */
 package nl.kennisnet.nummervoorziening.client;
 
-import org.junit.Test;
-
 import jakarta.xml.ws.soap.SOAPFaultException;
+import org.junit.jupiter.api.Test;
+
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * Demonstrates correct usage of the "Submit Eck Id Batch" operation.
@@ -32,27 +33,30 @@ public class SubmitEckIdBatchOperationTest extends AbstractUnitTest {
     /**
      * Tests that Nummervoorziening service throws error on invalid Chain Guid.
      */
-    @Test(expected = SOAPFaultException.class)
+    @Test
     public void testSubmitEckIdBatchWithInvalidChainGuid() {
-        eckIdServiceUtil.submitEckIdBatch(Collections.singletonMap(0, VALID_STUDENT_STAMPSEUDONYM), INVALID_CHAIN_GUID,
-            VALID_SECTOR_GUID);
+        assertThrows(SOAPFaultException.class, () ->
+            eckIdServiceUtil.submitEckIdBatch(Collections.singletonMap(0,
+                    VALID_STUDENT_STAMPSEUDONYM), INVALID_CHAIN_GUID, VALID_SECTOR_GUID));
     }
 
     /**
      * Tests that Nummervoorziening service throws error on invalid Sector Guid.
      */
-    @Test(expected = SOAPFaultException.class)
+    @Test
     public void testSubmitEckIdBatchWithInvalidSectorGuid() {
-        eckIdServiceUtil.submitEckIdBatch(Collections.singletonMap(0, VALID_STUDENT_STAMPSEUDONYM), VALID_CHAIN_GUID,
-            INVALID_SECTOR_GUID);
+        assertThrows(SOAPFaultException.class, () ->
+            eckIdServiceUtil.submitEckIdBatch(Collections.singletonMap(0,
+                    VALID_STUDENT_STAMPSEUDONYM), VALID_CHAIN_GUID, INVALID_SECTOR_GUID));
     }
 
     /**
      * Tests that Nummervoorziening service throws error on empty Stampseudonym list.
      */
-    @Test(expected = SOAPFaultException.class)
+    @Test
     public void testSubmitEckIdBatchWithEmptyStampseudonymList() {
-        eckIdServiceUtil.submitEckIdBatch(Collections.emptyMap(), VALID_CHAIN_GUID, VALID_SECTOR_GUID);
+        assertThrows(SOAPFaultException.class, () ->
+            eckIdServiceUtil.submitEckIdBatch(Collections.emptyMap(), VALID_CHAIN_GUID, VALID_SECTOR_GUID));
     }
 
     /**
@@ -62,6 +66,7 @@ public class SubmitEckIdBatchOperationTest extends AbstractUnitTest {
     public void testSimpleSubmitEckIdBatchWithCorrectValues() {
         String batchIdentifier = eckIdServiceUtil.submitEckIdBatch(Collections.singletonMap(0,
             VALID_STUDENT_STAMPSEUDONYM), VALID_CHAIN_GUID, VALID_SECTOR_GUID);
+
         assertNotNull(batchIdentifier);
     }
 
@@ -74,6 +79,8 @@ public class SubmitEckIdBatchOperationTest extends AbstractUnitTest {
         input.put(0, VALID_STUDENT_STAMPSEUDONYM);
         input.put(1, VALID_TEACHER_STAMPSEUDONYM);
         String batchIdentifier = eckIdServiceUtil.submitEckIdBatch(input, VALID_CHAIN_GUID, VALID_SECTOR_GUID);
+
         assertNotNull(batchIdentifier);
     }
+
 }

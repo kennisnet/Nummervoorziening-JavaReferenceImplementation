@@ -16,11 +16,11 @@
 package nl.kennisnet.nummervoorziening.client;
 
 import nl.ketenid.eck.schemas.v1_0.Chain;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static org.junit.Assert.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 /**
  * Demonstrates correct usage of the "Retrieve Chains" operation.
@@ -33,6 +33,7 @@ public class RetrieveChainsOperationTest extends AbstractUnitTest {
     @Test
     public void testGettingActiveChains() {
         List<Chain> activeChains = eckIdServiceUtil.getChains();
-        assertFalse("Nummervoorziening service returned empty list of active chains!", activeChains.isEmpty());
+        assertFalse(activeChains.isEmpty(), "Nummervoorziening service returned empty list of active chains!");
     }
+
 }

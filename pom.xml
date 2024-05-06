@@ -19,7 +19,7 @@
 
     <groupId>nl.kennisnet.nummervoorziening</groupId>
     <artifactId>nummervoorziening-java-reference-implementation</artifactId>
-    <version>0.1.2</version>
+    <version>1.0.0</version>
 
     <name>Nummervoorziening - Java Reference Implementation</name>
     <packaging>pom</packaging>
@@ -29,14 +29,9 @@
         <url>https://jira.kennisnet.nl/browse/NV</url>
     </issueManagement>
 
-    <ciManagement>
-        <system>Jenkins</system>
-        <url>http://jenkins-nv.bks.kennisnet.nl/</url>
-    </ciManagement>
-
     <scm>
-        <url>https://gitlab.bks.kennisnet.nl/Nummervoorziening/JavaReferenceImplementation</url>
-        <developerConnection>scm:git:ssh://git@gitlab.bks.kennisnet.nl:Numbervoorziening/JavaReferenceImplementation.git</developerConnection>
+        <url>https://github.com/kennisnet/Nummervoorziening-JavaReferenceImplementation</url>
+        <developerConnection>scm:git@github.com:kennisnet/Nummervoorziening-JavaReferenceImplementation.git</developerConnection>
     </scm>
 
     <properties>
@@ -44,19 +39,17 @@
         <maven.build.timestamp.format>yyyy-MM-dd</maven.build.timestamp.format>
         <timestamp>${maven.build.timestamp}</timestamp>
         <releaseTag>${project.parent.version}</releaseTag>
-        <source.level>11</source.level>
-        <dependency-check-maven.version>8.0.2</dependency-check-maven.version>
+        <source.level>17</source.level>
+        <build-helper-maven-plugin.version>3.2.0</build-helper-maven-plugin.version>
+        <bind-api.version>4.0.2</bind-api.version>
+        <dependency-check-maven.version>9.0.10</dependency-check-maven.version>
+        <jaxb-impl.version>4.0.5</jaxb-impl.version>
+        <jaxws.version>4.0.2</jaxws.version>
+        <junit-jupiter-api.version>5.10.2</junit-jupiter-api.version>
         <maven-assembly-plugin.version>2.6</maven-assembly-plugin.version>
         <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
-        <maven-release-plugin.version>2.5.3</maven-release-plugin.version>
-        <maven-scm-provider-gitexe.version>1.9.4</maven-scm-provider-gitexe.version>
-        <build-helper-maven-plugin.version>3.2.0</build-helper-maven-plugin.version>
-
-        <!-- SonarQube properties -->
-        <sonar-maven-plugin.version>5.1</sonar-maven-plugin.version>
-        <sonar.host.url>https://sonarqube.bks.kennisnet.nl/</sonar.host.url>
-        <sonar.language>java</sonar.language>
-        <sonar.exclusions>file:**/generated-sources/**</sonar.exclusions>
+        <maven-surefire-plugin.version>3.2.5</maven-surefire-plugin.version>
+        <scrypt.version>1.4.0</scrypt.version>
     </properties>
 
     <modules>
@@ -70,38 +63,15 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.1</version>
+                <version>${maven-compiler-plugin.version}</version>
                 <configuration>
                     <source>${source.level}</source>
                     <target>${source.level}</target>
                 </configuration>
             </plugin>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-release-plugin</artifactId>
-                <version>${maven-release-plugin.version}</version>
-                <configuration>
-                    <releaseProfiles>release</releaseProfiles>
-                    <remoteTagging>true</remoteTagging>
-                    <autoVersionSubmodules>true</autoVersionSubmodules>
-                </configuration>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.apache.maven.scm</groupId>
-                        <artifactId>maven-scm-provider-gitexe</artifactId>
-                        <version>${maven-scm-provider-gitexe.version}</version>
-                    </dependency>
-                </dependencies>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-clean-plugin</artifactId>
-                <version>${build-helper-maven-plugin.version}</version>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-resources-plugin</artifactId>
-                <version>${build-helper-maven-plugin.version}</version>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>${maven-surefire-plugin.version}</version>
             </plugin>
         </plugins>
         <pluginManagement>
@@ -111,30 +81,11 @@
                     <artifactId>maven-assembly-plugin</artifactId>
                     <version>${maven-assembly-plugin.version}</version>
                 </plugin>
-                <plugin>
-                    <groupId>org.sonarsource.scanner.maven</groupId>
-                    <artifactId>sonar-maven-plugin</artifactId>
-                    <version>${sonar-maven-plugin.version}</version>
-                </plugin>
             </plugins>
         </pluginManagement>
     </build>
 
     <profiles>
-        <profile>
-            <id>release</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-surefire-plugin</artifactId>
-                        <configuration>
-                            <skipTests>true</skipTests>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
         <profile>
             <id>security-updates</id>
             <build>

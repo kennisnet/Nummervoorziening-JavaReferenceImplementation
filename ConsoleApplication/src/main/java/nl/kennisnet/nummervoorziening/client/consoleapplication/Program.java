@@ -32,7 +32,7 @@ import java.util.Map;
  */
 public class Program {
 
-    private static final String WEB_SERVICE_APPLICATION_VERSION = "1.1.13";
+    private static final String WEB_SERVICE_APPLICATION_VERSION = "2.0";
 
     private static final int BATCH_RETRIEVE_ATTEMPTS_COUNT = 10;
 
@@ -62,7 +62,7 @@ public class Program {
             // Print some information about the service
             String applicationVersion = eckIDServiceUtil.getApplicationVersion();
             System.out.println("Application version:\t\t" + applicationVersion);
-            if (!WEB_SERVICE_APPLICATION_VERSION.equals(applicationVersion)) {
+            if (null == applicationVersion || !applicationVersion.startsWith(WEB_SERVICE_APPLICATION_VERSION)) {
                 System.out.println("Web Service Application version is different from intended (" +
                     WEB_SERVICE_APPLICATION_VERSION + " vs " + applicationVersion + ").");
             }
@@ -242,4 +242,5 @@ public class Program {
         }
         return eckIDServiceBatch;
     }
+
 }

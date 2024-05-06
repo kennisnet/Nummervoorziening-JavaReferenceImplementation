@@ -32,7 +32,7 @@ De Nummervoorziening - Java Client Reference Application is een client implement
 Voor alle bovenstaande functionaliteiten wordt gebruik gemaakt van SOAP Messaging tussen de verschillende actoren. Authenticatie vindt plaats middels PKI-Certificaten die over TLS worden uitgewisseld. Aanvullende informatie over Nummervoorziening kan gevonden worden op de [Edukoppeling Wiki] van [Stichting Kennisnet].  
 
 ## Version
-0.1.2 (20230227)
+1.0.0 (20240506)
 
 ## Gebruikte Technologiën
 
@@ -46,7 +46,7 @@ Bij de ontwikkeling van Nummervoorziening - Java Client Reference Application zi
  
 ### Dependencies
 
-| GroupId         | ArtifactId  | Version  |       Beschrijving  |
+| GroupId         | ArtifactId  | Version  |        Beschrijving |
 |-----------------|:-----------:|:--------:|--------------------:|
 | com.lambdaworks |   scrypt    |  1.4.0   |      SCrypt library |
 | junit           |    junit    |   4.12   | Unit Test framework |

@@ -15,11 +15,11 @@
  */
 package nl.kennisnet.nummervoorziening.client;
 
-import org.junit.Test;
-
 import jakarta.xml.ws.soap.SOAPFaultException;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * Demonstrates correct usage of the "Retrieve Stampseudonym" operation.
@@ -29,9 +29,10 @@ public class RetrieveStampseudonymOperationTest extends AbstractUnitTest {
     /**
      * Tests that Nummervoorziening service throws error on invalid HPgn.
      */
-    @Test(expected = SOAPFaultException.class)
+    @Test
     public void testGetStampseudonymWithInvalidHpgn() {
-        eckIdServiceUtil.generateStampseudonym(INVALID_HPGN);
+        assertThrows(SOAPFaultException.class, () ->
+            eckIdServiceUtil.generateStampseudonym(INVALID_HPGN));
     }
 
     /**
@@ -51,4 +52,5 @@ public class RetrieveStampseudonymOperationTest extends AbstractUnitTest {
         String stampseudonym = eckIdServiceUtil.generateStampseudonym(VALID_TEACHER_HPGN);
         assertEquals(VALID_TEACHER_STAMPSEUDONYM, stampseudonym);
     }
+
 }
